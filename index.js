@@ -16,6 +16,7 @@ app.options = {
 		//, 'browser client minification': true
 		//, 'browser client gzip': true
 	}
+	, 'ui': 'lite'
 	, 'pd': {
 		'read': 8005
 		, 'write': 8006
