@@ -1,0 +1,96 @@
+#N canvas 399 50 758 551 10;
+#X declare -path ./ -path tests/abstractions/;
+#N canvas 770 23 427 507 more 0;
+#X obj 33 430 outlet;
+#X msg 301 370 clone 1 3;
+#X msg 231 49 bang;
+#X obj 231 109 print nodes;
+#X msg 233 160 bang;
+#X obj 233 220 print nodes~;
+#X obj 231 79 pddom.get rack1.nodes;
+#X obj 233 190 pddom.get rack1.nodes~;
+#X obj 41 49 r rack1;
+#X obj 41 109 print verbose;
+#X obj 41 79 spigot;
+#X obj 111 49 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X msg 103 390 disconnect 2;
+#X msg 43 300 delete 2 1 0;
+#X msg 53 330 delete 0 1 2;
+#X text 153 300 delete many nodes at once;
+#X msg 153 420 connect~ 2 0;
+#X msg 83 360 connect 2 0;
+#X msg 164 449 disconnect~ 1;
+#X connect 2 0 6 0;
+#X connect 4 0 7 0;
+#X connect 6 0 3 0;
+#X connect 7 0 5 0;
+#X connect 8 0 10 0;
+#X connect 10 0 9 0;
+#X connect 11 0 10 1;
+#X connect 12 0 0 0;
+#X connect 13 0 0 0;
+#X connect 14 0 0 0;
+#X connect 16 0 0 0;
+#X connect 17 0 0 0;
+#X connect 18 0 0 0;
+#X restore 496 284 pd more;
+#X obj 176 280 hradio 15 1 0 8 empty empty empty 0 -8 0 10 -262144
+-1 -1 0;
+#X msg 174 439 delete \$1;
+#X obj 174 389 hradio 15 1 0 8 empty empty empty 0 -8 0 10 -262144
+-1 -1 0;
+#X obj 26 339 pd-dom rack1;
+#X msg 477 240 vis \$1;
+#X obj 477 190 hradio 15 1 0 8 empty empty empty 0 -8 0 10 -262144
+-1 -1 0;
+#X msg 177 190 add random-osc~;
+#X msg 176 330 set \$1 random-osc~;
+#X text 23 60 Pd-Dom is a wrapper around the unofficial Pd dynamic
+patching methods. It simplifies API to create and chain abstractions.
+Tree structures can be build with multiple nested Pd-Dom instances.
+Abstractions get a unique Id as \$1 argument and use globally available
+send~ and receives~. There are plans for a [dyn~] wrapper with same
+API.;
+#X text 173 370 delete abstraction at node;
+#X text 476 171 open abstraction at node;
+#N canvas 460 150 494 396 META 0;
+#X text 12 5 KEYWORDS signal pd-dom;
+#X text 12 25 LICENSE MIT;
+#X text 12 45 DESCRIPTION wrapper for unofficial pd dynamic patching
+methods;
+#X text 12 75 INLET_0 signal;
+#X text 12 95 INLET_1 control;
+#X text 12 135 OUTLET_0 signal;
+#X text 12 155 AUTHOR Enrique Erne;
+#X text 12 175 HELP_PATCH_AUTHORS Enrique Erne;
+#X restore 477 20 pd META;
+#X msg 174 499 reset;
+#X text 177 260 update node;
+#X text 177 170 create nodes with abstractions;
+#X msg 174 469 delete 0 1 2;
+#X floatatom 176 305 5 0 0 0 - - -;
+#X floatatom 174 414 5 0 0 0 - - -;
+#X obj 476 324 s rack1;
+#X text 476 354 all methods can be sent directly to <id>;
+#X floatatom 477 215 5 0 0 0 - - -;
+#X msg 177 220 chain random-osc~ random-osc~ random-osc~;
+#X obj 26 379 utils/get.output~;
+#X obj 177 20 declare -path ./ -path tests/abstractions/;
+#X text 23 20 Pd-Dom 0.8.0-dev;
+#X connect 0 0 19 0;
+#X connect 1 0 17 0;
+#X connect 2 0 4 1;
+#X connect 3 0 18 0;
+#X connect 4 0 23 0;
+#X connect 4 0 23 1;
+#X connect 5 0 19 0;
+#X connect 6 0 21 0;
+#X connect 7 0 4 1;
+#X connect 8 0 4 1;
+#X connect 13 0 4 1;
+#X connect 16 0 4 1;
+#X connect 17 0 8 0;
+#X connect 18 0 2 0;
+#X connect 21 0 5 0;
+#X connect 22 0 4 1;

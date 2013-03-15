@@ -1,0 +1,19 @@
+{
+	"name": "instrument-a1",
+	"label": "Instrument A1",
+	"controllers": {
+		"controller-a": {
+			"label": "Controller A",
+			"type": "int",
+			"range": [1, 100]
+		},
+		"controller-b": {
+			"label": "Controller B",
+			"type": "bool"
+		}
+	},
+	"payload": {
+		"controller-a": 100,
+		"controller-b": false
+	}
+}

@@ -1,0 +1,26 @@
+[
+	{
+		"name": "pd"
+		, "label": "Pd"
+		, "controllers": {
+			"engine": {
+				"label": "Engine"
+				, "type": "enum"
+				, "values": ["create", "destroy"]
+			}
+			, "dsp": {
+				"label": "DSP"
+				, "type": "bool"
+			}
+			, "gui": {
+				"label": "GUI"
+				, "type": "bool"
+			}
+		}
+		, "payload": {
+			"engine": "create"
+			, "dsp": true
+			, "gui": true
+		}
+	}
+]

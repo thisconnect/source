@@ -1,0 +1,60 @@
+[
+	{
+		"name": "blib~",
+		"label": "Blib~",
+		"description": "A simple bleep sine and sequencer",
+		"controllers": {
+			"run": {
+				"label": "Run",
+				"type": "bool"
+			},
+			"steps": {
+				"label": "Steps",
+				"type": "bool[2]"
+			},
+			"interval": {
+				"label": "Interval (ms)",
+				"type": "int",
+				"range": [0, 1000]
+			},
+			"freq": {
+				"label": "Frequency",
+				"type": "int",
+				"range": [0, 127]
+			},
+			"level": {
+				"label": "Level",
+				"type": "float",
+				"range": [0, 1],
+				"step": 0.01
+			},
+			"decay": {
+				"label": "Decay",
+				"type": "int",
+				"range": [1, 300]
+			},
+			"url": {
+				"label": "URL",
+				"type": "string"
+			},
+			"wave": {
+				"label": "Wave",
+				"type": "enum",
+				"values": ["sine", "saw", "triangle"]
+			}
+		},
+		"payload": {
+			"run": false,
+			"interval": 450,
+			"freq": 64,
+			"level": 0.5,
+            "decay": 59,
+			"url": "//:8004",
+			"wave": "sine"
+			
+		}
+	},
+	"instrument-a.json"
+
+]
+

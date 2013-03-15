@@ -1,0 +1,55 @@
+#! /usr/bin/env node
+
+/*
+
+CLI API
+-------
+
+```bash
+cd bin && ./dsp
+```
+
+### CLI Options
+
+  - `-p`, `--planet [STRING]` - The planet to bind to (default: 127.0.0.1:8004).
+
+*/
+
+var io = require('socket.io-client'),
+	app = require('../../lib/app'),
+	pd = require('../../lib/pd');
+
+
+app.options = {
+	'server': {
+		'host': '127.0.0.1'
+		, 'port': 8004
+	}
+	, 'pd': {
+		'read': 8005
+		, 'write': 8006
+		, 'flags': [
+			'-noprefs'
+			, '-stderr'
+			//, '-nogui'
+			, '-path'
+			, '../'
+			, '-path'
+			, './../blib'
+			, '-open'
+			, '../manager.pd'
+		]
+	}
+};
+
+var location = app.options.server.host + ':' + app.options.server.port;
+
+var client = io.connect(location, {
+	'force new connection': true
+});
+
+app.emit('planet', client);
+
+client.on('error', function(error){
+	console.log('error', error);
+});

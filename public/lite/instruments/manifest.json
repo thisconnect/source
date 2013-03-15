@@ -1,0 +1,58 @@
+[
+	"instrument-a.json",
+	"instrument-b.json",
+	{
+		"name": "instrument-e",
+		"label": "Instrument E",
+		"description": "Instrument with named controllers",
+		"controllers": {
+			"controller-a": {
+				"label": "Controller A",
+				"type": "int",
+				"range": [1, 100]
+			},
+			"controller-b": {
+				"label": "Controller B",
+				"type": "bool"
+			},
+			"controller-c": {
+				"label": "Controller C",
+				"type": "bool"
+			}
+		},
+		"payload": {
+			"controller-a": 90,
+			"controller-b": false,
+			"controller-c": true
+		}
+	},
+	{
+		"name": "instrument-f",
+		"label": "Instrument F",
+		"description": "Instrument with anonymous controllers",
+		"controllers": [{
+			"label": "Controller A",
+			"type": "int",
+			"range": [1, 100]
+		}, {
+			"label": "Controller B",
+			"type": "int",
+			"range": [1, 100]
+		}, {
+			"label": "Controller C",
+			"type": "int",
+			"range": [1, 100]
+		}, {
+			"label": "Controller D",
+			"type": "bool"
+		}],
+		"payload": {
+			"0": 30,
+			"1": 20,
+			"2": 10,
+			"3": true
+		}
+	}
+
+]
+
