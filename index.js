@@ -1,8 +1,8 @@
 var app = require('./lib/app');
 
 app.options = {
-	'dirname': __dirname,
-	'server': {
+	'dirname': __dirname
+	, 'server': {
 		'host': 'localhost'
 		, 'port': 8004
 	}
