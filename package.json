@@ -1,22 +1,22 @@
 {
 	"name": "tcme"
-    , "version": "0.9.0-dev"
-    , "author": "Enrique Erne (http://mild.ch/)"
-    , "contributors": [
+	, "version": "0.9.0-dev"
+	, "author": "Enrique Erne (http://mild.ch/)"
+	, "contributors": [
 		{"name": "Enrique Erne"}
 	]
-    , "dependencies": {
+	, "dependencies": {
 		"connect": ">= 2.7.3"
-        , "fudi": ">= 0.0.2"
+		, "fudi": ">= 0.0.2"
 		, "planet": ">= 0.14.4"
-        , "port": ">= 0.6.4"
+		, "port": ">= 0.6.4"
 		, "socket.io": ">= 0.9.13"
-        , "socket.io-client": ">= 0.9.11"
+		, "socket.io-client": ">= 0.9.11"
 	}
-    , "devDependencies": {
-        "mocha": ">= 1.8.1"
-        , "expect.js": "0.2.0"
-        , "send": ">= 0.1.0"
-        , "wrapup": "0.11.2"
+	, "devDependencies": {
+		"mocha": ">= 1.8.1"
+		, "expect.js": "0.2.0"
+		, "send": ">= 0.1.0"
+		, "wrapup": "0.11.2"
 	}
 }
