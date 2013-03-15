@@ -1,7 +1,9 @@
 var expect = require('expect.js'),
 	io = require('socket.io-client');
 
-var socket = io.connect('//:8004');
+var socket = io.connect('//:8004', {
+	resource: 'io'
+});
 
 describe('Socket.IO', function(){
 
@@ -32,7 +34,7 @@ describe('Socket.IO', function(){
 
 		it('should connect to tools', function(done){
 
-			io.connect('//:8004/tools')
+			io.connect('//:8004/service')
 			.on('connect', function(){
 
 				this.emit('get', function(data){
