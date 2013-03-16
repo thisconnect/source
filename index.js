@@ -22,7 +22,7 @@ app.options = {
 		, 'write': 8006
 		, 'flags': [
 			'-noprefs'
-		//	, '-nogui'
+			//, '-nogui'
 			, '-stderr'
 			, '-path'
 			, './pd'
@@ -40,27 +40,5 @@ require('./lib/desktop');
 require('./lib/planet');
 require('./lib/pd');
 require('./lib/server');
-
-/*
-process.on('exit', function(){
-	app.emit('exit');
-});
-
-process.on('uncaughtException', function(){
-	app.emit('exit');
-});
-*/
-
-// listen to ctrl-c
-process.on('SIGINT', function(){
-	app.emit('exit');
-	process.exit();
-});
-
-// listen to killall node
-process.on('SIGTERM', function(){
-	app.emit('exit');
-	process.exit();
-});
 
 app.emit('setup');
