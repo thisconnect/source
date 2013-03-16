@@ -16,8 +16,8 @@ cd bin && ./dsp
 */
 
 var io = require('socket.io-client'),
-	app = require('../../lib/app'),
-	pd = require('../../lib/pd');
+	app = require('../lib/app'),
+	pd = require('../lib/pd');
 
 
 app.options = {
@@ -33,11 +33,11 @@ app.options = {
 			, '-stderr'
 			//, '-nogui'
 			, '-path'
-			, '../'
+			, '../pd/'
 			, '-path'
-			, './../blib'
+			, '../pd/blib'
 			, '-open'
-			, '../manager.pd'
+			, '../pd/manager.pd'
 		]
 	}
 };
