@@ -15,9 +15,11 @@ cd bin && ./dsp
 
 */
 
+
 var io = require('socket.io-client'),
 	app = require('../lib/app'),
 	pd = require('../lib/pd');
+
 
 
 app.options = {
