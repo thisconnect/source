@@ -1,7 +1,7 @@
 var app = require('./lib/app');
 
 require('./lib/monitor');
-require('./lib/ui');
+require('./lib/interface');
 require('./lib/desktop');
 require('./lib/planet');
 require('./lib/pd');
