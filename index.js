@@ -5,8 +5,8 @@ require('./lib/option');
 require('./lib/planet');
 require('./lib/pd');
 require('./lib/server');
-require('./lib/desktop');
 require('./lib/interface');
+require('./lib/desktop');
 
 app.emit('option set', {'dirname': __dirname});
 
