@@ -6,7 +6,7 @@ test: test-node test-browser
 
 test-node:
 	@node index.js & echo $$! > app.pid
-	@./node_modules/mocha/bin/mocha --reporter $(REPORTER) ./test/node/* || true
+	@./node_modules/.bin/mocha --reporter $(REPORTER) ./test/node/* || true
 	@echo 'done'
 	@kill `cat app.pid`
 	@rm app.pid
