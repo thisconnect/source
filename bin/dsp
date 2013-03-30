@@ -11,6 +11,7 @@ var pd = require('../lib/pd');
 
 var client = io.connect('127.0.0.1:8004', {
 	'force new connection': true
+	, 'resource': 'io'
 });
 
 app.emit('planet', client);
