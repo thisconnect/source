@@ -32,7 +32,7 @@ describe('Socket.IO', function(){
 
 	describe('#namespace', function(){
 
-		it('should connect to tools', function(done){
+		it('should connect to service', function(done){
 
 			io.connect('//:8004/service')
 			.on('connect', function(){

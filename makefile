@@ -5,7 +5,7 @@ all: test
 test: test-node test-browser
 
 test-node:
-	@node index.js & echo $$! > app.pid
+	@node index.js --pd.nogui & echo $$! > app.pid
 	@./node_modules/.bin/mocha --reporter $(REPORTER) ./test/node/* || true
 	@echo 'done'
 	@kill `cat app.pid`

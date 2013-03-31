@@ -5,7 +5,7 @@ require('./lib/option');
 
 app.emit('option set', {'dirname': __dirname + '/'});
 
-require('./lib/planet');
+require('./lib/socket');
 require('./lib/pd');
 require('./lib/server');
 require('./lib/interface');
