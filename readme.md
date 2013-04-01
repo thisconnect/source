@@ -1,36 +1,33 @@
 # thisconnect
 
-  - [Planet](https://github.com/thisconnect/planet)
-    synchronizes the state between users.
+Is a configurable application that:
 
-  - [Port](https://github.com/thisconnect/port)
-    communicates with Pure Data.
+  - Connects to [Planet](https://github.com/thisconnect/planet)
+    to synchronize the state between users using Socket.IO.
 
-  - [Lite](https://github.com/thisconnect/lite)
-    a minimal user interface to edit the state.
+  - Communicates with a sound engine, for example Pure Data via 
+    [Port](https://github.com/thisconnect/port).
 
-  - A manifest format to describe the parameters
-  	for the DSP engine and the controllers for the UI.
+  - Dynamically builds a user interface with
+	[Lite](https://github.com/thisconnect/lite)
+	to manipulate the current state.
 
-  - The app is just an event emitter to that glues
-    everything together.
+  - Interprets JSON files that generically describe parameters
+    and settings to build the ui.
 
 
 ### App:Events
 
-  - `setup` - Initiallizion.
+  - `setup` - On initialization.
 
-  - `exit` - Terminate the application.
-	
+  - `exit` - On termination.
 
-Modules
--------
 
-### Server
+## Server
 
-A HTTP server using [Connect](http://www.senchalabs.org/connect/)
+A HTTP server using [Connect](http://www.senchalabs.org/connect/).
 
-#### Server:Events
+### Server:Events
 
   - `server setup` - before the server initialization.
 
@@ -38,18 +35,18 @@ A HTTP server using [Connect](http://www.senchalabs.org/connect/)
     the conenct instance
 
 
-#### Server:Methods
+### Server:Methods
 
   - `server add static` - (path[, target])
 
   - `server add favicon` - (target)
 
 
-### Socket
+## Socket
 
-A planetary shared state using Socket.IO
+A planetary shared state using Socket.IO and Planet.
 
-#### Socket:Events
+### Socket:Events
 
   - `socket io` - the Socket.IO object
 
