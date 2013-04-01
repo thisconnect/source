@@ -17,4 +17,8 @@ test-browser:
 	@./node_modules/wrapup/bin/wrup.js --require ./test/browser.js --output ./test/public/tests.js
 #	@open -a Google\ Chrome ./test/browser/index.html
 
+test-modules:
+	@cd node_modules/port/ && make
+	@cd node_modules/planet/ && make
+
 .PHONY: test
