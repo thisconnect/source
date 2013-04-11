@@ -1,23 +1,8 @@
 #! /usr/bin/env node
 
-var io = require('socket.io-client'),
-	app = require('../lib/app'),
-	option = require('../lib/option');
+var app = require('../lib/app');
 
-app.emit('option set', {'dirname': __dirname + '/../'});
-
-var pd = require('../lib/pd');
-
-
-var client = io.connect('127.0.0.1:8004', {
-	'force new connection': true
-	, 'resource': 'io'
-});
-
-app.emit('planet', client);
-
-client.on('error', function(error){
-	console.log('error', error);
-});
+require('../lib/pd');
+require('../lib/connection');
 
 app.emit('setup');
