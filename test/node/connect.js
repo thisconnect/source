@@ -34,7 +34,7 @@ describe('Socket.IO', function(){
 
 		it('should connect to service', function(done){
 
-			io.connect('//:8004/service')
+			io.connect('//:8004/system')
 			.on('connect', function(){
 
 				this.emit('get', function(data){
