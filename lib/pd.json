@@ -16,7 +16,7 @@
 			, "type": "bool"
 		}
 	}
-	, "payload": {
+	, "state": {
 		"engine": 1
 		, "dsp": true
 		, "gui": true

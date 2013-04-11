@@ -12,7 +12,7 @@
 			"type": "bool"
 		}
 	},
-	"payload": {
+	"state": {
 		"controller-a": 100,
 		"controller-b": false
 	}

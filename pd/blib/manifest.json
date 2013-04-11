@@ -43,14 +43,14 @@
 				"values": ["sine", "saw", "triangle"]
 			}
 		},
-		"payload": {
+		"state": {
 			"run": false,
 			"interval": 450,
 			"freq": 64,
 			"level": 0.5,
             "decay": 59,
 			"url": "//:8004",
-			"wave": "sine"
+			"wave": 0
 			
 		}
 	},
