@@ -2,7 +2,13 @@
 
 var app = require('../lib/app');
 
+require('../lib/monitor');
 require('../lib/pd');
-require('../lib/connection');
+require('../lib/client');
+
+app.on('client connection', function(socket){
+	console.log(socket);
+	app.emit('socket', socket);
+});
 
 app.emit('setup');
