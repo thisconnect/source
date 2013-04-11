@@ -2,7 +2,7 @@ REPORTER = spec # list
 
 all: test
 
-test: test-node test-browser
+test: test-browser test-node test-modules
 
 test-node:
 	@node index.js --pd.flags.nogui & echo $$! > app.pid
