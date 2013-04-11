@@ -17,7 +17,7 @@
 		}
 	}
 	, "payload": {
-		"engine": "create"
+		"engine": 1
 		, "dsp": true
 		, "gui": true
 	}
