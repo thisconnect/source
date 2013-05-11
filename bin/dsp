@@ -2,7 +2,7 @@
 
 var app = require('../lib/app');
 
-require('../lib/monitor');
+require('../lib/log');
 require('../lib/pd');
 require('../lib/client');
 
