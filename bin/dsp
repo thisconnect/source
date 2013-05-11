@@ -7,7 +7,6 @@ require('../lib/pd');
 require('../lib/client');
 
 app.on('client connection', function(socket){
-	console.log(socket);
 	app.emit('socket', socket);
 });
 

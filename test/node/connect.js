@@ -39,8 +39,6 @@ describe('Socket.IO', function(){
 
 				this.emit('get', function(data){
 					expect(data).to.be.an('object');
-					expect(data).to.eql({});
-					expect(data).to.be.empty();
 					done();
 				});
 
@@ -55,8 +53,6 @@ describe('Socket.IO', function(){
 
 				this.emit('get', function(data){
 					expect(data).to.be.an('object');
-					expect(data).to.eql({});
-					expect(data).to.be.empty();
 					done();
 				});
 

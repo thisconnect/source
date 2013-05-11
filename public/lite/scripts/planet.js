@@ -17,6 +17,15 @@ new Unit({
 		socket.on('connect', this.onConnect.bind(this));
 		socket.on('disconnect', this.onDisconnect.bind(this));
 		this.publish('planet connection', socket);
+
+		var system = this.system = io.connect('/system', {
+			resource: 'io'
+		});
+		system.on('connect', function(){
+			system.emit('get', function(settings){
+				console.log('system socket!', settings);
+			});
+		});
 	},
 
 	connected: false,
