@@ -22,8 +22,17 @@ new Unit({
 			resource: 'io'
 		});
 		system.on('connect', function(){
-			system.emit('get', function(settings){
-				console.log('system socket!', settings);
+			system.emit('get', function(system){
+				console.log('system socket!', system);
+			});
+		});
+
+		var state = this.system = io.connect('/state', {
+			resource: 'io'
+		});
+		state.on('connect', function(){
+			state.emit('get', function(state){
+				console.log('state socket!', state);
 			});
 		});
 	},
