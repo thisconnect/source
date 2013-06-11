@@ -2,9 +2,25 @@ html {
 	overflow-y: scroll;
 }
 
-::selection { background: transparent; }
+body {
+    background: white;
+}
 
+h1 .close {
+	font-size: 30px;
+	vertical-align: top;
+}
+
+input[type=range] {
+	height: 28px;
+}
+
+/* text selection */
+
+::selection { background: transparent; }
 ::-moz-selection { background: transparent; }
+
+/* scrollbar */
 
 ::-webkit-scrollbar {
 	width: 10px;
@@ -25,13 +41,4 @@ html {
 	-webkit-border-radius: 6px;
 	background: @grayLight;
 	border: 2px solid white;
-}
-
-input[type=range] {
-	height: 28px;
-}
-
-h1 .close {
-	font-size: 30px;
-	vertical-align: top;
 }

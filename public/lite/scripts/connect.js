@@ -5,7 +5,7 @@ new Unit({
 			'merge': this.merge,
 			'widget update': this.set,
 			'widget remove': this.remove,
-			'planet connection': this.connect,
+			'planet connection': this.connect, // TODO change to connect
 			'descriptor ready': this.onReadyDescriptors
 		});
 	},

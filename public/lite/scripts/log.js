@@ -2,8 +2,9 @@ new Unit({
 
 	initSetup: function(){
 		this.subscribe({
+			/* socket */
 			'planet connection': this.log.bind(['planet connection']),
-	//		'planet connect': this.log.bind(['planet connect']),
+			'planet connect': this.log.bind(['planet connect']),
 			'planet disconnect': this.log.bind(['planet disconnect']),
 			'planet remove': this.log.bind(['planet remove']),
 
@@ -24,7 +25,8 @@ new Unit({
 	},
 
 	log: function(){
-		console.log(this, arguments);
+		if (arguments.length == 0) console.log(this[0]);
+		else console.log(this[0], arguments);
 	}
 
 });
