@@ -1,72 +1,61 @@
 new Unit({
 
-	element: new Element('button[text="connect"]'),
-
-	io: null,
-
 	options: {
-		resource: 'io'
+		'resource': 'io'
+		, 'transports': ['websocket']
+		, 'try multiple transports': false
+		, 'force new connection': true
+	},
+
+	button: new Element('button.float-left'),
+
+	initSetup: function(){
+		this.subscribe({
+			'socket connect': this.onConnect,
+			'socket disconnect': this.onDisconnect
+		});
 	},
 
 	readySetup: function(){
-		/**/
-		this.subscribe('system connect', function(system){
-			system.emit('get', function(data){
-				console.log('system', data);
-			});
-		});
-		this.subscribe('state connect', function(state){
-			state.emit('get', function(data){
-				console.log('state', data);
-			});
-		});
-		
-		this.publish('tools add', this.element);
-		this.element.addEvent('click', this.toggle.bind(this));
+		this.button.addEvent('click', this.toggle.bind(this));
+		this.button.inject(document.body, 'top');
 		this.connect();
 	},
 
+	io: null,
+
 	connect: function(){
 		var socket = this.io = io.connect(null, this.options);
-		socket.on('connect', this.onConnect.bind(this));
-		socket.on('disconnect', this.onDisconnect.bind(this));
-		this.publish('planet connection', socket);
+		socket.on('connect', this.publish.bind(this, 'socket connect', socket));
+		socket.on('disconnect', this.publish.bind(this, 'socket disconnect'));
+		socket.on('reconnect', this.publish.bind(this, 'socket reconnect'));
+		this.button.set('text', 'conntecting');
 	},
 
 	disconnect: function(){
 		this.io.disconnect();
-	//	this.io.removeAllListeners();
-	//	this.io.socket.removeAllListeners();
 	},
 
 	reconnect: function(){
-		this.element.set('text', 'reconnect');
 		this.io.socket.reconnect();
 	},
 
 	isConnected: function(){
-		return this.io.socket.connected;
-	},
-
-	onConnect: function(){
-		var system = this.io.of('/system', this.options),
-			state = this.io.of('/state', this.options);
-
-		this.element.set('text', 'connected');
-		system.once('connect', this.publish.bind(this, 'system connect', system));
-		state.once('connect', this.publish.bind(this, 'state connect', state));
-		this.publish('planet connect', this.io);
-	},
-
-	onDisconnect: function(){
-		this.element.set('text', 'disconnected');
-		this.publish('planet disconnect');
+		return !!this.io && !!this.io.socket.connected;
 	},
 
 	toggle: function(e){
 		e.preventDefault();
 		if (this.isConnected()) this.disconnect();
 		else this.reconnect();
+	},
+
+	onConnect: function(){
+		this.button.set('text', 'connected');
+	},
+
+	onDisconnect: function(){
+		this.button.set('text', 'disconnected');
 	}
 
 });

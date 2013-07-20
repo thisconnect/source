@@ -2,35 +2,28 @@ Controller.Bool = new Class({
 
 	Extends: Controller,
 
+	selector: 'input[type=checkbox]',
+
 	initialize: function(data){
-		this.build(data);
-		this.element.addEvent('change', this.onChange.bind(this));
-	},
+		var input = this.input = new Element(this.selector);
 
-	build: function(data){
-		var container, label, input;
-		this.parent();
+		input.addEvent('change', this.onChange.bind(this));
 
-		label = new Element('label.checkbox', {
-			'text': data.label
-		});
-		input = this.element = new Element('input[type=checkbox]');
+		if (!data.label) this.element = input;
+		else {
+			this.element = this.label(data.label);
+			input.inject(this.element);
+		}
 
-		container = this.add('div.controls');
-		label.inject(container);
-		input.inject(label, 'top');
-	},
-
-	create: function(){
-		return;
+		this.set(data.value || false);
 	},
 
 	onChange: function(){
-		this.fireEvent('quickchange', this.element.checked);
+		this.fireEvent('quickchange', this.input.checked);
 	},
 
 	set: function(value){
-		this.element.checked = !!value;
+		this.input.checked = !!value;
 		return this;
 	}
 

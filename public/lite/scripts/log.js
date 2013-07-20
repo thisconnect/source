@@ -1,32 +1,47 @@
 new Unit({
 
+	pre: new Element('pre'),
+
 	initSetup: function(){
+		var pre = this.pre;
+
 		this.subscribe({
-			/* socket */
-			'planet connection': this.log.bind(['planet connection']),
-			'planet connect': this.log.bind(['planet connect']),
-			'planet disconnect': this.log.bind(['planet disconnect']),
-			'planet remove': this.log.bind(['planet remove']),
-
-			'service add': this.log.bind(['service add']),
-
-			'descriptor add': this.log.bind(['descriptor add']),
-			'descriptor ready': this.log.bind(['descriptor ready']),
-			
-			'widget select': this.log.bind(['widget select']),
-			'widget create': this.log.bind(['widget create']),
-			'widget update': this.log.bind(['widget update']),
-			'widget remove': this.log.bind(['widget remove']),
-
-			'tools add': this.log.bind(['tools add']),
-			
-			'merge': this.log.bind(['merge'])
+			'socket connect': function(){
+				pre.appendText('socket connect', 'top');
+				pre.appendText('\n', 'top');
+			},
+			'socket disconnect': function(){
+				pre.set('text', '\nsocket disconnect');
+			},
+			'socket reconnect': function(){
+				pre.appendText('socket reconnect', 'top');
+				pre.appendText('\n', 'top');
+			},
+			'system connect': function(system){
+				pre.appendText('system connect', 'top');
+				pre.appendText('\n', 'top');
+				system.emit('get', function(data){
+					pre.appendText('system: ' + JSON.stringify(data, null, '\r\t'), 'top');
+					pre.appendText('\n', 'top');
+				});
+			},
+			'state connect': function(state){
+				state.emit('get', function(data){
+					pre.appendText('state: ' + JSON.stringify(data, null, '\r\t'), 'top');
+					pre.appendText('\n', 'top');
+				});
+			},
+			'state set': function(path, value){
+				path = path.slice(0);
+				path.push(value);
+				pre.appendText('\n' + path.join(' '), 'top');
+			}
 		});
+
 	},
 
-	log: function(){
-		if (arguments.length == 0) console.log(this[0]);
-		else console.log(this[0], arguments);
+	readySetup: function(){
+		this.pre.inject(document.body);
 	}
 
 });
