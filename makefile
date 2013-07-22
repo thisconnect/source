@@ -18,6 +18,7 @@ test-browser:
 #	@open -a Google\ Chrome ./test/browser/index.html
 
 test-modules:
+	@cd node_modules/tool/ && make
 	@cd node_modules/port/ && make
 	@cd node_modules/planet/ && make
 

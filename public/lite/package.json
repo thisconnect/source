@@ -1,0 +1,11 @@
+{
+	"name": "lite"
+	, "version": "0.9.0-dev"
+	, "author": "Enrique Erne (http://mild.ch/)"
+	, "contributors": [
+		{"name": "Enrique Erne"}
+	]
+	, "devDependencies": {
+		"wrapup": "0.12.1"
+	}
+}

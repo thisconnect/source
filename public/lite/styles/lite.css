@@ -1,0 +1,68 @@
+html {
+	overflow-y: scroll;
+}
+
+body {
+    background: white;
+}
+
+h1 .close {
+	font-size: 30px;
+	vertical-align: top;
+}
+
+input[type=range] {
+	vertical-align: middle;
+}
+
+input[type=range].vertical {
+	-webkit-appearance: slider-vertical;
+}
+
+pre {
+	clear: both;
+	height: 250px;
+	margin: 1em;
+	overflow: auto;
+}
+
+label {
+	white-space: nowrap;
+}
+
+.float-left {
+	float: left;
+}
+
+.float-right {
+	float: right;
+}
+
+/* text selection */
+
+::selection { background: transparent; }
+::-moz-selection { background: transparent; }
+
+/* scrollbar */
+
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+
+::-webkit-scrollbar-button:start:decrement,
+::-webkit-scrollbar-button:end:increment {
+	display: none;
+}
+
+::-webkit-scrollbar-track-piece {
+	background-color: #e0e0e0;
+	-webkit-border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+	-webkit-border-radius: 6px;
+	background: #444;
+	border: 1px solid #777;
+}
+
