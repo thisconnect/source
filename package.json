@@ -10,7 +10,7 @@
 		, "socket.io": "0.9.16"
 		, "socket.io-client": "0.9.16"
 		, "optimist": "0.6.0"
-		, "planet": ">= 0.14.7"
+		, "planet": ">= 0.14.8"
 		, "port": ">= 0.7.0"
 		, "fudi": "> = 0.0.2"
 		, "tool": "1.0.0"
