@@ -28,7 +28,8 @@ new Unit({
 		var that = this;
 		this.publish('widget destroy', 'system');
 		system.emit('get', function(data){
-			that.publish('widget create', ['system', data]);
+			console.log('system', data);
+	//		that.publish('widget create', ['system', data]);
 		});
 	},
 

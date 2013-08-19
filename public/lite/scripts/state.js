@@ -36,7 +36,8 @@ new Unit({
 	connect: function(state){
 		var that = this;
 		state.emit('get', function(data){
-			console.log(data);
+			console.log('state', data);
+			that.publish('widget create', ['state', data]);
 	//		that.pre.set('text', 'state: ' + JSON.stringify(data, null, '\r\t'));
 		});
 	},

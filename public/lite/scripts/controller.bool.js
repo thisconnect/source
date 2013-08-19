@@ -12,7 +12,7 @@ Controller.Bool = new Class({
 		if (!data.label) this.element = input;
 		else {
 			this.element = this.label(data.label);
-			input.inject(this.element);
+			input.inject(this.element, 'top');
 		}
 
 		this.set(data.value || false);

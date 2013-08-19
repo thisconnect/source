@@ -61,6 +61,7 @@ var Widget2 = new Class({
 	},
 
 	control: function(id, data, name){
+console.log(id, data, name);
 		var type = data.type.capitalize(),
 			array = type.match(this.brakets),
 			publish = this.publish.bind(this),
@@ -68,6 +69,7 @@ var Widget2 = new Class({
 				? new Controller[type](data)
 				: new Controller.Array(array, data)),
 			change = function(value){
+				console.log(id, name, value);
 				publish('state set', [[id, name], value]);
 			};
 
