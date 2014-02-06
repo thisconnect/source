@@ -3,10 +3,11 @@ var app = require('./lib/app');
 require('./lib/log');
 require('./lib/socket');
 require('./lib/pd');
-//require('./lib/engine');
+require('./lib/engine');
 require('./lib/server');
 require('./lib/interface');
 require('./lib/desktop');
-require('./lib/system');
 
 app.emit('setup');
+
+console.log(app.config);
