@@ -9,5 +9,3 @@ require('./lib/interface');
 require('./lib/desktop');
 
 app.emit('setup');
-
-console.log(app.config);
