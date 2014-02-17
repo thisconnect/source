@@ -1,3 +1,5 @@
+// depricated
+
 new Unit({
 
 	element: new Element('div.state'),

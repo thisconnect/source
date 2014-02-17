@@ -21,7 +21,7 @@ input[type=range].vertical {
 
 pre {
 	clear: both;
-	height: 450px;
+	height: auto;
 	margin: 1em;
 	overflow: auto;
 }
@@ -56,13 +56,11 @@ label {
 }
 
 ::-webkit-scrollbar-track-piece {
-	background-color: #e0e0e0;
-	-webkit-border-radius: 6px;
+	background-color: #fff;
 }
 
 ::-webkit-scrollbar-thumb:vertical {
+	background: #ddd;
 	-webkit-border-radius: 6px;
-	background: #444;
-	border: 1px solid #777;
 }
 
