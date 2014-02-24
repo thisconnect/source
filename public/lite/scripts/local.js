@@ -6,12 +6,11 @@ new Unit({
 		this.subscribe({
 			'socket connect': this.setup,
 			'socket disconnect': this.disconnect,
-			'local connect': this.connect,
 			'local set': this.set,
 			'local remove': this.remove,
 			'local merge': this.merge,
-			'local type connect': this.connectType,
-			'local add': this.add
+			'local add': this.add,
+			'local type connect': this.connectType
 		});
 	},
 
@@ -24,6 +23,8 @@ new Unit({
 	type: null,
 
 	setup: function(local){
+		var that = this;
+
 		this.io = local;
 
 		local.on('set', this.onSet.bind(this));
@@ -31,13 +32,17 @@ new Unit({
 		local.on('merge', this.onMerge.bind(this));
 
 		this.type = local.of('/type');
-		this.publish('local type connect', this.type);
-		this.publish('local connect', this.io);
+
+		this.type.on('connect', function(){
+			that.publish('local type connect', that.type);
+			that.connect(that.io);
+		});
 	},
 
 	types: {},
 
 	connectType: function(type){
+		//console.log('local type connect');
 		var that = this;
 		type.emit('get', function(data){
 			console.log('local type', data);
@@ -52,6 +57,7 @@ new Unit({
 			console.log('local', data);
 			for (var widget in data){
 				if (!(widget in that.types)) continue;
+				console.log('widget', data[widget]);
 				that.publish('widget create', ['local', widget, that.types[widget]]);
 			}
 		});

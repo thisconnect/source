@@ -37,8 +37,7 @@ var Widget3 = new Class({
 
 	create: function(id, data){
 		this.element = new Element('section');
-		var control = this.control.bind(this, id);
-		Object.forEach(data, control);
+		Object.forEach(data, this.control.bind(this, id));
 	},
 
 	destroy: function(){
