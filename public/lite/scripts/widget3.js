@@ -3,7 +3,9 @@ new Unit({
 	initSetup: function(){
 		this.subscribe({
 			'widget create': this.create,
-			'widget destroy': this.destroy
+			'widget destroy': this.destroy,
+			'widget merge': this.merge,
+			'widget set': this.set
 		});
 	},
 
@@ -20,6 +22,16 @@ new Unit({
 		if (!this.widgets[id]) return;
 		this.widgets[id].destroy();
 		delete this.widgets[id];
+	},
+
+	merge: function(context, id, data){
+		console.log('merge --->', context, id, data);
+		//console.log(this.widgets[id]);
+	},
+
+	set: function(path, value){
+		console.log('set --->', path, value);
+		//console.log(this.widgets[id]);
 	}
 
 });
@@ -44,11 +56,6 @@ var Widget3 = new Class({
 		this.element.destroy();
 	},
 
-	inject: function(element, position){
-		this.element.inject(element, position || 'bottom');
-		return this;
-	},
-
 	attach: function(element, position){
 		this.element.inject(element, position || 'bottom');
 		return this;
@@ -60,7 +67,6 @@ var Widget3 = new Class({
 	},
 
 	control: function(id, data, name){
-		// console.log(id, data, name);
 		var type = data.type.capitalize(),
 			array = type.match(this.brakets),
 			publish = this.publish.bind(this),
@@ -68,11 +74,14 @@ var Widget3 = new Class({
 				? new Controller[type](data)
 				: new Controller.Array(array, data)),
 			change = function(value){
-				console.log(id, name, value);
+				//console.log(id, name, value);
 				publish('local set', [[id, name], value]);
 			};
 
 		control.addEvent('quickchange', change).attach(this.element);
+		this.subscribe(id + ' change ' + name, function(value){
+			console.log(id + ' change ' + name, value);
+		});
 	}
 
 });

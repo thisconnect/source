@@ -4,11 +4,11 @@ new Unit({
 
 	initSetup: function(){
 		this.subscribe({
-			'socket connect': this.setup,
+			'socket connect': this.connect,
 			'socket disconnect': this.disconnect,
 			'local set': this.set,
-			'local remove': this.remove,
 			'local merge': this.merge,
+			'local remove': this.remove,
 			'local add': this.add,
 			'local type connect': this.connectType
 		});
@@ -22,7 +22,7 @@ new Unit({
 
 	type: null,
 
-	setup: function(local){
+	connect: function(local){
 		var that = this;
 
 		this.io = local;
@@ -35,7 +35,7 @@ new Unit({
 
 		this.type.on('connect', function(){
 			that.publish('local type connect', that.type);
-			that.connect(that.io);
+			that.setup(that.io);
 		});
 	},
 
@@ -50,15 +50,15 @@ new Unit({
 		});
 	},
 
-	connect: function(local){
+	setup: function(local){
 		var that = this;
 		this.publish('widget destroy', 'local');
 		local.emit('get', function(data){
-			console.log('local', data);
+			// console.log('local', data);
 			for (var widget in data){
 				if (!(widget in that.types)) continue;
-				console.log('widget', data[widget]);
 				that.publish('widget create', ['local', widget, that.types[widget]]);
+				that.publish('widget merge', ['local', widget, data[widget]]);
 			}
 		});
 	},
@@ -78,8 +78,9 @@ new Unit({
 		this.io.emit('merge', data);
 	},
 
-	onSet: function(key, value){
-		console.log('onSet', key, value);
+	onSet: function(path, value){
+		console.log('onSet', path.join(' '), value);
+		this.publish('widget set', [path, value]);
 	},
 
 	onRemove: function(key){
@@ -96,7 +97,7 @@ new Unit({
 	},
 
 	add: function(widget){
-		widget.inject(this.element);
+		widget.attach(this.element);
 	}
 
 });
