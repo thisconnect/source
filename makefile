@@ -1,12 +1,14 @@
+export PATH := $(shell pwd)/node_modules/.bin/:$(PATH)
+
 REPORTER = spec # list
 
 all: test
 
-test: test-node test-modules
+test: test-modules test-node
 
 test-node:
 	@node index --socket.log-level=1 --pd.flags.nogui & echo $$! > app.pid
-	@./node_modules/.bin/mocha --reporter $(REPORTER) ./test/node/* || true
+	@mocha --reporter $(REPORTER) ./test/node/* || true
 	@echo 'done'
 	@kill `cat app.pid`
 	@rm app.pid
