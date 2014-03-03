@@ -1,0 +1,13 @@
+.DS_Store
+.bin
+node_modules
+*.git
+public/*/.gitmodules
+*benchmark.html
+*.as
+*.zip
+*.swf
+test/public/mocha.css
+test/public/mocha.js
+test/public/tests.js
+
