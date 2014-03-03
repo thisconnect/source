@@ -10,10 +10,11 @@ describe('Socket.IO', function(){
 	describe('#connect()', function(){
 
 		it('should connect to Socket.IO', function(done){
-			socket
-			.on('connect', function(){
+
+			socket.on('connect', function(){
 				done();
 			});
+
 		});
 
 		it('should fail to connect to Socket.IO', function(done){
@@ -32,9 +33,12 @@ describe('Socket.IO', function(){
 
 	describe('#namespace', function(){
 
-		it('should connect to service', function(done){
+		it('should connect to port 8004', function(done){
 
-			io.connect('//:8004/system')
+			io.connect('//:8004', {
+				'resource': 'io'
+				, 'force new connection': true
+			})
 			.on('connect', function(){
 
 				this.emit('get', function(data){
@@ -46,9 +50,30 @@ describe('Socket.IO', function(){
 
 		});
 
-		it('should connect to state', function(done){
+		it('should connect to 8004/type', function(done){
 
-			io.connect('//:8004/state')
+			io.connect('//:8004/type', {
+				'resource': 'io'
+				, 'force new connection': true
+			})
+			.on('connect', function(){
+
+				this.emit('get', function(data){
+					expect(data).to.be.an('object');
+					done();
+				});
+
+			});
+
+		});
+
+		it('should connect to port 8004 on namespace /type', function(done){
+
+			io.connect('//:8004', {
+				'resource': 'io'
+				, 'force new connection': true
+			})
+			.of('/type')
 			.on('connect', function(){
 
 				this.emit('get', function(data){
