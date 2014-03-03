@@ -16,9 +16,9 @@
 		, "tool": "1.0.0"
 	}
 	, "devDependencies": {
-		"mocha": "1.16.2"
-		, "expect.js": "0.2.0"
-		, "wrapup": "1.0.3"
+		"mocha": "1.17.1"
+		, "expect.js": "0.3.1"
+		, "wrapup": "1.0.5"
 		, "benchmark": "1.0.0"
 	}
 }
