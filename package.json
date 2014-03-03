@@ -10,8 +10,8 @@
 		, "socket.io": "0.9.16"
 		, "socket.io-client": "0.9.16"
 		, "minimist": "0.0.8"
-		, "planet": ">= 0.14.8"
-		, "port": ">= 0.7.1"
+		, "planet": ">= 0.14.9"
+		, "port": ">= 0.7.2"
 		, "fudi": "> = 0.0.2"
 		, "tool": "1.0.1"
 	}
@@ -21,4 +21,5 @@
 		, "wrapup": "1.0.5"
 		, "benchmark": "1.0.0"
 	}
+	, "repository": "git://github.com/thisconnect/source.git"
 }
