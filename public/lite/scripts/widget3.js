@@ -2,20 +2,12 @@ new Unit({
 
 	initSetup: function(){
 		this.subscribe({
-			'widget create': this.create,
-			'widget destroy': this.destroy,
-			'widget merge': this.merge,
-			'widget set': this.set
+			'widget create': this.create
 		});
 	},
 
-	widgets: {},
-
 	create: function(context, id, data){
-		var widget = this.widgets[id]
-			|| (this.widgets[id] = new Widget3(id, data));
-
-		this.publish(context + ' add', widget);
+		new Widget3(context, id, data);
 	},
 
 	destroy: function(id){
@@ -43,18 +35,41 @@ var Widget3 = new Class({
 	Implements: Unit,
 
 	brakets: /(.*?)\[(.*?)\]/,
+	context: null,
+	id: null,
 
-	initialize: function(id, data){
+	initialize: function(context, id, data){
 		this.setupUnit();
-		this.create(id, data);
+		this.context = context;
+		this.id = id;
+		this.create(data);
+		this.publish(context + ' add', this);
     },
 
-	create: function(id, data){
+	create: function(data){
 		this.element = new Element('section');
-		Object.forEach(data, this.control.bind(this, id));
+
+		new Element('span.float-right[text=⨯]')
+			.addEvent('click', function(){
+				console.log('close');
+			})
+			.inject(this.element);
+
+		new Element('h2', {
+			text: this.id.capitalize()
+		}).inject(this.element);
+
+		Object.forEach(data, this.addControl.bind(this));
+
+		this.subscribe([this.context, this.id, 'merge'].join(' '), function(data){
+			for (var key in data){
+				this.publish([this.context, this.id, key, 'set'].join(' '), data[key]);
+			}
+		});
 	},
 
 	destroy: function(){
+		this.unsubscribe();
 		this.element.destroy();
 	},
 
@@ -68,25 +83,31 @@ var Widget3 = new Class({
 		return this;
 	},
 
-	controllers: {},
-
-	control: function(id, data, name){
-		var type = data.type.capitalize(),
+	addControl: function(data, name){
+		var control,
+			that = this,
+			type = data.type.capitalize(),
 			array = type.match(this.brakets),
-			publish = this.publish.bind(this),
-			control = (!array
-				? new Controller[type](data)
-				: new Controller.Array(array, data)),
-			change = function(value){
-				//console.log(id, name, value);
-				publish('local set', [[id, name], value]);
-			};
+			publish = this.publish.bind(this);
 
-		control.addEvent('quickchange', change).attach(this.element);
-		this.controllers[name] = control;
-		//this.subscribe(id + ' change ' + name, function(value){
-		//	console.log(id + ' change ' + name, value);
-		//});
+		if (!array) control = new Controller[type](data);
+		else control = new Controller.Array(array, data);
+
+		control.addEvent('quickchange', function(value){
+			publish(that.context + ' set', [[that.id, name], value]);
+		}).attach(this.element);
+
+		this.subscribe([this.context, this.id, name, 'set'].join(' '), function(value){
+			control.set(value);
+		});
+
+	},
+
+	merge: function(id, data){
+		for (var key in data){
+			if (!this.widgets[id]['controllers'][key]) continue;
+			this.widgets[id]['controllers'][key].set(data[key]);
+		}
 	}
 
 });

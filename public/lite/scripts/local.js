@@ -42,10 +42,8 @@ new Unit({
 	types: {},
 
 	connectType: function(type){
-		//console.log('local type connect');
 		var that = this;
 		type.emit('get', function(data){
-			console.log('local type', data);
 			that.types = data;
 		});
 	},
@@ -54,17 +52,15 @@ new Unit({
 		var that = this;
 		this.publish('widget destroy', 'local');
 		local.emit('get', function(data){
-			// console.log('local', data);
 			for (var widget in data){
 				if (!(widget in that.types)) continue;
 				that.publish('widget create', ['local', widget, that.types[widget]]);
-				that.publish('widget merge', ['local', widget, data[widget]]);
+				that.publish('local ' + widget + ' merge', [data[widget]]);
 			}
 		});
 	},
 
 	set: function(path, value){
-		console.log('local set', path, value);
 		this.io.emit('set', path, value);
 	},
 
@@ -79,8 +75,7 @@ new Unit({
 	},
 
 	onSet: function(path, value){
-		console.log('onSet', path.join(' '), value);
-		this.publish('widget set', [path, value]);
+		this.publish('local ' + path.join(' ') + ' set', value);
 	},
 
 	onRemove: function(key){
@@ -88,6 +83,9 @@ new Unit({
 	},
 
 	onMerge: function(data){
+		for (var key in data){
+			this.publish('local ' + key + ' merge', data[key]);
+		}
 		console.log('onMerge', data);
 	},
 
