@@ -4,21 +4,36 @@ Controller.Enum = new Class({
 
 	selector: 'select',
 
+	select: null,
+
 	initialize: function(data){
+		this.addEvent('destroy', this.destroy);
+		this.addEvent('quickset', this.set);
+		this.create(data);
+	},
+
+	create: function(data){
 		var select = this.select = new Element(this.selector);
 
 		this.addOptions(data.values);
 
 		select.addEvent('change', this.onChange.bind(this));
 
-		if (!data.label) this.element = select;
-		else {
-			this.label = this.label(data.label);
-			this.element = this.label;
+		if (!!data.label){
+
+			this.element = this.label(data.label);
 			select.inject(this.element);
-		}
+
+		} else this.element = select;
 
 		this.set(data.value || data.values[0]);
+	},
+
+	destroy: function(){
+		console.log('CONTROLLER destroy');
+		this.removeEvents();
+		this.select.removeEvents();
+		this.element.destroy();
 	},
 
 	addOptions: function(values){

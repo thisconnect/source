@@ -22,21 +22,30 @@ new Unit({
 
 	type: null,
 
-	connect: function(local){
+	connect: function(io){
+		console.log('SOCKET CONNECT');
 		var that = this;
 
-		this.io = local;
+		this.io = io;
 
-		local.on('set', this.onSet.bind(this));
-		local.on('remove', this.onRemove.bind(this));
-		local.on('merge', this.onMerge.bind(this));
+		io.on('set', this.onSet.bind(this));
+		io.on('remove', this.onRemove.bind(this));
+		io.on('merge', this.onMerge.bind(this));
 
-		this.type = local.of('/type');
+		this.type = io.of('/type');
 
-		this.type.on('connect', function(){
+		this.type.once('connect', function(){
 			that.publish('local type connect', that.type);
-			that.setup(that.io);
+			that.setup(io);
 		});
+	},
+
+	disconnect: function(){
+		this.io.removeListener('set');
+		this.io.removeListener('remove');
+		this.io.removeListener('merge');
+		this.io = null;
+		this.type = null;
 	},
 
 	types: {},
@@ -54,6 +63,8 @@ new Unit({
 		local.emit('get', function(data){
 			for (var widget in data){
 				if (!(widget in that.types)) continue;
+				// console.log('DELETE', ['local', widget, 'delete'].join(' '));
+				that.publish(['local', widget, 'delete'].join(' '));
 				that.publish('widget create', ['local', widget, that.types[widget]]);
 				that.publish('local ' + widget + ' merge', [data[widget]]);
 			}
@@ -75,7 +86,8 @@ new Unit({
 	},
 
 	onSet: function(path, value){
-		this.publish('local ' + path.join(' ') + ' set', value);
+		var key = path.pop(-1);
+		this.publish('local ' + path.join(' ') + ' set', [key, value]);
 	},
 
 	onRemove: function(key){
@@ -87,11 +99,6 @@ new Unit({
 			this.publish('local ' + key + ' merge', data[key]);
 		}
 		console.log('onMerge', data);
-	},
-
-	disconnect: function(){
-		//this.local.removeAllListeners();
-		//delete this.local;
 	},
 
 	add: function(widget){

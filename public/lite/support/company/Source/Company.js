@@ -4,7 +4,7 @@ name: Company
 
 description: Mediated Component System for MooTools
 
-version: 1.1
+version: 1.2
 
 license: MIT-style
 
@@ -160,7 +160,7 @@ Object.append(Dispatcher, {
 		if (finish) finished[type] = args;
 		if (!events || !(handlers = events[type])) return this;
 		for (var i = 0, l = handlers.length; i < l; i++){
-			this.dispatch(handlers[i], args);
+			if (handlers[i]) this.dispatch(handlers[i], args);
 		}
 		return this;
 	},
@@ -419,6 +419,11 @@ this.Unit = new Type('Unit', Unit).extend({
 		if (type.charAt(0) == '!') finish = (type = type.substring(1));
 		else if (this.$unitPrefix) type = this.$unitPrefix + '.' + type;
 		if (this.$unitAttached) Dispatcher.fireEvent.call(Dispatcher, type, args, finish);
+		return this;
+	},
+
+	copublish: function(type, args){
+		if (this.$unitAttached) Dispatcher.fireEvent.call(Dispatcher, type, args);
 		return this;
 	}
 

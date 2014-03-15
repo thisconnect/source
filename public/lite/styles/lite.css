@@ -1,14 +1,16 @@
 html {
 	overflow-y: scroll;
+	padding: 8px 0 8px 8px;
 }
 
 body {
     background: #fff;
 }
 
-h1 .close {
-	font-size: 30px;
-	vertical-align: top;
+h1, h2, h3, h4, h5 {
+	font-size: 1em;
+	line-height: inherit;
+	margin: .84em 0;
 }
 
 input[type=range] {
@@ -27,7 +29,22 @@ pre {
 }
 
 label {
+	display: block;
+	margin: .84em 0;
 	white-space: nowrap;
+}
+
+label select {
+	margin: 0 .84em;
+}
+
+.button {
+	cursor: pointer;
+	display: inline-block;
+	height: 1.4em;
+	line-height: 1.4;
+	text-align: center;
+	width: 1.4em;
 }
 
 .float-left {
@@ -36,6 +53,12 @@ label {
 
 .float-right {
 	float: right;
+}
+
+.widget {
+	border: 1px solid #ddd;
+	display: block;
+	padding: 0 0 0 1em;
 }
 
 /* text selection */

@@ -2,6 +2,8 @@ var Controller = new Class({
 
 	Implements: [Events],
 
+	element: null,
+
 	attach: function(container, position){
 		this.element.inject(container, position || 'bottom');
 		return this;

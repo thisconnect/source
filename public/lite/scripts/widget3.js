@@ -7,25 +7,7 @@ new Unit({
 	},
 
 	create: function(context, id, data){
-		new Widget3(context, id, data);
-	},
-
-	destroy: function(id){
-		if (!this.widgets[id]) return;
-		this.widgets[id].destroy();
-		delete this.widgets[id];
-	},
-
-	merge: function(context, id, data){
-		for (var key in data){
-			if (!this.widgets[id]['controllers'][key]) continue;
-			this.widgets[id]['controllers'][key].set(data[key]);
-		}
-	},
-
-	set: function(path, value){
-		if (!this.widgets[path[0]]['controllers'][path[1]]) return;
-		this.widgets[path[0]]['controllers'][path[1]].set(value);
+		var widget = new Widget3(context, id, data);
 	}
 
 });
@@ -46,13 +28,13 @@ var Widget3 = new Class({
 		this.publish(context + ' add', this);
     },
 
-	create: function(data){
-		this.element = new Element('section');
+	element: null,
 
-		new Element('span.float-right[text=⨯]')
-			.addEvent('click', function(){
-				console.log('close');
-			})
+	create: function(data){
+		this.element = new Element('section.widget');
+
+		new Element('span.button.float-right[text=⨯]')
+			.addEvent('click', this.destroy.bind(this))
 			.inject(this.element);
 
 		new Element('h2', {
@@ -61,16 +43,15 @@ var Widget3 = new Class({
 
 		Object.forEach(data, this.addControl.bind(this));
 
-		this.subscribe([this.context, this.id, 'merge'].join(' '), function(data){
-			for (var key in data){
-				this.publish([this.context, this.id, key, 'set'].join(' '), data[key]);
-			}
-		});
+		this.subscribe([this.context, this.id, 'delete'].join(' '), this.destroy);
+
+		this.subscribe([this.context, this.id, 'merge'].join(' '), this.merge);
 	},
 
 	destroy: function(){
 		this.unsubscribe();
 		this.element.destroy();
+		Unit.undecorate(this);
 	},
 
 	attach: function(element, position){
@@ -82,6 +63,8 @@ var Widget3 = new Class({
 		this.element.dispose();
 		return this;
 	},
+
+	controls: [],
 
 	addControl: function(data, name){
 		var control,
@@ -98,15 +81,20 @@ var Widget3 = new Class({
 		}).attach(this.element);
 
 		this.subscribe([this.context, this.id, name, 'set'].join(' '), function(value){
+			console.log([this.context, this.id, name, 'set'].join(' '), value);
 			control.set(value);
+		});
+
+		this.subscribe([this.context, this.id, 'delete'].join(' '), function(){
+			console.log([this.context, this.id, name, 'destroy'].join(' '));
+			control.destroy();
 		});
 
 	},
 
-	merge: function(id, data){
+	merge: function(data){
 		for (var key in data){
-			if (!this.widgets[id]['controllers'][key]) continue;
-			this.widgets[id]['controllers'][key].set(data[key]);
+			this.publish([this.context, this.id, key, 'set'].join(' '), data[key]);
 		}
 	}
 
