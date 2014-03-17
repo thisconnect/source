@@ -5,6 +5,10 @@
 	, "contributors": [
 		{"name": "Enrique Erne"}
 	]
+	, "scripts": {
+		"start": "node index"
+		, "test": "make test"
+	}
 	, "dependencies": {
 		"connect": "2.13.0"
 		, "socket.io": "0.9.16"
