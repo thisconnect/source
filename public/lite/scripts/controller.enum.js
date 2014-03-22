@@ -8,7 +8,7 @@ Controller.Enum = new Class({
 
 	initialize: function(data){
 		this.addEvent('destroy', this.destroy);
-		this.addEvent('quickset', this.set);
+		this.addEvent('set', this.set);
 		this.create(data);
 	},
 
@@ -30,7 +30,6 @@ Controller.Enum = new Class({
 	},
 
 	destroy: function(){
-		console.log('CONTROLLER destroy');
 		this.removeEvents();
 		this.select.removeEvents();
 		this.element.destroy();
@@ -47,7 +46,7 @@ Controller.Enum = new Class({
 	},
 
 	onChange: function(){
-		this.fireEvent('quickchange', this.select.get('value'));
+		this.fireEvent('change', this.select.get('value'));
 	},
 
 	set: function(value){

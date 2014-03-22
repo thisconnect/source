@@ -2,49 +2,60 @@ new Unit({
 
 	initSetup: function(){
 		this.subscribe({
-			'widget create': this.create
+			'widget create': this.create,
+			'types set': this.setTypes
 		});
 	},
 
-	create: function(context, name, data){
+	types: {},
+
+	setTypes: function(types){
+		this.types = types;
+	},
+
+	create: function(context, name, types){
 		var publish = this.publish.bind(this),
 			subscribe = this.subscribe.bind(this),
 			unsubscribe = this.unsubscribe.bind(this),
-			widget = new Widget(name, data);
+			widget = new Widget(name, types);
 
 		var id = context + ' ' + name;
 
-		Object.forEach(data, function(Control, key){
-			var control = widget.addControl(Control, key);
+		Object.forEach(types, function(type, key){
+			var control = widget.addControl(type, key);
 
-			control.addEvent('quickchange', function(value){
+			control.addEvent('change', function(value){
 				publish(context + ' set', [[name, key], value]);
 			});
 		});
 
 		function set(key, value){
-			widget.controls[key].fireEvent('quickset', value);
+			widget.controls[key].fireEvent('set', value);
 		}
 
-		function merge(data){
-			for (var key in data){
-				widget.controls[key].fireEvent('quickset', data[key]);
+		function merge(state){
+			console.log('types', types, this.types[name]); // this.types[name]
+			console.log('state', state);
+			for (var key in state){
+				if (!widget.controls[key]) console.log('create controller', key);
+				widget.controls[key].fireEvent('set', state[key]);
 			}
 		}
 
 		function destroy(){
-			Object.forEach(data, function(data, key){
-				unsubscribe
-			});
-			widget.fireEvent('destroy');
 			unsubscribe(id + ' set', set);
 			unsubscribe(id + ' merge', merge);
 			unsubscribe(id + ' delete', destroy);
+			widget.fireEvent('destroy');
 		}
 
 		subscribe(id + ' set', set);
 		subscribe(id + ' merge', merge);
 		subscribe(id + ' delete', destroy);
+
+		widget.addEvent('delete', function(){
+			publish(context + ' remove', name);
+		});
 
 		publish(context + ' add', widget);
 	}
@@ -80,7 +91,6 @@ var Widget = new Class({
 		Object.forEach(this.controls, function(control){
 			control.fireEvent('destroy');
 		});
-		this.removeEvent('destroy', this.destroy);
 		this.removeEvents();
 		this.element.destroy();
 	},
