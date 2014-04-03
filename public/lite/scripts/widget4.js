@@ -34,7 +34,7 @@ new Unit({
 		}
 
 		function merge(state){
-			console.log('types', types, this.types[name]); // this.types[name]
+			console.log('types', types, this.types[name]);
 			console.log('state', state);
 			for (var key in state){
 				if (!widget.controls[key]) console.log('create controller', key);

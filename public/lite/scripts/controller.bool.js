@@ -4,7 +4,15 @@ Controller.Bool = new Class({
 
 	selector: 'input[type=checkbox]',
 
+	input: null,
+
 	initialize: function(data){
+		this.addEvent('destroy', this.destroy);
+		this.addEvent('set', this.set);
+		this.create(data);
+	},
+
+	create: function(data){
 		var input = this.input = new Element(this.selector);
 
 		input.addEvent('change', this.onChange.bind(this));
@@ -18,8 +26,14 @@ Controller.Bool = new Class({
 		this.set(data.value || false);
 	},
 
+	destroy: function(){
+		this.removeEvents();
+		this.input.removeEvents();
+		this.element.destroy();
+	},
+
 	onChange: function(){
-		this.fireEvent('quickchange', this.input.checked);
+		this.fireEvent('change', this.input.checked);
 	},
 
 	set: function(value){
