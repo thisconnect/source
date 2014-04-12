@@ -7,21 +7,28 @@ new Unit({
 			'socket connect': this.connect,
 			'socket disconnect': this.disconnect
 		});
-		this.bound.onGet = this.onGet.bind(this);
-		this.bound.onConnect = this.onConnect.bind(this);
+		this.bound = {
+			'onConnect': this.onConnect.bind(this),
+			'onGet': this.onGet.bind(this),
+			'onSet': this.onSet.bind(this),
+			'onMerge': this.onMerge.bind(this),
+			'onRemove': this.onRemove.bind(this)
+		};
 	},
 
 	io: null,
 
 	connect: function(socket){
-		this.io = socket.of('/type');
-		this.io.once('connect', this.bound.onConnect);
+		(this.io = socket.of('/type'))
+			.once('connect', this.bound.onConnect)
+			.on('set', this.bound.onSet)
+			.on('merge', this.bound.onMerge);
 	},
 
 	disconnect: function(){
-		this.io.removeListener('set');
-		this.io.removeListener('remove');
-		this.io.removeListener('merge');
+		// this.io.removeListener('set');
+		// this.io.removeListener('remove');
+		// this.io.removeListener('merge');
 		this.io = null;
 	},
 
@@ -32,13 +39,13 @@ new Unit({
 	},
 
 	onGet: function(data){
-		TYPES = this.types = data;
+		this.types = data;
 		this.publish('types connect', this.types);
 	},
 
-	onSet: function(path, value){
-		var key = path.pop(-1);
-		this.publish('local ' + path.join(' ') + ' set', [key, value]);
+	onSet: function(id, value){
+		console.log('types:onSet', id, value);
+		this.publish('local ' + id + ' set', [key, value]);
 	},
 
 	onRemove: function(key){
@@ -47,9 +54,11 @@ new Unit({
 
 	onMerge: function(data){
 		for (var key in data){
-			this.publish('local ' + key + ' merge', data[key]);
+			console.log('types:onMerge for key in data', key, data[key]);
+			this.types[key] = data[key];
+			// this.publish('local ' + key + ' merge', data[key]);
 		}
-		console.log('types:onMerge', data);
+		console.log('types.types', this.types);
 	}
 
 });

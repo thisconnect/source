@@ -1,10 +1,17 @@
 new Unit({
 
+	bound: {},
+
 	initSetup: function(){
 		this.subscribe({
-			'widget create': this.create,
-			'types set': this.setTypes
+			'types connect': this.setTypes,
+			'widget create': this.create
 		});
+		this.bound = {
+			publish: this.publish.bind(this),
+			subscribe: this.subscribe.bind(this),
+			unsubscribe: this.unsubscribe.bind(this)
+		};
 	},
 
 	types: {},
@@ -13,51 +20,61 @@ new Unit({
 		this.types = types;
 	},
 
-	create: function(context, name, types){
-		var publish = this.publish.bind(this),
-			subscribe = this.subscribe.bind(this),
-			unsubscribe = this.unsubscribe.bind(this),
-			widget = new Widget(name, types);
+	create: function(context, name){
+
+		var types = this.types,
+			widget = new Widget(name, types[name]),
+			bound = this.bound;
 
 		var id = context + ' ' + name;
 
-		Object.forEach(types, function(type, key){
-			var control = widget.addControl(type, key);
+		function addControl(type, key){
+			widget.addControl(type, key)
+				.addEvent('change', function(value){
+					bound.publish(context + ' set', [[name, key], value]);
+				});
+		}
 
-			control.addEvent('change', function(value){
-				publish(context + ' set', [[name, key], value]);
-			});
-		});
+		Object.forEach(types[name], addControl);
 
 		function set(key, value){
 			widget.controls[key].fireEvent('set', value);
 		}
 
 		function merge(state){
-			console.log('types', types, this.types[name]);
-			console.log('state', state);
+			// console.log('types', types, this.types[name]);
+			// console.log('state', state);
 			for (var key in state){
-				if (!widget.controls[key]) console.log('create controller', key);
+				// if (!widget.controls[key]) console.log('create controller', key);
 				widget.controls[key].fireEvent('set', state[key]);
 			}
 		}
 
-		function destroy(){
-			unsubscribe(id + ' set', set);
-			unsubscribe(id + ' merge', merge);
-			unsubscribe(id + ' delete', destroy);
-			widget.fireEvent('destroy');
+		function update(a){
+			// console.log('UPDATE:::', a, Object.keys(widget.controls));
+			Object.forEach(a, function(value, key){
+				if (!widget.controls[key]) addControl(types[name][key], key);
+			});
 		}
 
-		subscribe(id + ' set', set);
-		subscribe(id + ' merge', merge);
-		subscribe(id + ' delete', destroy);
+		function destroy(){
+			bound.unsubscribe(id + ' set', set);
+			bound.unsubscribe(id + ' merge', merge);
+			bound.unsubscribe(id + ' update', merge);
+			bound.unsubscribe(id + ' delete', destroy);
+			widget.fireEvent('destroy');
+		}
+		console.log('listen::::', id + ' update');
+		bound.subscribe(id + ' set', set);
+		bound.subscribe(id + ' merge', merge);
+		bound.subscribe(id + ' update', update);
+		bound.subscribe(id + ' delete', destroy);
 
 		widget.addEvent('delete', function(){
-			publish(context + ' remove', name);
+			bound.publish(context + ' remove', name);
 		});
 
-		publish(context + ' add', widget);
+		bound.publish(context + ' add', widget);
 	}
 
 });
@@ -98,6 +115,7 @@ var Widget = new Class({
 	controls: {},
 
 	addControl: function(data, name){
+		console.log('widget:addControl_____', data, name);
 		var control,
 			type = data.type.capitalize(),
 			array = type.match(this.brakets);
