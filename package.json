@@ -10,7 +10,7 @@
 		, "test": "make test"
 	}
 	, "dependencies": {
-		"connect": "2.14.2"
+		"connect": "2.14.4"
 		, "socket.io": "0.9.16"
 		, "socket.io-client": "0.9.16"
 		, "minimist": "0.0.8"
@@ -20,9 +20,9 @@
 		, "tool": "1.0.1"
 	}
 	, "devDependencies": {
-		"mocha": "1.18.0"
+		"mocha": "1.18.2"
 		, "expect.js": "0.3.1"
-		, "wrapup": "1.0.5"
+		, "wrapup": "1.0.6"
 		, "benchmark": "1.0.0"
 	}
 	, "repository": "git://github.com/thisconnect/source.git"
