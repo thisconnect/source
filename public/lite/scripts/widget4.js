@@ -42,16 +42,12 @@ new Unit({
 		}
 
 		function merge(state){
-			// console.log('types', types, this.types[name]);
-			// console.log('state', state);
 			for (var key in state){
-				// if (!widget.controls[key]) console.log('create controller', key);
 				widget.controls[key].fireEvent('set', state[key]);
 			}
 		}
 
 		function update(a){
-			// console.log('UPDATE:::', a, Object.keys(widget.controls));
 			Object.forEach(a, function(value, key){
 				if (!widget.controls[key]) addControl(types[name][key], key);
 			});
@@ -60,11 +56,11 @@ new Unit({
 		function destroy(){
 			bound.unsubscribe(id + ' set', set);
 			bound.unsubscribe(id + ' merge', merge);
-			bound.unsubscribe(id + ' update', merge);
+			bound.unsubscribe(id + ' update', update);
 			bound.unsubscribe(id + ' delete', destroy);
 			widget.fireEvent('destroy');
 		}
-		console.log('listen::::', id + ' update');
+
 		bound.subscribe(id + ' set', set);
 		bound.subscribe(id + ' merge', merge);
 		bound.subscribe(id + ' update', update);
@@ -115,13 +111,11 @@ var Widget = new Class({
 	controls: {},
 
 	addControl: function(data, name){
-		console.log('widget:addControl_____', data, name);
-		var control,
-			type = data.type.capitalize(),
-			array = type.match(this.brakets);
-
-		if (!array) control = new Controller[type](data);
-		else control = new Controller.Array(array, data);
+		var type = data.type.capitalize(),
+			array = type.match(this.brakets),
+			control = (!array)
+				? new Controller[type](data)
+				: new Controller.Array(array, data);
 
 		this.controls[name] = control;
 		control.attach(this.element);
