@@ -1,16 +1,30 @@
 html {
 	overflow-y: scroll;
-	padding: 8px 0 8px 8px;
+	padding: .6rem 1.2rem .6rem 1.8rem;
 }
 
 body {
     background: #fff;
 }
 
+header {
+	color: #a0a0a0;
+	font-size: .8rem;
+	padding-bottom: .5rem;
+}
+
+html, button, input, textarea, select {
+	font: 100%/1.4 Menlo, monospace;
+}
+
+a {
+	text-decoration: none;
+}
+
 h1, h2, h3, h4, h5 {
-	font-size: 1em;
+	font-size: 1rem;
 	line-height: inherit;
-	margin: .84em 0;
+	margin: .84rem 0;
 }
 
 input[type=range] {
@@ -24,27 +38,37 @@ input[type=range].vertical {
 pre {
 	clear: both;
 	height: auto;
-	margin: 1em;
+	margin: 1rem;
 	overflow: auto;
 }
 
 label {
 	display: block;
-	margin: .84em 0;
+	margin: .84rem 0;
 	white-space: nowrap;
 }
 
 label select {
-	margin: 0 .84em;
+	margin: 0 .5rem;
+}
+
+label input[type=checkbox] {
+	margin: 0 .5rem 0 0;
 }
 
 .button {
 	cursor: pointer;
 	display: inline-block;
-	height: 1.4em;
-	line-height: 1.4;
+	font-size: 2rem;
+	height: 2rem;
+	line-height: 1;
 	text-align: center;
-	width: 1.4em;
+	width: 2rem;
+}
+
+.button:active {
+	background: white;
+	outline: 1px solid white;
 }
 
 .float-left {

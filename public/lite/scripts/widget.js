@@ -1,90 +1,137 @@
+new Unit({
+
+	bound: {},
+
+	initSetup: function(){
+		this.subscribe({
+			'types connect': this.setTypes,
+			'widget create': this.create
+		});
+		this.bound = {
+			publish: this.publish.bind(this),
+			subscribe: this.subscribe.bind(this),
+			unsubscribe: this.unsubscribe.bind(this)
+		};
+	},
+
+	types: {},
+
+	setTypes: function(types){
+		this.types = types;
+	},
+
+	create: function(context, name){
+
+		var types = this.types,
+			widget = new Widget(name, types[name]),
+			bound = this.bound;
+
+		var id = context + ' ' + name;
+
+		function addControl(type, key){
+			widget.addControl(type, key)
+				.addEvent('change', function(value){
+					bound.publish(context + ' set', [[name, key], value]);
+				});
+		}
+
+		Object.forEach(types[name], addControl);
+
+		function set(key, value){
+			console.log('asdf');
+			widget.controls[key].fireEvent('set', value);
+		}
+
+		function merge(state){
+			for (var key in state){
+				widget.controls[key].fireEvent('set', state[key]);
+			}
+		}
+
+		function update(a){
+			Object.forEach(a, function(value, key){
+				if (!widget.controls[key]) addControl(types[name][key], key);
+			});
+		}
+
+		function destroy(){
+			bound.unsubscribe(id + ' set', set);
+			bound.unsubscribe(id + ' merge', merge);
+			bound.unsubscribe(id + ' update', update);
+			bound.unsubscribe(id + ' delete', destroy);
+			widget.fireEvent('destroy');
+		}
+
+		bound.subscribe(id + ' set', set);
+		bound.subscribe(id + ' merge', merge);
+		bound.subscribe(id + ' update', update);
+		bound.subscribe(id + ' delete', destroy);
+
+		widget.addEvent('delete', function(){
+			console.log('widget delete', name, this);
+			bound.publish(context + ' remove', name);
+		});
+
+		bound.publish(context + ' add', widget);
+	}
+
+});
+
 var Widget = new Class({
 
-	Implements: Unit,
+	Implements: [Events],
+
+	brakets: /(.*?)\[(.*?)\]/,
 
 	initialize: function(id, data){
-		this.setupUnit();
-		this.id = id;
-		this.label = data.label;
-		this.description = data.description;
-		this.name = data.name;
+		this.addEvent('destroy', this.destroy);
+		this.create(id, data);
+    },
 
-		this.build();
-		this.buildControllers(data.controllers);
+	element: null,
+
+	create: function(id, data){
+		this.element = new Element('section.widget');
+
+		new Element('span.button.float-right[text=⨯]')
+			.addEvent('click', this.fireEvent.bind(this, 'delete'))
+			.inject(this.element);
+
+		new Element('h2', {
+			text: id.capitalize()
+		}).inject(this.element);
 	},
 
-	build: function(){
-		var that = this;
-		this.element = new Element('section');
-		new Element('h1', {
-			text: this.label,
-			events: {
-				click: function(){ that.form.toggleClass('hidden'); }
-			}
-		}).adopt([
-			(!this.description) ? null : new Element('small', {
-				text: ' ' + this.description + ' '
-			}),
-			new Element('button.close[text=⨯]', {
-				title: 'destroy ' + this.label + ' (' + this.id + ')',
-				events: {
-					click: this.onRemove.bind(this)
-				}
-			})
-		]).inject(this.element);
-		/*
-		this.element.set('html', '<h1>{label}{description}{close}</h1>'.substitute({
-			label: this.label,
-			description: this.description ? '<small> ' + this.description + ' </small>' : '',
-			close: '<button class="close" title="destroy">⨯</button>'
-		}));
-		*/
-
-		this.form = new Element('form.form-horizontal').inject(this.element);
-	},
-
-	buildControllers: function(controls){
-		for (var name in controls){
-			if (!controls.hasOwnProperty(name)) continue;
-			this.addController([this.id, this.name, name], controls[name]);
-		};
-	},
-
-	addController: function(path, controller){
-		var that = this,
-			control = new Controller(controller.type, controller);
-
-		control.addEvent('quickchange', function(value){
-			that.publish('widget update', [path, value]);
+	destroy: function(){
+		Object.forEach(this.controls, function(control){
+			control.fireEvent('destroy');
 		});
-		var bound = {
-			update: this.onUpdate.bind(control)
-		};
-		this.subscribe('planet update ' + path.join(' '), bound.update);
-		control.attach(this.form);
+		this.removeEvents();
+		this.element.destroy();
+	},
+
+	controls: {},
+
+	addControl: function(data, name){
+		var type = data.type.capitalize(),
+			array = type.match(this.brakets),
+			control = (!array)
+				? new Controller[type](data)
+				: new Controller.Array(array, data);
+
+		this.controls[name] = control;
+		control.attach(this.element);
 		return control;
 	},
 
 	attach: function(element, position){
-		this.element.inject(element || document.body, position || 'bottom');
+		this.element.inject(element, position || 'bottom');
 		return this;
 	},
 
 	detach: function(){
 		this.element.dispose();
 		return this;
-	},
-
-	onRemove: function(){
-		this.publish('widget remove', this.id);
-	},
-
-	destroy: function(){
-		this.element.destroy();
-	},
-
-	onUpdate: function(value){
-		this.set(value);
 	}
 
 });

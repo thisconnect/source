@@ -1,19 +1,25 @@
-// depricated
-
 new Unit({
 
-	element: new Element('div.state'),
+	bound: {},
 
 	initSetup: function(){
 		this.subscribe({
-			'socket connect': this.prepare,
-			'system connect': this.setup,
-			'state connect': this.connect,
+			'socket connect': this.setup,
+			'types connect': this.setTypes,
 			'state set': this.set,
+			'state merge': this.merge,
 			'state remove': this.remove,
-			'state merge': this.merge
+			'state add': this.add
 		});
+		this.bound = {
+			'onSet': this.onSet.bind(this),
+			'onMerge': this.onMerge.bind(this),
+			'onRemove': this.onRemove.bind(this),
+			'create': this.create.bind(this)
+		};
 	},
+
+	element: new Element('div.state'),
 
 	readySetup: function(){
 		this.element.inject(document.body);
@@ -21,51 +27,65 @@ new Unit({
 
 	io: null,
 
-	state: null,
+	types: null,
 
-	prepare: function(socket){
-		this.io = socket;
+	setup: function(socket){
+		(this.io = socket)
+		.on('set', this.bound.onSet)
+		.on('merge', this.bound.onMerge)
+		.on('remove', this.bound.onRemove);
 	},
 
-	setup: function(){
-		var state = this.state = this.io.of('/state');
-		state.on('set', this.onSet.bind(this));
-		state.on('remove', this.onRemove.bind(this));
-		state.on('merge', this.onMerge.bind(this));
-		state.once('connect', this.publish.bind(this, 'state connect', state));
+	setTypes: function(types){
+		this.types = types;
+		this.io.emit('get', this.bound.create)
 	},
 
-	connect: function(state){
-		var that = this;
-		state.emit('get', function(data){
-			console.log('state', data);
-			that.publish('widget create', ['state', data]);
-	//		that.pre.set('text', 'state: ' + JSON.stringify(data, null, '\r\t'));
-		});
+	create: function(data){
+		for (var widget in data){
+			if (!(widget in this.types)){
+				this.publish('log', 'widget [' + widget + '] missing in this.types');
+				continue;
+			}
+			this.publish('state ' + widget + ' delete');
+			this.publish('widget create', ['state', widget, this.types[widget]]);
+			this.publish('state ' + widget + ' merge', [data[widget]]);
+		}
+	},
+
+	add: function(widget){
+		widget.attach(this.element);
 	},
 
 	set: function(path, value){
-		this.state.emit('set', path, value);
+		this.io.emit('set', path, value);
 	},
 
 	remove: function(key){
-		this.state.emit('remove', key);
+		this.io.emit('remove', key);
 	},
 
 	merge: function(data){
-		this.state.emit('merge', data);
+		this.io.emit('merge', data);
 	},
 
 	onSet: function(key, value){
-		// console.log('onSet', key, value);
+		if (typeof key == 'string'){
+			this.publish('widget create', ['state', key, this.types[key]]);
+			this.publish('state ' + key + ' merge', value);
+		console.log('onSet:::::::::', typeof key, key, value);
+		}
+		//this.publish('state ' + key + ' set', value);
 	},
 
 	onRemove: function(key){
-		// console.log('onRemove', key);
+		this.publish('state ' + key + ' delete');
 	},
 
 	onMerge: function(data){
-		// console.log('onMerge', data);
+		for (var widget in data){
+			this.publish('state ' + widget + ' update', data[widget]);
+		}
 	}
 
 });
