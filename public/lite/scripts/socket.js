@@ -12,15 +12,19 @@ new Unit({
 
 	element: new Element('header'),
 
-	button: new Element('a[href="#connect"]'),
+	button: new Element('a[href="#connect"].float-right'),
 
 	info: new Element('span.info'),
+
+	warning: new Element('span.warning'),
 
 	readySetup: function(){
 		this.button.addEvent('click', this.bound.toggle);
 		this.info.inject(this.element);
+		this.warning.inject(this.element);
 		this.element.appendText(' ');
 		this.button.inject(this.element);
+		this.element.appendText(' ');
 		this.element.inject(document.body);
 		this.connect();
 	},
@@ -69,6 +73,7 @@ new Unit({
 			+ ':' + this.io.socket.options.port
 		);
 
+		this.warning.set('text', '');
 		this.button.set('text', 'disconnect');
 
 		this.publish('socket connect', this.io);
@@ -76,6 +81,7 @@ new Unit({
 
 	onDisconnect: function(){
 		this.info.set('text', '');
+		this.warning.set('text', 'oh no, connection lost!');
 		this.button.set('text', 'connect');
 
 		this.publish('socket disconnect');

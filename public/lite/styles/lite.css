@@ -79,6 +79,10 @@ label input[type=checkbox] {
 	float: right;
 }
 
+.warning {
+	color: #f10;
+}
+
 .widget {
 	border: 1px solid #ddd;
 	display: block;

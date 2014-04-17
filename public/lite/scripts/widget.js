@@ -38,7 +38,6 @@ new Unit({
 		Object.forEach(types[name], addControl);
 
 		function set(key, value){
-			console.log('asdf');
 			widget.controls[key].fireEvent('set', value);
 		}
 
@@ -68,7 +67,6 @@ new Unit({
 		bound.subscribe(id + ' delete', destroy);
 
 		widget.addEvent('delete', function(){
-			console.log('widget delete', name, this);
 			bound.publish(context + ' remove', name);
 		});
 

@@ -44,7 +44,7 @@ new Unit({
 	create: function(data){
 		for (var widget in data){
 			if (!(widget in this.types)){
-				this.publish('log', 'widget [' + widget + '] missing in this.types');
+				this.publish('log', 'this.types[' + widget + '] is missing!');
 				continue;
 			}
 			this.publish('state ' + widget + ' delete');
@@ -73,13 +73,14 @@ new Unit({
 		if (typeof key == 'string'){
 			this.publish('widget create', ['state', key, this.types[key]]);
 			this.publish('state ' + key + ' merge', value);
-		console.log('onSet:::::::::', typeof key, key, value);
+			console.log('state ' + key + ' merge', value);
 		}
 		//this.publish('state ' + key + ' set', value);
+		console.log('onSet:::::::::', typeof key, key, value);
 	},
 
-	onRemove: function(key){
-		this.publish('state ' + key + ' delete');
+	onRemove: function(widget){
+		this.publish('state ' + widget + ' delete');
 	},
 
 	onMerge: function(data){
