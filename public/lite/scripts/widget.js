@@ -35,7 +35,7 @@ new Unit({
 				});
 		}
 
-		Object.forEach(types[name], addControl);
+		// Object.forEach(types[name], addControl);
 
 		function set(key, value){
 			widget.controls[key].fireEvent('set', value);
@@ -47,9 +47,10 @@ new Unit({
 			}
 		}
 
-		function update(a){
-			Object.forEach(a, function(value, key){
+		function update(data){
+			Object.forEach(data, function(value, key){
 				if (!widget.controls[key]) addControl(types[name][key], key);
+				widget.controls[key].fireEvent('set', value);
 			});
 		}
 

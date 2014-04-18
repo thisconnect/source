@@ -11,8 +11,7 @@ new Unit({
 			'onConnect': this.onConnect.bind(this),
 			'onGet': this.onGet.bind(this),
 			'onSet': this.onSet.bind(this),
-			'onMerge': this.onMerge.bind(this),
-			'onRemove': this.onRemove.bind(this)
+			'onMerge': this.onMerge.bind(this)
 		};
 	},
 
@@ -26,9 +25,9 @@ new Unit({
 	},
 
 	disconnect: function(){
-		// this.io.removeListener('set');
-		// this.io.removeListener('remove');
-		// this.io.removeListener('merge');
+		this.io
+			.removeListener('set', this.bound.onSet)
+			.removeListener('merge', this.bound.onMerge);
 		this.io = null;
 	},
 
@@ -44,21 +43,13 @@ new Unit({
 	},
 
 	onSet: function(id, value){
-		console.log('types:onSet', id, value);
-		this.publish('local ' + id + ' set', [key, value]);
-	},
-
-	onRemove: function(key){
-		this.publish('local ' + key + ' delete');
+		this.types[id] = value;
 	},
 
 	onMerge: function(data){
 		for (var key in data){
-			console.log('types:onMerge for key in data', key, data[key]);
 			this.types[key] = data[key];
-			// this.publish('local ' + key + ' merge', data[key]);
 		}
-		console.log('types.types', this.types);
 	}
 
 });

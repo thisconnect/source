@@ -4,7 +4,8 @@ new Unit({
 
 	initSetup: function(){
 		this.subscribe({
-			'socket connect': this.setup,
+			'socket connect': this.connect,
+			'socket disconnect': this.disconnect,
 			'types connect': this.setTypes,
 			'state set': this.set,
 			'state merge': this.merge,
@@ -29,11 +30,19 @@ new Unit({
 
 	types: null,
 
-	setup: function(socket){
+	connect: function(socket){
 		(this.io = socket)
-		.on('set', this.bound.onSet)
-		.on('merge', this.bound.onMerge)
-		.on('remove', this.bound.onRemove);
+			.on('set', this.bound.onSet)
+			.on('merge', this.bound.onMerge)
+			.on('remove', this.bound.onRemove);
+	},
+
+	disconnect: function(){
+		this.io
+			.removeListener('set', this.bound.onSet)
+			.removeListener('merge', this.bound.onMerge)
+			.removeListener('remove', this.bound.onRemove);
+		this.io = null;
 	},
 
 	setTypes: function(types){
@@ -49,7 +58,7 @@ new Unit({
 			}
 			this.publish('state ' + widget + ' delete');
 			this.publish('widget create', ['state', widget, this.types[widget]]);
-			this.publish('state ' + widget + ' merge', [data[widget]]);
+			this.publish('state ' + widget + ' update', [data[widget]]);
 		}
 	},
 
@@ -72,11 +81,10 @@ new Unit({
 	onSet: function(key, value){
 		if (typeof key == 'string'){
 			this.publish('widget create', ['state', key, this.types[key]]);
-			this.publish('state ' + key + ' merge', value);
-			console.log('state ' + key + ' merge', value);
+			this.publish('state ' + key + ' update', value);
+		} else {
+			this.publish('state ' + key[0] + ' set', [key[1], value]);
 		}
-		//this.publish('state ' + key + ' set', value);
-		console.log('onSet:::::::::', typeof key, key, value);
 	},
 
 	onRemove: function(widget){
