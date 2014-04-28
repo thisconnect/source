@@ -1,16 +1,16 @@
-Controller.Bool = new Class({
+Controller.boolean = new Class({
 
 	Extends: Controller,
 
 	selector: 'input[type=checkbox]',
-
-	input: null,
 
 	initialize: function(data){
 		this.addEvent('destroy', this.destroy);
 		this.addEvent('set', this.set);
 		this.create(data);
 	},
+
+	input: null,
 
 	create: function(data){
 		var input = this.input = new Element(this.selector);

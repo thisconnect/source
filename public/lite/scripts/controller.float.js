@@ -1,11 +1,11 @@
-Controller.Float = new Class({
+Controller.float = new Class({
 
-	Extends: Controller.Int,
+	Extends: Controller.number,
 
 	selector: 'input[type=range]',
 
 	onChange: function(e){
-		this.fireEvent('quickchange', parseFloat(this.input.value));
+		this.fireEvent('change', parseFloat(this.input.value));
 	}
 
 });

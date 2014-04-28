@@ -1,16 +1,16 @@
-Controller.Enum = new Class({
+Controller.enum = new Class({
 
 	Extends: Controller,
 
 	selector: 'select',
-
-	select: null,
 
 	initialize: function(data){
 		this.addEvent('destroy', this.destroy);
 		this.addEvent('set', this.set);
 		this.create(data);
 	},
+
+	select: null,
 
 	create: function(data){
 		var select = this.select = new Element(this.selector);
@@ -39,7 +39,7 @@ Controller.Enum = new Class({
 		var i = values.length;
 		while (i--){
 			new Element('option', {
-				text: values[i].capitalize(),
+				text: values[i],
 				value: values[i]
 			}).inject(this.select, 'top');
 		}

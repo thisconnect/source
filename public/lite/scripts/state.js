@@ -6,7 +6,7 @@ new Unit({
 		this.subscribe({
 			'socket connect': this.connect,
 			'socket disconnect': this.disconnect,
-			'types connect': this.setTypes,
+			'types ready': this.setTypes,
 			'state set': this.set,
 			'state merge': this.merge,
 			'state remove': this.remove,
@@ -28,8 +28,6 @@ new Unit({
 
 	io: null,
 
-	types: null,
-
 	connect: function(socket){
 		(this.io = socket)
 			.on('set', this.bound.onSet)
@@ -42,8 +40,11 @@ new Unit({
 			.removeListener('set', this.bound.onSet)
 			.removeListener('merge', this.bound.onMerge)
 			.removeListener('remove', this.bound.onRemove);
+
 		this.io = null;
 	},
+
+	types: null,
 
 	setTypes: function(types){
 		this.types = types;
@@ -83,7 +84,9 @@ new Unit({
 			this.publish('widget create', ['state', key, this.types[key]]);
 			this.publish('state ' + key + ' update', value);
 		} else {
-			this.publish('state ' + key[0] + ' set', [key[1], value]);
+			var data = key.splice(1);
+			this.publish('state ' + key[0] + ' set', [data, value]);
+			// this.publish('state ' + key[0] + ' set', [key[1], value]);
 		}
 	},
 

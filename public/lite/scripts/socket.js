@@ -12,7 +12,7 @@ new Unit({
 
 	element: new Element('header'),
 
-	button: new Element('a[href="#connect"].float-right'),
+	button: new Element('span.button.at-right[tabindex=0]'),
 
 	info: new Element('span.info'),
 

@@ -28,6 +28,7 @@ new Unit({
 		this.io
 			.removeListener('set', this.bound.onSet)
 			.removeListener('merge', this.bound.onMerge);
+
 		this.io = null;
 	},
 
@@ -35,11 +36,12 @@ new Unit({
 
 	onConnect: function(){
 		this.io.emit('get', this.bound.onGet);
+		this.publish('types connect', this.io);
 	},
 
 	onGet: function(data){
 		this.types = data;
-		this.publish('types connect', this.types);
+		this.publish('types ready', this.types);
 	},
 
 	onSet: function(id, value){

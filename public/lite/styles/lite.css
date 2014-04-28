@@ -1,6 +1,6 @@
 html {
 	overflow-y: scroll;
-	padding: .6rem 1.2rem .6rem 1.8rem;
+	padding: 8px 24px 8px 36px;
 }
 
 body {
@@ -10,21 +10,56 @@ body {
 header {
 	color: #a0a0a0;
 	font-size: .8rem;
-	padding-bottom: .5rem;
 }
 
 html, button, input, textarea, select {
-	font: 100%/1.4 Menlo, monospace;
-}
-
-a {
-	text-decoration: none;
+	font: 100%/1.625 Menlo, monospace;
 }
 
 h1, h2, h3, h4, h5 {
 	font-size: 1rem;
 	line-height: inherit;
 	margin: .84rem 0;
+}
+
+.at-left {
+	float: left;
+}
+
+.at-right {
+	float: right;
+}
+
+a:focus,
+input:focus,
+select:focus,
+.button:focus {
+	outline-color: rgba(0, 0, 0, .5);
+	outline-offset: 2px;
+	outline-style: solid;
+	outline-width: .3rem;
+	position: relative;
+	z-index: 100;
+}
+
+a,
+.button {
+	color: rgb(0, 0, 238);
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:active,
+.button:active {
+	color: rgb(255, 0, 0);
+}
+
+input {
+	line-height: 1.25;
+	text-indent: .25rem;
 }
 
 input[type=range] {
@@ -37,6 +72,7 @@ input[type=range].vertical {
 
 pre {
 	clear: both;
+	font-size: .6rem;
 	height: auto;
 	margin: 1rem;
 	overflow: auto;
@@ -45,7 +81,6 @@ pre {
 label {
 	display: block;
 	margin: .84rem 0;
-	white-space: nowrap;
 }
 
 label select {
@@ -56,9 +91,18 @@ label input[type=checkbox] {
 	margin: 0 .5rem 0 0;
 }
 
+span::selection,
+label::selection { background: transparent; }
+
+span::-moz-selection,
+label::-moz-selection { background: transparent; }
+
 .button {
 	cursor: pointer;
 	display: inline-block;
+}
+
+.button.close {
 	font-size: 2rem;
 	height: 2rem;
 	line-height: 1;
@@ -66,33 +110,20 @@ label input[type=checkbox] {
 	width: 2rem;
 }
 
-.button:active {
-	background: white;
-	outline: 1px solid white;
-}
-
-.float-left {
-	float: left;
-}
-
-.float-right {
-	float: right;
-}
-
 .warning {
-	color: #f10;
+	background: rgb(255, 100, 0);
+	color: white;
+	display: inline-block;
+	padding: 0 1px;
 }
 
 .widget {
 	border: 1px solid #ddd;
 	display: block;
+	margin: .5rem 0;
 	padding: 0 0 0 1em;
 }
 
-/* text selection */
-
-::selection { background: transparent; }
-::-moz-selection { background: transparent; }
 
 /* scrollbar */
 

@@ -13,7 +13,11 @@ var Controller = new Class({
 		this.element.dispose();
 		return this;
 	},
-	
+
+	setTitle: function(description){
+		this.element.set('title', description);
+	},
+
 	label: function(label){
 		return new Element('label', {text: label});
 	}/*,
@@ -46,7 +50,7 @@ Controller.Array = new Class({
 	},
 
 	build: function(array, data){
-		console.log(array[0], array[1], array[2].toInt(), data);
+		console.log(array[0], array[1], array[2], data);
 		//new Controller[array[1]]();
 		//this.add(array[1]);
 	}

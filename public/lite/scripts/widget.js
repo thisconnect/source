@@ -1,10 +1,47 @@
+(function(){
+
+
+var util = {
+
+	get: function(o, path){
+		for (var i = 0, l = path.length; i < l; i++){
+			// setup test for this
+			if (hasOwnProperty.call(o, path[i])) o = o[path[i]];
+			else return o[path[i]];
+		}
+		return o;
+	},
+
+	set: function(o, path, value){
+		path = path.slice(0);
+
+		var key = path.pop(),
+			len = path.length,
+			i = 0,
+			current;
+
+		if (!(/^(string|number)$/.test(typeof key))) return null;
+
+		while (len--){
+			current = path[i++];
+			o = current in o ? o[current] : (o[current] = {});
+			// setup test for this
+			// o = hasOwnProperty.call(o, current) ? o[current] : (o[current] = {});
+		}
+		o[key] = value;
+		return o;
+	}
+
+};
+
+
 new Unit({
 
 	bound: {},
 
 	initSetup: function(){
 		this.subscribe({
-			'types connect': this.setTypes,
+			'types ready': this.setTypes,
 			'widget create': this.create
 		});
 		this.bound = {
@@ -28,29 +65,42 @@ new Unit({
 
 		var id = context + ' ' + name;
 
-		function addControl(type, key){
-			widget.addControl(type, key)
-				.addEvent('change', function(value){
-					bound.publish(context + ' set', [[name, key], value]);
-				});
+		function addControl(type, key, value){
+
+			if (typeof value == 'object' && !Array.isArray(value)){
+				widget.addTitle(Array.isArray(key) ? key.getLast() : key);
+				for (var k in value){
+					addControl(type[k], [key, k], value[k]);
+				}
+			} else {
+				if (Array.isArray(value)) return;
+				// console.log(type, key.toString(), value);
+				
+				var path = [name, key].flatten();
+				
+				widget.addControl(type, (Array.isArray(key) ? key.getLast() : key), value)
+					.addEvent('change', function(value){
+						// console.log('set', [path, value]);
+						bound.publish(context + ' set', [path, value]);
+					});
+			}
 		}
 
-		// Object.forEach(types[name], addControl);
-
 		function set(key, value){
-			widget.controls[key].fireEvent('set', value);
+			console.log(widget.controls, key.toString());
+			widget.controls[key].set(value);
 		}
 
 		function merge(state){
 			for (var key in state){
-				widget.controls[key].fireEvent('set', state[key]);
+				// widget.controls[key].fireEvent('set', state[key]);
 			}
 		}
 
 		function update(data){
 			Object.forEach(data, function(value, key){
-				if (!widget.controls[key]) addControl(types[name][key], key);
-				widget.controls[key].fireEvent('set', value);
+				if (!widget.controls[key]) addControl(types[name][key], key, value);
+				// widget.controls[key].fireEvent('set', value);
 			});
 		}
 
@@ -92,13 +142,11 @@ var Widget = new Class({
 	create: function(id, data){
 		this.element = new Element('section.widget');
 
-		new Element('span.button.float-right[text=⨯]')
+		new Element('span.close.button.at-right[text=⨯][tabindex=0]')
 			.addEvent('click', this.fireEvent.bind(this, 'delete'))
 			.inject(this.element);
 
-		new Element('h2', {
-			text: id.capitalize()
-		}).inject(this.element);
+		this.addTitle(id);
 	},
 
 	destroy: function(){
@@ -109,15 +157,32 @@ var Widget = new Class({
 		this.element.destroy();
 	},
 
+	addTitle: function(text){
+		new Element('h2', {
+			text: text.capitalize()
+		}).inject(this.element);
+	},
+
 	controls: {},
 
-	addControl: function(data, name){
-		var type = data.type.capitalize(),
-			array = type.match(this.brakets),
-			control = (!array)
-				? new Controller[type](data)
-				: new Controller.Array(array, data);
+	addControl: function(data, name, value){
+		var type = (data && data.type) || typeof value,
+			array = type.match(this.brakets);
+		
+		// console.log(data, name, value, type);
+		
+		// if (type == 'object' && !array) return this.addControls(data, name, value);
 
+		if (!data) data = {};
+		if (data.label == null) data.label = name;
+
+		var control = (!array)
+			? new Controller[type](data)
+			: new Controller.Array(array, data);
+
+		if (!!data.desc) control.setTitle(data.desc);
+
+		control.set(value);
 		this.controls[name] = control;
 		control.attach(this.element);
 		return control;
@@ -134,3 +199,5 @@ var Widget = new Class({
 	}
 
 });
+
+})();
