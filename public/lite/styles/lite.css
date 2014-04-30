@@ -59,6 +59,7 @@ a:active,
 
 input {
 	line-height: 1.25;
+	max-width: 100%;
 	text-indent: .25rem;
 }
 
@@ -83,6 +84,10 @@ label {
 	margin: .84rem 0;
 }
 
+label.at-right {
+	margin-top: 0;
+}
+
 label select {
 	margin: 0 .5rem;
 }
@@ -91,9 +96,11 @@ label input[type=checkbox] {
 	margin: 0 .5rem 0 0;
 }
 
+h1::selection, h2::selection,
 span::selection,
 label::selection { background: transparent; }
 
+h1::-moz-selection, h2::-moz-selection,
 span::-moz-selection,
 label::-moz-selection { background: transparent; }
 
@@ -103,9 +110,14 @@ label::-moz-selection { background: transparent; }
 }
 
 .button.close {
+	border-color: #ddd;
+	border-width: 1px;
+	border-style: solid;
+	box-sizing: border-box;
 	font-size: 2rem;
 	height: 2rem;
-	line-height: 1;
+	line-height: 1.9rem;
+	margin: -1px -1px 0 0;
 	text-align: center;
 	width: 2rem;
 }
@@ -119,6 +131,7 @@ label::-moz-selection { background: transparent; }
 
 .widget {
 	border: 1px solid #ddd;
+	clear: both;
 	display: block;
 	margin: .5rem 0;
 	padding: 0 0 0 1em;

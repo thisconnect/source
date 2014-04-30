@@ -2,8 +2,8 @@ new Unit({
 
 	initSetup: function(){
 		this.subscribe({
-			'socket connect': this.create,
-			'types connect': this.createConfig,
+			'socket connect': this.addDataSocket,
+			'types connect': this.addConfigSocket,
 			'socket disconnect': this.destroy
 		});
 	},
@@ -12,33 +12,45 @@ new Unit({
 
 	elements: {
 		display: new Element('pre'),
-		dataButton: new Element('a[href=#][text=data]'),
-		configButton: new Element('a[href][text=config]')
+		dataButton: new Element('span[tabindex=0][text=data].button'),
+		configButton: new Element('span[tabindex=0][text=config].button')
 	},
 
 	data: null,
 
-	create: function(data){
+	addDataSocket: function(data){
+		var get = this.get.bind(this, data);
 		this.data = data;
 
 		this.elements.dataButton
-			.addEvent('click', this.get.bind(this, data))
-			.inject(this.element, 'top')
-			.appendText(' ');
+			.addEvent('click', get)
+			.addEvent('keydown:keys(enter)', get)
+			.inject(this.element);
 
-		this.elements.display.set('text', '').inject(this.element);
-		this.element.inject(document.body);
+		this.element.appendText(' ');
+		this.then();
 	},
 
 	config: null,
 
-	createConfig: function(config){
+	addConfigSocket: function(config){
+		var get = this.get.bind(this, config);
 		this.config = config;
 
 		this.elements.configButton
-			.addEvent('click', this.get.bind(this, config))
-			.inject(this.element, 'top')
-			.appendText(' ');
+			.addEvent('click', get)
+			.addEvent('keydown:keys(enter)', get)
+			.inject(this.element);
+
+		this.element.appendText(' ');
+		this.then();
+	},
+
+	then: function(){
+		if (!!this.data && !!this.config){
+			this.elements.display.set('text', '').inject(this.element);
+			this.element.inject(document.body);
+		}
 	},
 
 	destroy: function(){
@@ -47,13 +59,12 @@ new Unit({
 		this.element.dispose();
 	},
 
-	get: function(socket, e){
-		e.preventDefault();
+	get: function(socket){
 		socket.emit('get', this.onGet.bind(this));
 	},
 
 	onGet: function(data){
-		this.elements.display.set('text', JSON.stringify(data, null, '\r\t'));
+		this.elements.display.set('text', JSON.stringify(data, null, '\r    '));
 	}
 
 });

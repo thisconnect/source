@@ -1,40 +1,3 @@
-(function(){
-
-
-var util = {
-
-	get: function(o, path){
-		for (var i = 0, l = path.length; i < l; i++){
-			// setup test for this
-			if (hasOwnProperty.call(o, path[i])) o = o[path[i]];
-			else return o[path[i]];
-		}
-		return o;
-	},
-
-	set: function(o, path, value){
-		path = path.slice(0);
-
-		var key = path.pop(),
-			len = path.length,
-			i = 0,
-			current;
-
-		if (!(/^(string|number)$/.test(typeof key))) return null;
-
-		while (len--){
-			current = path[i++];
-			o = current in o ? o[current] : (o[current] = {});
-			// setup test for this
-			// o = hasOwnProperty.call(o, current) ? o[current] : (o[current] = {});
-		}
-		o[key] = value;
-		return o;
-	}
-
-};
-
-
 new Unit({
 
 	bound: {},
@@ -74,11 +37,11 @@ new Unit({
 				}
 			} else {
 				if (Array.isArray(value)) return;
-				// console.log(type, key.toString(), value);
 				
 				var path = [name, key].flatten();
-				
-				widget.addControl(type, (Array.isArray(key) ? key.getLast() : key), value)
+				console.log(name, 'addControl', [key].flatten().join('.'));
+
+				widget.addControl(type, [key].flatten(), value)
 					.addEvent('change', function(value){
 						// console.log('set', [path, value]);
 						bound.publish(context + ' set', [path, value]);
@@ -86,13 +49,14 @@ new Unit({
 			}
 		}
 
-		function set(key, value){
-			console.log(widget.controls, key.toString());
-			widget.controls[key].set(value);
+		function set(path, value){
+			// console.log(widget.controls, path.join(' '));
+			widget.controls[path.join(' ')].set(value);
 		}
 
 		function merge(state){
 			for (var key in state){
+				console.log('WHOOOOT??', key, state[key]);
 				// widget.controls[key].fireEvent('set', state[key]);
 			}
 		}
@@ -117,7 +81,7 @@ new Unit({
 		bound.subscribe(id + ' update', update);
 		bound.subscribe(id + ' delete', destroy);
 
-		widget.addEvent('delete', function(){
+		widget.addEvent('remove', function(){
 			bound.publish(context + ' remove', name);
 		});
 
@@ -143,7 +107,7 @@ var Widget = new Class({
 		this.element = new Element('section.widget');
 
 		new Element('span.close.button.at-right[text=⨯][tabindex=0]')
-			.addEvent('click', this.fireEvent.bind(this, 'delete'))
+			.addEvent('click', this.fireEvent.bind(this, 'remove'))
 			.inject(this.element);
 
 		this.addTitle(id);
@@ -165,16 +129,16 @@ var Widget = new Class({
 
 	controls: {},
 
-	addControl: function(data, name, value){
-		var type = (data && data.type) || typeof value,
+	addControl: function(data, path, value){
+		var type = (!!data && data.type) || typeof value,
 			array = type.match(this.brakets);
 		
-		// console.log(data, name, value, type);
+		// console.log(data, path, value, type);
 		
-		// if (type == 'object' && !array) return this.addControls(data, name, value);
+		// if (type == 'object' && !array) return this.addControls(data, path, value);
 
 		if (!data) data = {};
-		if (data.label == null) data.label = name;
+		if (data.label == null) data.label = path.getLast();
 
 		var control = (!array)
 			? new Controller[type](data)
@@ -183,7 +147,7 @@ var Widget = new Class({
 		if (!!data.desc) control.setTitle(data.desc);
 
 		control.set(value);
-		this.controls[name] = control;
+		this.controls[path.join(' ')] = control;
 		control.attach(this.element);
 		return control;
 	},
@@ -199,5 +163,3 @@ var Widget = new Class({
 	}
 
 });
-
-})();
