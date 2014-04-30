@@ -86,6 +86,7 @@ new Unit({
 		} else {
 			var data = key.splice(1);
 			this.publish('state ' + key[0] + ' set', [data, value]);
+			// this.publish('state ' + key[0] + ' set', [key[1], value]);
 		}
 	},
 

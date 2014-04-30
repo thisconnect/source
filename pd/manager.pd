@@ -1,4 +1,4 @@
-#N canvas 92 252 890 413 10;
+#N canvas 92 252 877 422 10;
 #X declare -path pddom;
 #X obj 535 155 pd-dom space;
 #X obj 535 195 dac~;
@@ -10,8 +10,8 @@
 #X msg 655 155 reset;
 #X obj 35 115 netsend;
 #X obj 35 235 loadbang;
-#X floatatom 35 145 5 0 0 0 - - -;
-#X floatatom 225 115 5 0 0 0 - - -;
+#X floatatom 35 145 5 0 0 0 - - -, f 5;
+#X floatatom 225 115 5 0 0 0 - - -, f 5;
 #X obj 35 85 r netsend;
 #X msg 535 275 \; netsend send 1 2 3 \, send 4 5 6 \, send 7 8 9;
 #X obj 125 115 s netreceive;
@@ -31,6 +31,10 @@
 #X obj 35 35 declare -path pddom;
 #X obj 125 185 print;
 #X obj 295 265 del 0;
+#X obj 34 317 r pd;
+#X obj 34 347 route dsp;
+#X obj 34 377 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
 #X connect 0 0 1 0;
 #X connect 0 0 1 1;
 #X connect 2 0 29 0;
@@ -50,3 +54,5 @@
 #X connect 26 0 13 0;
 #X connect 26 1 10 0;
 #X connect 29 0 3 0;
+#X connect 30 0 31 0;
+#X connect 31 0 32 0;
