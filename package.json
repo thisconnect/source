@@ -6,7 +6,7 @@
 		{"name": "Enrique Erne"}
 	]
 	, "scripts": {
-		"start": "node index"
+		"start": "node main"
 		, "test": "make test"
 	}
 	, "dependencies": {

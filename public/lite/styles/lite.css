@@ -126,7 +126,7 @@ label::-moz-selection { background: transparent; }
 	background: rgb(255, 100, 0);
 	color: white;
 	display: inline-block;
-	padding: 0 1px;
+	padding: 0 .2rem;
 }
 
 .widget {

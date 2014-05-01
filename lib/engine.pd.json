@@ -2,17 +2,25 @@
 	"engine": {
 		"pd": {
 			"options": {
-				"read": 8005
+				"pd": "/Applications/Pd-0.45-5-64bit.app/Contents/Resources/bin/pd"
+				, "read": 8005
 				, "write": 8006
 				, "encoding": "ascii"
 				, "flags": {
-					"nogui": false
-					, "listdev": false
-					, "noprefs": true
+					"r": 44100
+					, "audiobuf": 6
+					, "nogui": false
+					, "nodac": false
+					, "noadc": false
 					, "nomidi": true
 					, "noautopatch": false
-					, "batch": false
+					, "noloadbang": false
+					, "noprefs": true
 					, "stderr": true
+					, "listdev": false
+					, "verbose": false
+					, "batch": false
+					, "send": "netsend send ready;"
 					, "path": ["pd", "pd/blib"]
 					, "open": "./manager.pd"
 				}
@@ -25,7 +33,10 @@
 		"engine": {
 			"pd": {
 				"options": {
-					"encoding": {
+					"pd": {
+						"label": "Pd"
+					}
+					, "encoding": {
 						"type": "enum"
 						, "values": ["ascii", "utf-8", "base64", "hex"]
 					}
@@ -35,14 +46,38 @@
 							, "type": "enum"
 							, "values": [44100, 22050]
 						}
+						, "audiobuf": {
+							"desc": "size of audio I/O buffer in msec"
+						}
+						, "nogui": {
+							"desc": "suppress starting the GUI"
+						}
+						, "nodac": {
+							"desc": "suppress audio output"
+						}
+						, "noadc": {
+							"desc": "suppress audio input"
+						}
 						, "nomidi": {
 							"desc": "suppress MIDI input and output"
+						}
+						, "noautopatch": {
+							"desc": "suppress auto-connecting to new objects"
+						}
+						, "noloadbang": {
+							"desc": "suppress all loadbangs"
 						}
 						, "listdev": {
 							"desc": "list audio and MIDI devices"
 						}
+						, "verbose": {
+							"desc": "extra printout on startup when searching for files"
+						}
 						, "nogui": {
 							"desc": "suppress starting the GUI"
+						}
+						, "batch": {
+							"desc": "You should probably also specify -nosound. With these flag Pd runs as quickly as it can without waiting for real time"
 						}
 					}
 				}

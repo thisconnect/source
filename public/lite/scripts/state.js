@@ -59,7 +59,7 @@ new Unit({
 			}
 			this.publish('state ' + widget + ' delete');
 			this.publish('widget create', ['state', widget, this.types[widget]]);
-			this.publish('state ' + widget + ' update', [data[widget]]);
+			this.publish('state ' + widget + ' merge', [data[widget]]);
 		}
 	},
 
@@ -82,7 +82,7 @@ new Unit({
 	onSet: function(key, value){
 		if (typeof key == 'string'){
 			this.publish('widget create', ['state', key, this.types[key]]);
-			this.publish('state ' + key + ' update', value);
+			this.publish('state ' + key + ' merge', value);
 		} else {
 			var data = key.splice(1);
 			this.publish('state ' + key[0] + ' set', [data, value]);
@@ -96,7 +96,7 @@ new Unit({
 
 	onMerge: function(data){
 		for (var widget in data){
-			this.publish('state ' + widget + ' update', data[widget]);
+			this.publish('state ' + widget + ' merge', data[widget]);
 		}
 	}
 

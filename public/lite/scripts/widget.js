@@ -53,15 +53,8 @@ new Unit({
 			console.log(name, 'set', path.join(' '), value);
 			widget.controls[path.join(' ')].set(value);
 		}
-/*
-		function merge(state){
-			for (var key in state){
-				console.log('WHOOOOT??', key, state[key]);
-				// widget.controls[key].fireEvent('set', state[key]);
-			}
-		}
-*/
-		function update(data){
+
+		function merge(data){
 			Object.forEach(data, function(value, key){
 				if (!widget.controls[key]) addControl(types[name][key], key, value);
 				// widget.controls[key].fireEvent('set', value);
@@ -70,15 +63,13 @@ new Unit({
 
 		function destroy(){
 			bound.unsubscribe(id + ' set', set);
-			//bound.unsubscribe(id + ' merge', merge);
-			bound.unsubscribe(id + ' update', update);
+			bound.unsubscribe(id + ' merge', merge);
 			bound.unsubscribe(id + ' delete', destroy);
 			widget.fireEvent('destroy');
 		}
 
 		bound.subscribe(id + ' set', set);
-		//bound.subscribe(id + ' merge', merge);
-		bound.subscribe(id + ' update', update);
+		bound.subscribe(id + ' merge', merge);
 		bound.subscribe(id + ' delete', destroy);
 
 		widget.addEvent('remove', function(){

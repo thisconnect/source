@@ -1,4 +1,4 @@
-#N canvas 92 252 877 422 10;
+#N canvas 92 252 878 450 10;
 #X declare -path pddom;
 #X obj 535 155 pd-dom space;
 #X obj 535 195 dac~;
@@ -35,6 +35,9 @@
 #X obj 34 347 route dsp;
 #X obj 34 377 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
+#X obj 415 235 loadbang;
+#X obj 415 267 samplerate~;
+#X floatatom 415 297 5 0 0 0 - - -, f 5;
 #X connect 0 0 1 0;
 #X connect 0 0 1 1;
 #X connect 2 0 29 0;
@@ -56,3 +59,5 @@
 #X connect 29 0 3 0;
 #X connect 30 0 31 0;
 #X connect 31 0 32 0;
+#X connect 33 0 34 0;
+#X connect 34 0 35 0;
