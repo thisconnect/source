@@ -1,0 +1,58 @@
+{
+	"engine": {
+		"pd": {
+			"options": {
+				"read": 8005
+				, "write": 8006
+				, "encoding": "ascii"
+				, "flags": {
+					"nogui": false
+					, "listdev": false
+					, "noprefs": true
+					, "nomidi": true
+					, "noautopatch": false
+					, "batch": false
+					, "stderr": true
+					, "path": ["pd", "pd/blib"]
+					, "open": "./manager.pd"
+				}
+			}
+			, "process": false
+			, "dsp": false
+		}
+	}
+	, "type": {
+		"engine": {
+			"pd": {
+				"options": {
+					"encoding": {
+						"type": "enum"
+						, "values": ["ascii", "utf-8", "base64", "hex"]
+					}
+					, "flags": {
+						"r": {
+							"label": "sample rate"
+							, "type": "enum"
+							, "values": [44100, 22050]
+						}
+						, "nomidi": {
+							"desc": "suppress MIDI input and output"
+						}
+						, "listdev": {
+							"desc": "list audio and MIDI devices"
+						}
+						, "nogui": {
+							"desc": "suppress starting the GUI"
+						}
+					}
+				}
+				, "process": {
+					"label": "Spawn"
+				}
+				, "dsp": {
+					"label": "Compute Audio"
+				}
+			}
+		}
+	}
+}
