@@ -11,20 +11,13 @@ new Unit({
 	},
 
 	element: new Element('header'),
-
 	button: new Element('span.button.at-right[tabindex=0]'),
-
 	info: new Element('span.info'),
-
 	warning: new Element('span.warning'),
 
 	readySetup: function(){
 		this.button.addEvent('click', this.bound.toggle);
-		this.info.inject(this.element);
-		this.warning.inject(this.element);
-		this.element.appendText(' ');
-		this.button.inject(this.element);
-		this.element.appendText(' ');
+		this.element.adopt([this.info, this.warning, this.button]);
 		this.element.inject(document.body);
 		this.connect();
 	},
@@ -40,9 +33,9 @@ new Unit({
 
 	connect: function(){
 		(this.io = io.connect(null, this.options))
-		.on('connect', this.bound.onConnect)
-		.on('disconnect', this.bound.onDisconnect)
-		.on('reconnect', this.publish.bind(this, 'socket reconnect'));
+			.on('connect', this.bound.onConnect)
+			.on('disconnect', this.bound.onDisconnect)
+			.on('reconnect', this.publish.bind(this, 'socket reconnect'));
 
 		this.button.set('text', 'conntecting');
 		this.info.set('text', ' trying to connect');
@@ -72,10 +65,8 @@ new Unit({
 			+ this.io.socket.options.host
 			+ ':' + this.io.socket.options.port
 		);
-
 		this.warning.set('text', '');
 		this.button.set('text', 'disconnect');
-
 		this.publish('socket connect', this.io);
 	},
 
@@ -83,7 +74,6 @@ new Unit({
 		this.info.set('text', '');
 		this.warning.set('text', 'oh no, connection lost!');
 		this.button.set('text', 'connect');
-
 		this.publish('socket disconnect');
 	}
 

@@ -107,6 +107,7 @@ label::-moz-selection { background: transparent; }
 .button {
 	cursor: pointer;
 	display: inline-block;
+	margin: 0 0 .5rem 0;
 }
 
 .button.close {
