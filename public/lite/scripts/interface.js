@@ -9,8 +9,6 @@ new Unit({
 			'types ready': this.setTypes
 		});
 		this.bound = {
-			'subscribe': this.subscribe.bind(this),
-			'unsubscribe': this.unsubscribe.bind(this),
 			'onGet': this.onGet.bind(this),
 			'onSet': this.onSet.bind(this),
 			'onMerge': this.onMerge.bind(this),
@@ -100,7 +98,6 @@ new Unit({
 
 		var that = this,
 			types = this.types,
-			bound = this.bound,
 			widget = new Widget(name, types[name]);
 
 
