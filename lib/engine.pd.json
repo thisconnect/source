@@ -79,6 +79,12 @@
 						, "batch": {
 							"desc": "You should probably also specify -nosound. With these flag Pd runs as quickly as it can without waiting for real time"
 						}
+						, "send": {
+							"desc": "send a message at startup (after patches are loaded)"
+						}
+						, "open": {
+							"desc": "open file(s) on startup"
+						}
 					}
 				}
 				, "process": {

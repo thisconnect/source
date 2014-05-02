@@ -23,23 +23,24 @@ new Unit({
 	create: function(context, name){
 
 		var types = this.types,
-			widget = new Widget(name, types[name]),
-			bound = this.bound;
+			bound = this.bound,
+			widget = new Widget(name, types[name]);
 
-		var id = context + ' ' + name;
 
 		function addControl(type, key, value){
 
 			if (typeof value == 'object' && !Array.isArray(value)){
+
 				widget.addTitle(Array.isArray(key) ? key.getLast() : key);
 				for (var k in value){
 					addControl(type[k], [key, k], value[k]);
 				}
+
 			} else {
 				if (Array.isArray(value)) return;
 				
 				var path = [name, key].flatten();
-				console.log(name, 'addControl', [key].flatten().join('.'));
+				console.log(name, 'addControl', [key].flatten().join('.'), typeof value);
 
 				widget.addControl(type, [key].flatten(), value)
 					.addEvent('change', function(value){
@@ -55,11 +56,13 @@ new Unit({
 		}
 
 		function merge(data){
-			Object.forEach(data, function(value, key){
-				if (!widget.controls[key]) addControl(types[name][key], key, value);
-				// widget.controls[key].fireEvent('set', value);
-			});
+			for (var key in data){
+				console.log('__', types[name][key], key, data[key]);
+				if (!widget.controls[key]) addControl(types[name][key], key, data[key]);
+			}
 		}
+
+		var id = context + ' ' + name;
 
 		function destroy(){
 			bound.unsubscribe(id + ' set', set);
