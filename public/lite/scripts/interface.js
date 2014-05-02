@@ -4,25 +4,102 @@ new Unit({
 
 	initSetup: function(){
 		this.subscribe({
-			'types ready': this.setTypes,
-			'widget create': this.create
+			'socket connect': this.connect,
+			'socket disconnect': this.disconnect,
+			'types ready': this.setTypes
 		});
 		this.bound = {
-			publish: this.publish.bind(this),
-			subscribe: this.subscribe.bind(this),
-			unsubscribe: this.unsubscribe.bind(this)
+			'subscribe': this.subscribe.bind(this),
+			'unsubscribe': this.unsubscribe.bind(this),
+			'onGet': this.onGet.bind(this),
+			'onSet': this.onSet.bind(this),
+			'onMerge': this.onMerge.bind(this),
+			'onRemove': this.onRemove.bind(this)
 		};
 	},
 
-	types: {},
+	element: new Element('div.state'),
+
+	readySetup: function(){
+		this.element.inject(document.body);
+	},
+
+	types: null,
 
 	setTypes: function(types){
 		this.types = types;
+		this.then();
+	},
+
+	io: null,
+
+	connect: function(socket){
+		(this.io = socket)
+			.on('set', this.bound.onSet)
+			.on('merge', this.bound.onMerge)
+			.on('remove', this.bound.onRemove);
+
+		this.then();
+	},
+
+	disconnect: function(){
+		this.io
+			.removeListener('set', this.bound.onSet)
+			.removeListener('merge', this.bound.onMerge)
+			.removeListener('remove', this.bound.onRemove);
+
+		this.io = null;
+	},
+
+	then: function(){
+		if (!!this.io && !!this.types){
+			this.io.emit('get', this.bound.onGet)
+		}
+	},
+
+	set: function(path, value){
+		this.io.emit('set', path, value);
+	},
+
+	remove: function(key){
+		this.io.emit('remove', key);
+	},
+
+	merge: function(data){
+		this.io.emit('merge', data);
+	},
+
+	onGet: function(data){
+		for (var widget in data){
+			this.publish('state ' + widget + ' delete');
+			this.create('state', widget);
+			this.publish('state ' + widget + ' merge', [data[widget]]);
+		}
+	},
+
+	onSet: function(key, value){
+		if (typeof key == 'string'){
+			this.create('state', key);
+			this.publish('state ' + key + ' merge', value);
+		} else {
+			this.publish('state ' + key[0] + ' set', [key.slice(1), value]);
+		}
+	},
+
+	onRemove: function(widget){
+		this.publish('state ' + widget + ' delete');
+	},
+
+	onMerge: function(data){
+		for (var widget in data){
+			this.publish('state ' + widget + ' merge', data[widget]);
+		}
 	},
 
 	create: function(context, name){
 
-		var types = this.types,
+		var that = this,
+			types = this.types,
 			bound = this.bound,
 			widget = new Widget(name, types[name]);
 
@@ -40,12 +117,11 @@ new Unit({
 				if (Array.isArray(value)) return;
 				
 				var path = [name, key].flatten();
-				console.log(name, 'addControl', [key].flatten().join('.'), typeof value);
+				console.log(name, 'addControl', [key].flatten().join('.'));
 
 				widget.addControl(type, [key].flatten(), value)
 					.addEvent('change', function(value){
-						// console.log('set', [path, value]);
-						bound.publish(context + ' set', [path, value]);
+						that.set(path, value);
 					});
 			}
 		}
@@ -57,7 +133,7 @@ new Unit({
 
 		function merge(data){
 			for (var key in data){
-				console.log('__', types[name][key], key, data[key]);
+				//console.log('__', types[name][key], key, data[key]);
 				if (!widget.controls[key]) addControl(types[name][key], key, data[key]);
 			}
 		}
@@ -65,21 +141,21 @@ new Unit({
 		var id = context + ' ' + name;
 
 		function destroy(){
-			bound.unsubscribe(id + ' set', set);
-			bound.unsubscribe(id + ' merge', merge);
-			bound.unsubscribe(id + ' delete', destroy);
+			that.unsubscribe(id + ' set', set);
+			that.unsubscribe(id + ' merge', merge);
+			that.unsubscribe(id + ' delete', destroy);
 			widget.fireEvent('destroy');
 		}
 
-		bound.subscribe(id + ' set', set);
-		bound.subscribe(id + ' merge', merge);
-		bound.subscribe(id + ' delete', destroy);
+		this.subscribe(id + ' set', set);
+		this.subscribe(id + ' merge', merge);
+		this.subscribe(id + ' delete', destroy);
 
 		widget.addEvent('remove', function(){
-			bound.publish(context + ' remove', name);
+			that.remove(name);
 		});
 
-		bound.publish(context + ' add', widget);
+		widget.attach(this.element);
 	}
 
 });
