@@ -41,13 +41,15 @@
 						, "values": ["ascii", "utf-8", "base64", "hex"]
 					}
 					, "flags": {
-						"r": {
+						"columns": 2
+						, "r": {
 							"label": "sample rate"
 							, "type": "enum"
 							, "values": [44100, 22050]
 						}
 						, "audiobuf": {
-							"desc": "size of audio I/O buffer in msec"
+							"label": "audio buffer"
+							, "desc": "size of audio I/O buffer in msec"
 						}
 						, "nogui": {
 							"desc": "suppress starting the GUI"
@@ -89,6 +91,7 @@
 				}
 				, "process": {
 					"label": "Spawn"
+					, "important": true
 				}
 				, "dsp": {
 					"label": "Compute Audio"

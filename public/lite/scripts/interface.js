@@ -70,16 +70,18 @@ new Unit({
 	onGet: function(data){
 		for (var widget in data){
 			this.publish('state ' + widget + ' delete');
-			this.create('state', widget);
+			this.addWidget('state', widget);
 			this.publish('state ' + widget + ' merge', [data[widget]]);
 		}
 	},
 
 	onSet: function(key, value){
 		if (typeof key == 'string'){
-			this.create('state', key);
+			// console.log('onSet', key, value);
+			this.addWidget('state', key);
 			this.publish('state ' + key + ' merge', value);
 		} else {
+			// console.log('onSet', key.join('.'), value);
 			this.publish('state ' + key[0] + ' set', [key.slice(1), value]);
 		}
 	},
@@ -89,70 +91,39 @@ new Unit({
 	},
 
 	onMerge: function(data){
+		// console.log('onMerge', data);
 		for (var widget in data){
 			this.publish('state ' + widget + ' merge', data[widget]);
 		}
 	},
 
-	create: function(context, name){
-
-		var that = this,
-			types = this.types,
-			widget = new Widget(name, types[name]);
-
-
-		function addControl(type, key, value){
-
-			if (typeof value == 'object' && !Array.isArray(value)){
-
-				widget.addTitle(Array.isArray(key) ? key.getLast() : key);
-				for (var k in value){
-					addControl(type[k], [key, k], value[k]);
-				}
-
-			} else {
-				if (Array.isArray(value)) return;
-				
-				var path = [name, key].flatten();
-				console.log(name, 'addControl', [key].flatten().join('.'));
-
-				widget.addControl(type, [key].flatten(), value)
-					.addEvent('change', function(value){
-						that.set(path, value);
-					});
-			}
-		}
+	addWidget: function(context, name){
+		var widget = new Widget(name, this.types[name]),
+			build = widget.build.bind(widget),
+			unsubscribe = this.unsubscribe.bind(this),
+			id = context + ' ' + name;
 
 		function set(path, value){
-			// console.log(name, 'set', path.join(' '), value);
-			widget.controls[path.join(' ')].set(value);
+			widget.fireEvent(path.join(' '), value);
 		}
-
-		function merge(data){
-			for (var key in data){
-				//console.log('__', types[name][key], key, data[key]);
-				if (!widget.controls[key]) addControl(types[name][key], key, data[key]);
-			}
-		}
-
-		var id = context + ' ' + name;
 
 		function destroy(){
-			that.unsubscribe(id + ' set', set);
-			that.unsubscribe(id + ' merge', merge);
-			that.unsubscribe(id + ' delete', destroy);
+			unsubscribe(id + ' set', set);
+			unsubscribe(id + ' merge', build);
+			unsubscribe(id + ' delete', destroy);
 			widget.fireEvent('destroy');
 		}
 
+		widget.addEvent('change', this.set.bind(this));
+
 		this.subscribe(id + ' set', set);
-		this.subscribe(id + ' merge', merge);
+		this.subscribe(id + ' merge', build);
 		this.subscribe(id + ' delete', destroy);
 
-		widget.addEvent('remove', function(){
-			that.remove(name);
-		});
+		widget.addEvent('remove', this.remove.bind(this, name));
 
 		widget.attach(this.element);
+		
 	}
 
 });

@@ -4,15 +4,14 @@ Controller.number = new Class({
 
 	selector: 'input[type=number]',
 
-	initialize: function(data){
-		this.addEvent('destroy', this.destroy);
-		this.addEvent('set', this.set);
-		this.create(data);
-	},
+	input: null,
 
-	create: function(data){
+	create: function(path, data){
 		var input = this.input = new Element(this.selector);
-		input.addEvent('input', this.onInput.bind(this));
+
+		this.parent(path, data);
+
+		input.addEvent('input', this.send);
 
 		if (!!data.step) input.set('step', data.step);
 
@@ -21,30 +20,23 @@ Controller.number = new Class({
 			'max': data.range[1]
 		});
 
-		if (!data.label) this.element = input;
-		else {
-			this.label = this.label(data.label);
-			this.element = this.label;
-			this.element.appendText(' ');
-			input.inject(this.element);
-		}
+		this.element.appendText(' ');
 
-		this.set(data.value || 0);
+		input.inject(this.element);
 	},
 
 	destroy: function(){
-		this.removeEvents();
 		this.input.removeEvents();
-		this.element.destroy();
-	},
-
-	onInput: function(e){
-		this.fireEvent('change', parseInt(this.input.value));
+		this.parent();
 	},
 
 	set: function(value){
 		this.input.value = value;
 		return this;
+	},
+
+	get: function(){
+		return parseInt(this.input.value);
 	}
 
 });

@@ -4,60 +4,57 @@ var Widget = new Class({
 
 	brakets: /(.*?)\[(.*?)\]/,
 
-	initialize: function(id, data){
+	id: null,
+
+	types: null,
+
+	initialize: function(key, config){
+		this.id = key;
+		this.types = config;
 		this.addEvent('destroy', this.destroy);
-		this.create(id, data);
+		this.create();
     },
 
 	element: null,
 
-	create: function(id, data){
+	create: function(){
 		this.element = new Element('section.widget');
 
 		new Element('span.close.button.at-right[text=⨯][tabindex=0]')
 			.addEvent('click', this.fireEvent.bind(this, 'remove'))
 			.inject(this.element);
 
-		this.addTitle(id);
+		new Element('h2', {
+			'text': this.id.capitalize()
+		}).inject(this.element);
 	},
 
 	destroy: function(){
-		Object.forEach(this.controls, function(control){
-			control.fireEvent('destroy');
-		});
 		this.removeEvents();
 		this.element.destroy();
 	},
 
-	addTitle: function(text){
-		new Element('h2', {
-			text: text.capitalize()
-		}).inject(this.element);
+	build: function(values, data){
+		if (!data) data = {};
+
+		for (var key in values){
+			if (Array.isArray(values[key])) continue;
+
+			this.addControl(key, {
+				'config': (data.config || this.types)[key] || {},
+				'element': data.element || this.element,
+				'path': data.path || [this.id],
+				'value': values[key]
+			});
+		}
 	},
 
-	controls: {},
-
-	addControl: function(data, path, value){
-		var type = (!!data && data.type) || typeof value,
+	addControl: function(key, data){
+		var type = data.config.type || typeof data.value,
 			array = type.match(this.brakets);
-		
-		// console.log(data, path, value, type);
-		
-		// if (type == 'object' && !array) return this.addControls(data, path, value);
 
-		if (!data) data = {};
-		if (data.label == null) data.label = path.getLast();
-
-		var control = (!array)
-			? new Controller[type](data)
-			: new Controller.Array(array, data);
-
-		if (!!data.desc) control.setTitle(data.desc);
-
-		control.set(value);
-		this.controls[path.join(' ')] = control;
-		control.attach(this.element);
-		return control;
+		if (!array) new Controller[type](key, data, this)
+		else new Controller.Array(array, config);
 	},
 
 	attach: function(element, position){

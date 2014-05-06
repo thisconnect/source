@@ -4,8 +4,8 @@ Controller.float = new Class({
 
 	selector: 'input[type=range]',
 
-	onChange: function(e){
-		this.fireEvent('change', parseFloat(this.input.value));
+	get: function(){
+		return parseFloat(this.input.value);
 	}
 
 });

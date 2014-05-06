@@ -4,41 +4,30 @@ Controller.boolean = new Class({
 
 	selector: 'input[type=checkbox]',
 
-	initialize: function(data){
-		this.addEvent('destroy', this.destroy);
-		this.addEvent('set', this.set);
-		this.create(data);
-	},
-
 	input: null,
 
-	create: function(data){
+	create: function(path, data){
 		var input = this.input = new Element(this.selector);
 
-		input.addEvent('change', this.onChange.bind(this));
+		this.parent(path, data);
 
-		if (!data.label) this.element = input;
-		else {
-			this.element = this.label(data.label);
-			input.inject(this.element, 'top');
-		}
+		input.addEvent('change', this.send);
 
-		this.set(data.value || false);
+		input.inject(this.element, 'top');
 	},
 
 	destroy: function(){
-		this.removeEvents();
 		this.input.removeEvents();
-		this.element.destroy();
-	},
-
-	onChange: function(){
-		this.fireEvent('change', this.input.checked);
+		this.parent();
 	},
 
 	set: function(value){
 		this.input.checked = !!value;
 		return this;
+	},
+
+	get: function(){
+		return !!this.input.checked;
 	}
 
 });

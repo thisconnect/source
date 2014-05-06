@@ -1,8 +1,40 @@
 var Controller = new Class({
 
-	Implements: [Events],
+	send: null,
+
+	initialize: function(key, data, widget){
+		var path = data.path.slice(0);
+
+		path.push(key);
+
+		this.send = function(){
+			widget.fireEvent('change', [path, this.get()]);
+		}.bind(this);
+
+		this.create(key, data.config);
+
+		this.set(data.value);
+
+		// widget.addEvent('destroy', this.destroy);
+
+		widget.addEvent(path.slice(1).join(' '), this.set.bind(this));
+
+		this.attach(data.element);
+	},
 
 	element: null,
+
+	create: function(key, config){
+		this.element = new Element('label', {
+			text: config.label || key,
+			title: config.desc || null
+		});
+	},
+
+	destroy: function(){
+		this.removeEvents();
+		this.element.destroy();
+	},
 
 	attach: function(container, position){
 		this.element.inject(container, position || 'bottom');
@@ -14,12 +46,9 @@ var Controller = new Class({
 		return this;
 	},
 
-	setTitle: function(description){
-		this.element.set('title', description);
-	},
-
-	label: function(label){
-		return new Element('label', {text: label});
+	set: function(value){
+		this.element.set('text', value);
+		return this;
 	}/*,
 
 	$enabled: true,

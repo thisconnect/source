@@ -53,8 +53,7 @@ new Unit({
 		return !!this.io && !!this.io.socket.connected;
 	},
 
-	toggle: function(e){
-		e.preventDefault();
+	toggle: function(){
 		if (this.isConnected()) this.disconnect();
 		else this.reconnect();
 	},

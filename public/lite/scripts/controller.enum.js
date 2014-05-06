@@ -4,35 +4,25 @@ Controller.enum = new Class({
 
 	selector: 'select',
 
-	initialize: function(data){
-		this.addEvent('destroy', this.destroy);
-		this.addEvent('set', this.set);
-		this.create(data);
-	},
-
 	select: null,
 
-	create: function(data){
+	create: function(key, config){
 		var select = this.select = new Element(this.selector);
 
-		this.addOptions(data.values);
+		this.addOptions(config.values);
 
-		select.addEvent('change', this.onChange.bind(this));
+		select.addEvent('change', this.send);
+	
+		if (config.value == null) config.value = config.values[0];
 
-		if (!!data.label){
+		this.parent(key, config);
 
-			this.element = this.label(data.label);
-			select.inject(this.element);
-
-		} else this.element = select;
-
-		this.set(data.value || data.values[0]);
+		select.inject(this.element);
 	},
 
 	destroy: function(){
-		this.removeEvents();
 		this.select.removeEvents();
-		this.element.destroy();
+		this.parent();
 	},
 
 	addOptions: function(values){
@@ -45,13 +35,13 @@ Controller.enum = new Class({
 		}
 	},
 
-	onChange: function(){
-		this.fireEvent('change', this.select.get('value'));
-	},
-
 	set: function(value){
 		this.select.set('value', value);
 		return this;
+	},
+
+	get: function(){
+		return this.select.get('value');
 	}
 
 });

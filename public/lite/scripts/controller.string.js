@@ -4,44 +4,34 @@ Controller.string = new Class({
 
 	selector: 'input[type=text]',
 
-	initialize: function(data){
-		this.addEvent('destroy', this.destroy);
-		this.addEvent('set', this.set);
-		this.create(data);
-	},
-
 	input: null,
 
-	create: function(data){
+	create: function(path, data){
 		var input = this.input = new Element(this.selector);
 
-		input.set('placeholder', data.placeholder || '');
-		input.addEvent('input', this.onInput.bind(this));
+		this.parent(path, data);
 
-		if (!data.label) this.element = input;
-		else {
-			this.label = this.label(data.label);
-			this.element = this.label;
-			this.element.appendText(' ');
-			input.inject(this.element);
-		}
+		if (data.placeholder != null) input.set('placeholder', data.placeholder);
 
-		this.set(data.value || '');
+		input.addEvent('input', this.send);
+
+		this.element.appendText(' ');
+
+		input.inject(this.element);
 	},
 
 	destroy: function(){
-		this.removeEvents();
 		this.input.removeEvents();
-		this.element.destroy();
-	},
-
-	onInput: function(e){
-		this.fireEvent('change', this.input.value);
+		this.parent();
 	},
 
 	set: function(value){
 		this.input.value = value;
 		return this;
+	},
+
+	get: function(){
+		return this.input.value;
 	}
 
 });
