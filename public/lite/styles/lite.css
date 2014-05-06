@@ -58,6 +58,7 @@ a:active,
 }
 
 input {
+	box-sizing: border-box;
 	line-height: 1.25;
 	max-width: 100%;
 	text-indent: .25rem;
@@ -84,8 +85,17 @@ label {
 	margin: .84rem 0;
 }
 
-label.at-right {
-	margin-top: 0;
+@media screen and (min-width: 481px) {
+	.columns2 label {
+		display: inline-block;
+		margin-top: 0;
+		vertical-align: top;
+		width: 50%;
+	}
+}
+
+select {
+	max-width: 100%;
 }
 
 label select {
@@ -107,6 +117,9 @@ label::-moz-selection { background: transparent; }
 .button {
 	cursor: pointer;
 	display: inline-block;
+}
+
+span.button {
 	margin: 0 0 .5rem 0;
 }
 
@@ -119,6 +132,8 @@ label::-moz-selection { background: transparent; }
 	height: 2rem;
 	line-height: 1.9rem;
 	margin: -1px -1px 0 0;
+	position: absolute;
+	right: 0;
 	text-align: center;
 	width: 2rem;
 }
@@ -135,7 +150,8 @@ label::-moz-selection { background: transparent; }
 	clear: both;
 	display: block;
 	margin: .5rem 0;
-	padding: 0 0 0 1em;
+	padding: 0 1rem;
+	position: relative;
 }
 
 

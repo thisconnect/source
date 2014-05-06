@@ -13,6 +13,9 @@ var Controller = new Class({
 
 		this.create(key, data.config);
 
+		if (data.config.important) this.setImportant();
+		if (data.config.columns) this.setColumns(data.config.columns);
+
 		this.set(data.value);
 
 		// widget.addEvent('destroy', this.destroy);
@@ -49,6 +52,14 @@ var Controller = new Class({
 	set: function(value){
 		this.element.set('text', value);
 		return this;
+	},
+
+	setImportant: function(){
+		this.element.addClass('button').addClass('at-right');
+	},
+
+	setColumns: function(columns){
+		this.element.addClass('columns' + columns);
 	}/*,
 
 	$enabled: true,
