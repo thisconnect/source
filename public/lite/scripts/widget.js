@@ -2,15 +2,10 @@ var Widget = new Class({
 
 	Implements: [Events],
 
-	brakets: /(.*?)\[(.*?)\]/,
-
 	id: null,
 
-	types: null,
-
-	initialize: function(key, config){
+	initialize: function(key){
 		this.id = key;
-		this.types = config;
 		this.addEvent('destroy', this.destroy);
 		this.create();
     },
@@ -34,20 +29,22 @@ var Widget = new Class({
 		this.element.destroy();
 	},
 
-	build: function(values, data){
+	build: function(data, values){
 		if (!data) data = {};
 
 		for (var key in values){
 			if (Array.isArray(values[key])) continue;
 
 			this.addControl(key, {
-				'config': (data.config || this.types)[key] || {},
+				'config': (data.config)[key] || {},
 				'element': data.element || this.element,
 				'path': data.path || [this.id],
 				'value': values[key]
 			});
 		}
 	},
+
+	brakets: /(.*?)\[(.*?)\]/,
 
 	addControl: function(key, data){
 		var type = data.config.type || typeof data.value,

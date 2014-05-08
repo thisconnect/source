@@ -72,6 +72,11 @@ input[type=range].vertical {
 	-webkit-appearance: slider-vertical;
 }
 
+.disabled {
+	color: #aaa;
+	pointer-events: none;
+}
+
 pre {
 	clear: both;
 	font-size: .6rem;
@@ -86,7 +91,7 @@ label {
 }
 
 @media screen and (min-width: 481px) {
-	.columns2 label {
+	.columns label {
 		display: inline-block;
 		margin-top: 0;
 		vertical-align: top;
@@ -157,21 +162,21 @@ span.button {
 
 /* scrollbar */
 
-::-webkit-scrollbar {
+html::-webkit-scrollbar {
 	width: 10px;
 	height: 10px;
 }
 
-::-webkit-scrollbar-button:start:decrement,
-::-webkit-scrollbar-button:end:increment {
+html::-webkit-scrollbar-button:start:decrement,
+html::-webkit-scrollbar-button:end:increment {
 	display: none;
 }
 
-::-webkit-scrollbar-track-piece {
+html::-webkit-scrollbar-track-piece {
 	background-color: #fff;
 }
 
-::-webkit-scrollbar-thumb:vertical {
+html::-webkit-scrollbar-thumb:vertical {
 	background: #ddd;
 	-webkit-border-radius: 6px;
 }

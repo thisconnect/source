@@ -3,18 +3,22 @@ var Controller = new Class({
 	send: null,
 
 	initialize: function(key, data, widget){
-		var path = data.path.slice(0);
+		var path = data.path.slice(0),
+			get = this.get.bind(this);
 
 		path.push(key);
 
 		this.send = function(){
-			widget.fireEvent('change', [path, this.get()]);
-		}.bind(this);
+			widget.fireEvent('change', [path, get()]);
+		};
 
 		this.create(key, data.config);
 
 		if (data.config.important) this.setImportant();
-		if (data.config.columns) this.setColumns(data.config.columns);
+		if (data.config.columns) this.setColumns();
+		if (data.config.disabled) this.disable();
+		if (data.config.enable) this.setupEnable(widget, data.config.enable);
+		if (data.config.disable) this.setupDisable(widget, data.config.disable);
 
 		this.set(data.value);
 
@@ -30,12 +34,11 @@ var Controller = new Class({
 	create: function(key, config){
 		this.element = new Element('label', {
 			text: config.label || key,
-			title: config.desc || null
+			title: config.title || null
 		});
 	},
 
 	destroy: function(){
-		this.removeEvents();
 		this.element.destroy();
 	},
 
@@ -54,29 +57,45 @@ var Controller = new Class({
 		return this;
 	},
 
+	get: function(){
+		return this.element.get('text');
+	},
+
 	setImportant: function(){
 		this.element.addClass('button').addClass('at-right');
 	},
 
-	setColumns: function(columns){
-		this.element.addClass('columns' + columns);
-	}/*,
+	setColumns: function(){
+		this.element.addClass('columns');
+	},
+	
+	setupEnable: function(widget, path){
+		path = path.slice(1).join(' ');
+		widget.addEvent(path, this.onEnable.bind(this));
+	},
 
-	$enabled: true,
+	onEnable: function(value){
+		if (!!value) this.enable();
+		else this.disable();
+	},
+	
+	setupDisable: function(widget, path){
+		path = path.slice(1).join(' ');
+		widget.addEvent(path, this.onDisable.bind(this));
+	},
 
-	isEnabled: function(){
-		return !!this.$enabled;
+	onDisable: function(value){
+		if (!!value) this.disable();
+		else this.enable();
 	},
 
 	enable: function(){
-		this.$enabled = true;
-		return this;
+		this.element.removeClass('disabled');
 	},
 
 	disable: function(){
-		this.$enabled = false;
-		return this;
-	}*/
+		this.element.addClass('disabled');
+	}
 
 });
 

@@ -98,12 +98,15 @@ new Unit({
 	},
 
 	addWidget: function(context, name){
-		var widget = new Widget(name, this.types[name]),
-			build = widget.build.bind(widget),
+		var widget = new Widget(name),
+			build = widget.build.bind(widget, {
+				'config': this.types[name]
+			}),
 			unsubscribe = this.unsubscribe.bind(this),
 			id = context + ' ' + name;
 
 		function set(path, value){
+			console.log('set:::', path.join(' '), value);
 			widget.fireEvent(path.join(' '), value);
 		}
 
@@ -115,12 +118,11 @@ new Unit({
 		}
 
 		widget.addEvent('change', this.set.bind(this));
+		widget.addEvent('remove', this.remove.bind(this, name));
 
 		this.subscribe(id + ' set', set);
 		this.subscribe(id + ' merge', build);
 		this.subscribe(id + ' delete', destroy);
-
-		widget.addEvent('remove', this.remove.bind(this, name));
 
 		widget.attach(this.element);
 		

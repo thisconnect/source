@@ -3,9 +3,9 @@
 		"pd": {
 			"options": {
 				"pd": "/Applications/Pd-0.45-5-64bit.app/Contents/Resources/bin/pd"
+				, "encoding": "ascii"
 				, "read": 8005
 				, "write": 8006
-				, "encoding": "ascii"
 				, "flags": {
 					"r": 44100
 					, "audiobuf": 6
@@ -33,7 +33,11 @@
 		"engine": {
 			"pd": {
 				"options": {
-					"columns": 2
+					"object": {
+						"columns": true
+						, "fieldset": true
+						, "disable": ["engine", "pd", "process"]
+					}
 					, "pd": {
 						"label": "Pd"
 					}
@@ -49,43 +53,43 @@
 						}
 						, "audiobuf": {
 							"label": "audio buffer"
-							, "desc": "size of audio I/O buffer in msec"
+							, "title": "size of audio I/O buffer in msec"
 						}
 						, "nogui": {
-							"desc": "suppress starting the GUI"
+							"title": "suppress starting the GUI"
 						}
 						, "nodac": {
-							"desc": "suppress audio output"
+							"title": "suppress audio output"
 						}
 						, "noadc": {
-							"desc": "suppress audio input"
+							"title": "suppress audio input"
 						}
 						, "nomidi": {
-							"desc": "suppress MIDI input and output"
+							"title": "suppress MIDI input and output"
 						}
 						, "noautopatch": {
-							"desc": "suppress auto-connecting to new objects"
+							"title": "suppress auto-connecting to new objects"
 						}
 						, "noloadbang": {
-							"desc": "suppress all loadbangs"
+							"title": "suppress all loadbangs"
 						}
 						, "listdev": {
-							"desc": "list audio and MIDI devices"
+							"title": "list audio and MIDI devices"
 						}
 						, "verbose": {
-							"desc": "extra printout on startup when searching for files"
+							"title": "extra printout on startup when searching for files"
 						}
 						, "nogui": {
-							"desc": "suppress starting the GUI"
+							"title": "suppress starting the GUI"
 						}
 						, "batch": {
-							"desc": "You should probably also specify -nosound. With these flag Pd runs as quickly as it can without waiting for real time"
+							"title": "You should probably also specify -nosound. With these flag Pd runs as quickly as it can without waiting for real time"
 						}
 						, "send": {
-							"desc": "send a message at startup (after patches are loaded)"
+							"title": "send a message at startup (after patches are loaded)"
 						}
 						, "open": {
-							"desc": "open file(s) on startup"
+							"title": "open file(s) on startup"
 						}
 					}
 				}
@@ -95,6 +99,8 @@
 				}
 				, "dsp": {
 					"label": "Compute Audio"
+					, "disabled": true
+					, "enable": ["engine", "pd", "process"]
 				}
 			}
 		}

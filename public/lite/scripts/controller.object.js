@@ -4,22 +4,20 @@ Controller.object = new Class({
 
 	path: null,
 	widget: null,
+	config: null,
 
 	initialize: function(key, data, widget){
 		this.path = data.path.slice(0);
 		this.path.push(key);
 		this.widget = widget;
+		this.config = data.config;
+		if (!!data.config.object) data.config = data.config.object;
 		this.parent(key, data, widget);
 	},
 
-	selector: 'section',
-
-	config: null,
-
 	create: function(key, config){
-		this.config = config;
-		this.element = new Element(this.selector);
-		new Element('h2', {
+		this.element = new Element(config.fieldset ? 'fieldset' : 'section');
+		new Element(config.fieldset ? 'legend' : 'h2', {
 			'text': key
 		}).inject(this.element);
 	},
@@ -31,11 +29,11 @@ Controller.object = new Class({
 	},
 
 	set: function(values){
-		this.widget.build(values, {
+		this.widget.build({
 			'config': this.config,
 			'element': this.element,
 			'path': this.path
-		});
+		}, values);
 	}
 
 });
