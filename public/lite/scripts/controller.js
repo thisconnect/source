@@ -90,11 +90,15 @@ var Controller = new Class({
 	},
 
 	enable: function(){
-		this.element.removeClass('disabled');
+		this.element.removeClass('disabled')
+			.getElements('button, input, select, textarea')
+			.removeProperty('disabled');
 	},
 
 	disable: function(){
-		this.element.addClass('disabled');
+		this.element.addClass('disabled')
+			.getElements('button, input, select, textarea')
+			.setProperty('disabled', true);
 	}
 
 });

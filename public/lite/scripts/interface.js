@@ -106,7 +106,6 @@ new Unit({
 			id = context + ' ' + name;
 
 		function set(path, value){
-			console.log('set:::', path.join(' '), value);
 			widget.fireEvent(path.join(' '), value);
 		}
 

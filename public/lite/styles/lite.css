@@ -77,6 +77,12 @@ input[type=range].vertical {
 	pointer-events: none;
 }
 
+. disabled input {
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+}
+
 pre {
 	clear: both;
 	font-size: .6rem;
