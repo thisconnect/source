@@ -1,16 +1,12 @@
 var Controller = new Class({
 
-	send: null,
-
 	initialize: function(key, data, widget){
 		var path = data.path.slice(0),
 			get = this.get.bind(this);
 
 		path.push(key);
 
-		this.send = function(){
-			widget.fireEvent('change', [path, get()]);
-		};
+		this.send = this.send.bind(widget, path, get);
 
 		this.create(key, data.config);
 
@@ -27,6 +23,10 @@ var Controller = new Class({
 		widget.addEvent(path.slice(1).join(' '), this.set.bind(this));
 
 		this.attach(data.element);
+	},
+
+	send: function(path, get){
+		this.fireEvent('change', [path, get()]);
 	},
 
 	element: null,
