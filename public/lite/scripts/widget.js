@@ -30,8 +30,6 @@ var Widget = new Class({
 	},
 
 	build: function(data, values){
-		if (!data) data = {};
-
 		for (var key in values){
 			if (Array.isArray(values[key])) continue;
 

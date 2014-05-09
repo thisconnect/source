@@ -47,6 +47,7 @@ new Unit({
 			.removeListener('remove', this.bound.onRemove);
 
 		this.io = null;
+		this.types = null;
 	},
 
 	then: function(){
@@ -69,30 +70,39 @@ new Unit({
 
 	onGet: function(data){
 		for (var widget in data){
+			console.log('onGet', widget);
 			this.publish('state ' + widget + ' delete');
 			this.addWidget('state', widget);
-			this.publish('state ' + widget + ' merge', [data[widget]]);
+			this.publish('state ' + widget + ' build', data[widget]);
+			this.publish('state ' + widget + ' merge', data[widget]);
 		}
 	},
 
 	onSet: function(key, value){
 		if (typeof key == 'string'){
-			// console.log('onSet', key, value);
+			console.log('onSet', key, value);
 			this.addWidget('state', key);
+			this.publish('state ' + key + ' build', value);
 			this.publish('state ' + key + ' merge', value);
 		} else {
-			// console.log('onSet', key.join('.'), value);
+			// console.log('onSet', 'state ' + key[0] + ' set', [key.slice(1).join('.'), value].join(' '));
 			this.publish('state ' + key[0] + ' set', [key.slice(1), value]);
 		}
 	},
 
 	onRemove: function(widget){
-		this.publish('state ' + widget + ' delete');
+		if (typeof widget == 'string'){
+			console.log('onRemove', widget);
+			this.publish('state ' + widget + ' delete');
+		} else {
+			console.log('OMG OMG OMG OMG OMG onRemove', widget);
+		}
 	},
 
 	onMerge: function(data){
-		// console.log('onMerge', data);
+		console.log('onMerge', data);
 		for (var widget in data){
+			this.publish('state ' + widget + ' build', data[widget]);
 			this.publish('state ' + widget + ' merge', data[widget]);
 		}
 	},
@@ -109,9 +119,24 @@ new Unit({
 			widget.fireEvent(path.join(' '), value);
 		}
 
+		function merge(values, path){
+			var keys;
+			if (!path) path = [];
+			for (var key in values){
+				if (Array.isArray(values[key])) continue;
+				keys = path.slice(0);
+				keys.push(key);
+				if (typeof values[key] != 'object'){
+					// console.log(keys.join(' '), values[key]);
+					widget.fireEvent(keys.join(' '), values[key]);
+				} else merge(values[key], keys);
+			}
+		}
+
 		function destroy(){
+			unsubscribe(id + ' build', build);
 			unsubscribe(id + ' set', set);
-			unsubscribe(id + ' merge', build);
+			unsubscribe(id + ' merge', merge);
 			unsubscribe(id + ' delete', destroy);
 			widget.fireEvent('destroy');
 		}
@@ -119,8 +144,9 @@ new Unit({
 		widget.addEvent('change', this.set.bind(this));
 		widget.addEvent('remove', this.remove.bind(this, name));
 
+		this.subscribe(id + ' build', build);
 		this.subscribe(id + ' set', set);
-		this.subscribe(id + ' merge', build);
+		this.subscribe(id + ' merge', merge);
 		this.subscribe(id + ' delete', destroy);
 
 		widget.attach(this.element);

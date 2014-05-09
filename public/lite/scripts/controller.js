@@ -20,7 +20,7 @@ var Controller = new Class({
 		if (data.config.enable) this.setupEnable(widget, data.config.enable);
 		if (data.config.disable) this.setupDisable(widget, data.config.disable);
 
-		this.set(data.value);
+		// this.set(data.value);
 
 		// widget.addEvent('destroy', this.destroy);
 

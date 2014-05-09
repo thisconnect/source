@@ -13,6 +13,7 @@ Controller.object = new Class({
 		this.config = data.config;
 		if (!!data.config.object) data.config = data.config.object;
 		this.parent(key, data, widget);
+		this.set(data.value);
 	},
 
 	create: function(key, config){
