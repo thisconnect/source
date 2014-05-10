@@ -1,32 +1,29 @@
 var Controller = new Class({
 
 	initialize: function(key, data, widget){
-		var path = data.path.slice(0),
-			get = this.get.bind(this);
-
+		var path = data.path.slice(0);
 		path.push(key);
 
-		this.send = this.send.bind(widget, path, get);
-
-		this.create(key, data.config);
-
-		if (data.config.important) this.setImportant();
-		if (data.config.columns) this.setColumns();
-		if (data.config.disabled) this.disable();
-		if (data.config.enable) this.setupEnable(widget, data.config.enable);
-		if (data.config.disable) this.setupDisable(widget, data.config.disable);
-
-		// this.set(data.value);
-
-		// widget.addEvent('destroy', this.destroy);
+		this.send = this.send.bind(widget, path, this.get.bind(this));
 
 		widget.addEvent(path.slice(1).join(' '), this.set.bind(this));
+		// widget.addEvent('destroy', this.destroy);
 
+		this.setup(key, data.config, widget);
 		this.attach(data.element);
 	},
 
 	send: function(path, get){
 		this.fireEvent('change', [path, get()]);
+	},
+
+	setup: function(key, config, widget){
+		this.create(key, config);
+		if (config.important) this.setImportant();
+		if (config.columns) this.setColumns();
+		if (config.disabled) this.disable();
+		if (config.enable) this.setupEnable(widget, config.enable);
+		if (config.disable) this.setupDisable(widget, config.disable);
 	},
 
 	element: null,
