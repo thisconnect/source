@@ -6,23 +6,21 @@ Controller.number = new Class({
 
 	input: null,
 
-	create: function(path, data){
-		var input = this.input = new Element(this.selector);
+	create: function(key, data, widget){
+		var config = data.config || {};
 
-		this.parent(path, data);
+		var input = this.input = new Element(this.selector)
+			.addEvent('input', this.send)
+			.inject(this.element);
 
-		input.addEvent('input', this.send);
+		if (!!config.step) input.set('step', config.step);
 
-		if (!!data.step) input.set('step', data.step);
-
-		if (!!data.range) input.set({
-			'min': data.range[0],
-			'max': data.range[1]
+		if (!!config.range) input.set({
+			'min': config.range[0],
+			'max': config.range[1]
 		});
 
-		this.element.appendText(' ');
-
-		input.inject(this.element);
+		this.parent(key, data, widget);
 	},
 
 	destroy: function(){

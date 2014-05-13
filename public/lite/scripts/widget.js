@@ -31,13 +31,18 @@ var Widget = new Class({
 
 	build: function(data, values){
 		for (var key in values){
-			if (Array.isArray(values[key])) continue;
+			if (!values.hasOwnProperty(key)) continue;
+
+			if (!data.config[key]) data.config[key] = {};
+
+			if (Array.isArray(values[key])) data.config[key]['type'] = 'array';
 
 			this.addControl(key, {
-				'config': (data.config)[key] || {},
-				'element': data.element || this.element,
-				'path': data.path || [this.id],
-				'value': values[key]
+				'config': data.config[key]
+				, 'element': data.element || this.element
+				, 'path': data.path || [this.id]
+				, 'array': data.array
+				, 'value': values[key]
 			});
 		}
 	},
@@ -48,8 +53,9 @@ var Widget = new Class({
 		var type = data.config.type || typeof data.value,
 			array = type.match(this.brakets);
 
-		if (!array) new Controller[type](key, data, this)
-		else new Controller.Array(array, config);
+//if (Array.isArray(data.value)) return; console.log(key, type);
+
+		new Controller[type](key, data, this);
 	},
 
 	attach: function(element, position){

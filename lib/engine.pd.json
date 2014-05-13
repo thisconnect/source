@@ -1,7 +1,37 @@
 {
 	"engine": {
 		"pd": {
-			"options": {
+			"list": [true, false, false, true]
+			, "mixed": [
+				"text", 9, false, {
+					"item": "aha"
+					, "number": 2
+				}
+			]
+			, "collection": [
+				{
+					"item": {
+						"position": 1
+						, "name": "A"
+						, "active": true
+					}
+				}
+				, {
+					"item": {
+						"position": 2
+						, "name": "B"
+						, "active": false
+					}
+				}
+				, {
+					"item": {
+						"position": 3
+						, "name": "C"
+						, "active": true
+					}
+				}
+			]
+			, "options": {
 				"pd": "/Applications/Pd-0.45-5-64bit.app/Contents/Resources/bin/pd"
 				, "encoding": "ascii"
 				, "read": 8005

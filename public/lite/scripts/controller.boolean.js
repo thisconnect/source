@@ -4,16 +4,17 @@ Controller.boolean = new Class({
 
 	selector: 'input[type=checkbox]',
 
+	label: 'label.checkbox',
+
 	input: null,
 
-	create: function(path, data){
-		var input = this.input = new Element(this.selector);
+	create: function(key, data, widget){
 
-		this.parent(path, data);
+		this.input = new Element(this.selector)
+			.addEvent('change', this.send)
+			.inject(this.element, 'top');
 
-		input.addEvent('change', this.send);
-
-		input.inject(this.element, 'top');
+		this.parent(key, data, widget);
 	},
 
 	destroy: function(){

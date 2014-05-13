@@ -111,6 +111,7 @@ new Unit({
 		var widget = new Widget(name),
 			build = widget.build.bind(widget, {
 				'config': this.types[name]
+				//, 'element': this.element
 			}),
 			unsubscribe = this.unsubscribe.bind(this),
 			id = context + ' ' + name;
@@ -120,16 +121,15 @@ new Unit({
 		}
 
 		function merge(values, path){
-			var keys;
-			if (!path) path = [];
 			for (var key in values){
-				if (Array.isArray(values[key])) continue;
-				keys = path.slice(0);
-				keys.push(key);
-				if (typeof values[key] != 'object'){
-					// console.log(keys.join(' '), values[key]);
+				if (!values.hasOwnProperty(key)) continue;
+				// if (Array.isArray(values[key])) continue;
+				var keys = (path || []).concat(key);
+				if (typeof values[key] == 'object'){
+					merge(values[key], keys);
+				} else {
 					widget.fireEvent(keys.join(' '), values[key]);
-				} else merge(values[key], keys);
+				}
 			}
 		}
 

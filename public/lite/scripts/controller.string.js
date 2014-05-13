@@ -6,18 +6,16 @@ Controller.string = new Class({
 
 	input: null,
 
-	create: function(path, data){
-		var input = this.input = new Element(this.selector);
+	create: function(key, data, widget){
+		var config = data.config || {};
 
-		this.parent(path, data);
+		var input = this.input = new Element(this.selector)
+			.addEvent('input', this.send)
+			.inject(this.element);
 
-		if (data.placeholder != null) input.set('placeholder', data.placeholder);
+		if (config.placeholder != null) input.set('placeholder', config.placeholder);
 
-		input.addEvent('input', this.send);
-
-		this.element.appendText(' ');
-
-		input.inject(this.element);
+		this.parent(key, data, widget);
 	},
 
 	destroy: function(){

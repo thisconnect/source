@@ -3,33 +3,33 @@ Controller.object = new Class({
 	Extends: Controller,
 
 	initialize: function(key, data, widget){
-		var path = data.path.slice(0),
-			config = data.config;
+		var path = data.path.concat(key);
 
-		path.push(key);
-
-		this.setup(key, data.config.object || data.config, widget);
-
-		this.attach(data.element);
+		this.setup(key, data, widget);
 
 		widget.build({
-			'config': config,
+			'config': data.config,
 			'element': this.element,
 			'path': path
 		}, data.value);
+
+		this.attach(data.element);
 	},
 
-	create: function(key, config){
-		this.element = new Element(config.fieldset ? 'fieldset' : 'section');
-		new Element(config.fieldset ? 'legend' : 'h2', {
-			'text': key
-		}).inject(this.element);
-	},
+	setup: function(key, data, widget){
+		var config = data.config.object || data.config || {};
 
-	destroy: function(){
-		this.config = null;
-		this.widget = null;
-		this.parent();
+		if (data.array){
+			this.element = new Element('li');
+		} else {
+			this.element = new Element(config.fieldset ? 'fieldset' : 'section');
+
+			new Element(config.fieldset ? 'legend' : 'h2', {
+				'text': key
+			}).inject(this.element);
+		}
+
+		this.create(key, data, widget);
 	}
 
 });

@@ -1,38 +1,49 @@
 var Controller = new Class({
 
+	send: function(path, get){
+		this.fireEvent('change', [path, get()]);
+	},
+
 	initialize: function(key, data, widget){
-		var path = data.path.slice(0);
-		path.push(key);
+		var path = data.path.concat(key);
+		//console.log(path.join('.'));
 
 		this.send = this.send.bind(widget, path, this.get.bind(this));
 
 		widget.addEvent(path.slice(1).join(' '), this.set.bind(this));
 		// widget.addEvent('destroy', this.destroy);
 
-		this.setup(key, data.config, widget);
+		this.setup(key, data, widget);
 		this.attach(data.element);
 	},
 
-	send: function(path, get){
-		this.fireEvent('change', [path, get()]);
+	element: null,
+
+	label: 'label',
+
+	setup: function(key, data, widget){
+		var config = data.config || {};
+
+		this.element = (data.array)
+			? new Element('li')
+			: new Element(this.label, {
+				text: (config.label || key) + ' ',
+				title: config.title || null
+			});
+
+		this.create(key, data, widget);
 	},
 
-	setup: function(key, config, widget){
-		this.create(key, config);
+	create: function(key, data, widget){
+		var config = data.config || {};
+
 		if (config.important) this.setImportant();
 		if (config.columns) this.setColumns();
 		if (config.disabled) this.disable();
 		if (config.enable) this.setupEnable(widget, config.enable);
 		if (config.disable) this.setupDisable(widget, config.disable);
-	},
 
-	element: null,
-
-	create: function(key, config){
-		this.element = new Element('label', {
-			text: config.label || key,
-			title: config.title || null
-		});
+		this.element.appendText(' ');
 	},
 
 	destroy: function(){
@@ -96,23 +107,6 @@ var Controller = new Class({
 		this.element.addClass('disabled')
 			.getElements('button, input, select, textarea')
 			.setProperty('disabled', true);
-	}
-
-});
-
-Controller.Array = new Class({
-
-	Extends: Controller,
-
-	initialize: function(array, data){
-		this.element = new Element('div');
-		this.build(array, data);
-	},
-
-	build: function(array, data){
-		console.log(array[0], array[1], array[2], data);
-		//new Controller[array[1]]();
-		//this.add(array[1]);
 	}
 
 });

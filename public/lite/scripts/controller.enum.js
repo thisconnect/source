@@ -6,18 +6,19 @@ Controller.enum = new Class({
 
 	select: null,
 
-	create: function(key, config){
-		var select = this.select = new Element(this.selector);
+	create: function(key, data, widget){
+		var config = data.config || {};
+
+		if (config.value == null) config.value = config.values[0];
+
+		(this.select = new Element(this.selector))
+			.addEvent('change', this.send)
+			.inject(this.element);
 
 		this.addOptions(config.values);
 
-		select.addEvent('change', this.send);
-	
-		if (config.value == null) config.value = config.values[0];
+		this.parent(key, data, widget);
 
-		this.parent(key, config);
-
-		select.inject(this.element);
 	},
 
 	destroy: function(){
