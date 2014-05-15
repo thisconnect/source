@@ -70,7 +70,6 @@ new Unit({
 
 	onGet: function(data){
 		for (var widget in data){
-			console.log('onGet', widget);
 			this.publish('state ' + widget + ' delete');
 			this.addWidget('state', widget);
 			this.publish('state ' + widget + ' build', data[widget]);

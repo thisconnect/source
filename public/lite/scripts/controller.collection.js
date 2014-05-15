@@ -1,4 +1,4 @@
-Controller.array = new Class({
+Controller.collection = new Class({
 
 	Extends: Controller,
 
@@ -7,13 +7,25 @@ Controller.array = new Class({
 			config = data.config || {};
 
 		this.setup(key, data, widget);
-		
+
+		var table = new Element('table'),
+			thead = new Element('thead');
+
+		(config.headings || Object.keys(data.value[0]))
+			.forEach(function(key){
+				new Element('th', {'text': key}).inject(thead);
+			});
+
+		thead.inject(table);
+
 		widget.build({
 			'config': config
-			, 'element': new Element('ul').inject(this.element)
+			, 'element': new Element('tbody').inject(table)
 			, 'path': path
-			, 'array': true
+			, 'collection': true
 		}, data.value);
+
+		table.inject(this.element);
 
 		this.attach(data.element);
 	},

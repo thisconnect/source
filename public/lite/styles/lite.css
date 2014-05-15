@@ -16,7 +16,7 @@ html, button, input, textarea, select {
 	font: 100%/1.625 Menlo, monospace;
 }
 
-h1, h2, h3, h4, h5 {
+h1, h2, h3, h4, h5, label {
 	font-size: 1rem;
 	line-height: inherit;
 	margin: .84rem 0;
@@ -78,11 +78,21 @@ input {
 }
 
 input[type=range] {
+    /* -webkit-appearance: none; */
 	vertical-align: middle;
 }
 
+/* input[type="range"]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+    background: red;
+    width: 20px;
+    height: 20px;
+} */
+
 input[type=range].vertical {
 	-webkit-appearance: slider-vertical;
+	height: 4rem;
+	width: 1rem;
 }
 
 .disabled {
@@ -107,7 +117,6 @@ pre {
 label {
 	box-sizing: border-box;
 	display: block;
-	margin: .84rem 0;
 }
 
 label.checkbox,
@@ -134,10 +143,7 @@ select {
 	max-width: 100%;
 }
 
-label select {
-	margin: 0 .5rem;
-}
-
+label select,
 label input[type=checkbox],
 label input[type=radio] {
 	margin: 0 .5rem 0 0;
@@ -191,6 +197,19 @@ span.button {
 	position: relative;
 }
 
+/* table */
+
+th {
+	text-align: left;
+}
+
+td {
+	padding: 0 .5rem .5rem 0;
+}
+
+tr:last-child td {
+	padding-bottom: 0;
+}
 
 /* scrollbar */
 

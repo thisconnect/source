@@ -33,15 +33,12 @@ var Widget = new Class({
 		for (var key in values){
 			if (!values.hasOwnProperty(key)) continue;
 
-			if (!data.config[key]) data.config[key] = {};
-
-			if (Array.isArray(values[key])) data.config[key]['type'] = 'array';
-
 			this.addControl(key, {
-				'config': data.config[key]
+				'config': data.config[key] || {}
 				, 'element': data.element || this.element
 				, 'path': data.path || [this.id]
 				, 'array': data.array
+				, 'collection': data.collection
 				, 'value': values[key]
 			});
 		}
@@ -50,10 +47,10 @@ var Widget = new Class({
 	brakets: /(.*?)\[(.*?)\]/,
 
 	addControl: function(key, data){
-		var type = data.config.type || typeof data.value,
+		var type = data.config.type || (Array.isArray(data.value) && 'array') || typeof data.value,
 			array = type.match(this.brakets);
 
-//if (Array.isArray(data.value)) return; console.log(key, type);
+		if (!Controller[type]) return console.log('ERROR', type, 'is no controller');
 
 		new Controller[type](key, data, this);
 	},

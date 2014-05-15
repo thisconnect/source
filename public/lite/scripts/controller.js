@@ -6,8 +6,6 @@ var Controller = new Class({
 
 	initialize: function(key, data, widget){
 		var path = data.path.concat(key);
-		//console.log(path.join('.'));
-
 		this.send = this.send.bind(widget, path, this.get.bind(this));
 
 		widget.addEvent(path.slice(1).join(' '), this.set.bind(this));
@@ -24,11 +22,10 @@ var Controller = new Class({
 	setup: function(key, data, widget){
 		var config = data.config || {};
 
-		this.element = (data.array)
-			? new Element('li')
+		this.element = data.array ? new Element('li')
+			: data.collection ? new Element('td')
 			: new Element(this.label, {
-				text: (config.label || key) + ' ',
-				title: config.title || null
+				text: (config.label || key) + ' '
 			});
 
 		this.create(key, data, widget);
@@ -37,6 +34,7 @@ var Controller = new Class({
 	create: function(key, data, widget){
 		var config = data.config || {};
 
+		if (config.title) this.element.set('title', config.title);
 		if (config.important) this.setImportant();
 		if (config.columns) this.setColumns();
 		if (config.disabled) this.disable();

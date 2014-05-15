@@ -6,5 +6,6 @@ require('./lib/socket');
 require('./lib/engine');
 require('./lib/interface');
 require('./lib/desktop');
+require('./lib/test');
 
 app.emit('setup');
