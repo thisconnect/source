@@ -8,15 +8,14 @@ Controller.collection = new Class({
 
 		this.setup(key, data, widget);
 
-		var table = new Element('table'),
-			thead = new Element('thead');
+		var outer = new Element('div.table'),
+			table = new Element('table').inject(outer),
+			thead = new Element('thead').inject(table);
 
 		(config.headings || Object.keys(data.value[0]))
 			.forEach(function(key){
 				new Element('th', {'text': key}).inject(thead);
 			});
-
-		thead.inject(table);
 
 		widget.build({
 			'config': config
@@ -25,8 +24,7 @@ Controller.collection = new Class({
 			, 'collection': true
 		}, data.value);
 
-		table.inject(this.element);
-
+		outer.inject(this.element);
 		this.attach(data.element);
 	},
 

@@ -11,9 +11,10 @@ new Unit({
 	element: new Element('section.widget'),
 
 	elements: {
-		display: new Element('pre'),
-		dataButton: new Element('span[tabindex=0][text=data].button'),
-		configButton: new Element('span[tabindex=0][text=config].button')
+		display: new Element('pre')
+		, dataButton: new Element('span[tabindex=0][text=data].button')
+		, configButton: new Element('span[tabindex=0][text=config].button')
+		, perfButton: new Element('span[tabindex=0][text=performance].button')
 	},
 
 	data: null,
@@ -48,6 +49,7 @@ new Unit({
 
 	then: function(){
 		if (!!this.data && !!this.config){
+			this.elements.perfButton.inject(this.element).addEvent('click', this.getPerf.bind(this));
 			this.elements.display.set('text', '').inject(this.element);
 			this.element.inject(document.body);
 		}
@@ -65,6 +67,10 @@ new Unit({
 
 	onGet: function(data){
 		this.elements.display.set('text', JSON.stringify(data, null, '\r    '));
+	},
+
+	getPerf: function(){
+		this.onGet(window.performance.getEntries());
 	}
 
 });
