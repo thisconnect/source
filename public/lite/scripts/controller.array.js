@@ -3,13 +3,12 @@ Controller.array = new Class({
 	Extends: Controller,
 
 	initialize: function(key, data, widget){
-		var path = data.path.concat(key),
-			config = data.config || {};
+		var path = data.path.concat(key);
 
 		this.setup(key, data, widget);
-		
+
 		widget.build({
-			'config': config
+			'schema': data.schema || {}
 			, 'element': new Element('ul').inject(this.element)
 			, 'path': path
 			, 'array': true
@@ -19,11 +18,11 @@ Controller.array = new Class({
 	},
 
 	setup: function(key, data, widget){
-		var config = data.config = data.config.array || data.config || {};
+		var schema = data.schema || {};
 		this.element = new Element('div');
 
 		new Element('span', {
-			'text': config.label || key
+			'text': schema.title || key
 		}).inject(this.element);
 
 		this.create(key, data, widget);

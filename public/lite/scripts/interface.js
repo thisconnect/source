@@ -6,7 +6,7 @@ new Unit({
 		this.subscribe({
 			'socket connect': this.connect,
 			'socket disconnect': this.disconnect,
-			'types ready': this.setTypes
+			'types ready': this.setSchema
 		});
 		this.bound = {
 			'onGet': this.onGet.bind(this),
@@ -22,10 +22,10 @@ new Unit({
 		this.element.inject(document.body);
 	},
 
-	types: null,
+	schema: null,
 
-	setTypes: function(types){
-		this.types = types;
+	setSchema: function(schema){
+		this.schema = schema;
 		this.then();
 	},
 
@@ -47,11 +47,11 @@ new Unit({
 			.removeListener('remove', this.bound.onRemove);
 
 		this.io = null;
-		this.types = null;
+		this.schema = null;
 	},
 
 	then: function(){
-		if (!!this.io && !!this.types){
+		if (!!this.io && !!this.schema){
 			this.io.emit('get', this.bound.onGet)
 		}
 	},
@@ -107,10 +107,12 @@ new Unit({
 	},
 
 	addWidget: function(context, name){
-		var widget = new Widget(name),
+
+		// console.log(name, this.schema[name]);
+
+		var widget = new Widget(name, this.schema[name] || {}),
 			build = widget.build.bind(widget, {
-				'config': this.types[name]
-				//, 'element': this.element
+				'schema': this.schema[name] || {}
 			}),
 			unsubscribe = this.unsubscribe.bind(this),
 			id = context + ' ' + name;
@@ -122,11 +124,12 @@ new Unit({
 		function merge(values, path){
 			for (var key in values){
 				if (!values.hasOwnProperty(key)) continue;
-				// if (Array.isArray(values[key])) continue;
+
 				var keys = (path || []).concat(key);
 				if (typeof values[key] == 'object'){
 					merge(values[key], keys);
 				} else {
+					console.log(keys.join(' '), values[key]);
 					widget.fireEvent(keys.join(' '), values[key]);
 				}
 			}

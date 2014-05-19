@@ -7,13 +7,13 @@ Controller.string = new Class({
 	input: null,
 
 	create: function(key, data, widget){
-		var config = data.config || {};
+		var schema = data.schema || {};
 
 		var input = this.input = new Element(this.selector)
 			.addEvent('input', this.send)
 			.inject(this.element);
 
-		if (config.placeholder != null) input.set('placeholder', config.placeholder);
+		if (schema.placeholder != null) input.set('placeholder', schema.placeholder);
 
 		this.parent(key, data, widget);
 	},

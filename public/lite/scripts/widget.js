@@ -4,15 +4,15 @@ var Widget = new Class({
 
 	id: null,
 
-	initialize: function(key){
+	initialize: function(key, schema){
 		this.id = key;
 		this.addEvent('destroy', this.destroy);
-		this.create();
+		this.create(schema);
     },
 
 	element: null,
 
-	create: function(){
+	create: function(schema){
 		this.element = new Element('section.widget');
 
 		new Element('span.close.button.at-right[text=⨯][tabindex=0]')
@@ -20,7 +20,7 @@ var Widget = new Class({
 			.inject(this.element);
 
 		new Element('h2', {
-			'text': this.id.capitalize()
+			'text': schema.title || this.id
 		}).inject(this.element);
 	},
 
@@ -30,11 +30,13 @@ var Widget = new Class({
 	},
 
 	build: function(data, values){
+		var properties = data.schema.properties || {};
+
 		for (var key in values){
 			if (!values.hasOwnProperty(key)) continue;
 
 			this.addControl(key, {
-				'config': data.config[key] || {}
+				'schema': data.schema.items || properties[key] || {}
 				, 'element': data.element || this.element
 				, 'path': data.path || [this.id]
 				, 'array': data.array
@@ -47,7 +49,7 @@ var Widget = new Class({
 	brakets: /(.*?)\[(.*?)\]/,
 
 	addControl: function(key, data){
-		var type = data.config.type || (Array.isArray(data.value) && 'array') || typeof data.value,
+		var type = data.schema.type || (Array.isArray(data.value) && 'array') || typeof data.value,
 			array = type.match(this.brakets);
 
 		if (!Controller[type]) return console.log('ERROR', type, 'is no controller');

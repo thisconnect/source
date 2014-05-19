@@ -20,26 +20,26 @@ var Controller = new Class({
 	label: 'label',
 
 	setup: function(key, data, widget){
-		var config = data.config || {};
+		var schema = data.schema || {};
 
 		this.element = data.array ? new Element('li')
 			: data.collection ? new Element('td')
 			: new Element(this.label, {
-				text: (config.label || key) + ' '
+				text: (schema.title || key) + ' '
 			});
 
 		this.create(key, data, widget);
 	},
 
 	create: function(key, data, widget){
-		var config = data.config || {};
+		var schema = data.schema || {};
 
-		if (config.title) this.element.set('title', config.title);
-		if (config.important) this.setImportant();
-		if (config.columns) this.setColumns();
-		if (config.disabled) this.disable();
-		if (config.enable) this.setupEnable(widget, config.enable);
-		if (config.disable) this.setupDisable(widget, config.disable);
+		if (schema.description) this.element.set('title', schema.description);
+		if (schema.important) this.setImportant();
+		if (schema.columns) this.setColumns();
+		if (schema.disabled) this.disable();
+		if (schema.enable) this.setupEnable(widget, schema.enable);
+		if (schema.disable) this.setupDisable(widget, schema.disable);
 
 		this.element.appendText(' ');
 	},

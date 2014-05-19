@@ -3,13 +3,12 @@ Controller.object = new Class({
 	Extends: Controller,
 
 	initialize: function(key, data, widget){
-		var path = data.path.concat(key),
-			config = data.config || {};
+		var path = data.path.concat(key);
 
 		this.setup(key, data, widget);
 
 		widget.build({
-			'config': config
+			'schema': data.schema || {}
 			, 'element': this.element
 			, 'path': path
 			, 'collection': data.collection
@@ -19,13 +18,13 @@ Controller.object = new Class({
 	},
 
 	setup: function(key, data, widget){
-		var config = data.config = data.config.object || data.config || {};
+		var schema = data.schema || {};
 
 		this.element = data.array ? new Element('li')
 			: data.collection ? new Element('tr')
-			: new Element(config.fieldset ? 'fieldset' : 'section')
-				.grab(new Element(config.fieldset ? 'legend' : 'h2', {
-					'text': config.label || key
+			: new Element(schema.fieldset ? 'fieldset' : 'section')
+				.grab(new Element(schema.fieldset ? 'legend' : 'h2', {
+					'text': schema.title || key
 				}));
 
 		this.create(key, data, widget);

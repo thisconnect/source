@@ -7,17 +7,17 @@ Controller.number = new Class({
 	input: null,
 
 	create: function(key, data, widget){
-		var config = data.config || {};
+		var schema = data.schema || {};
 
 		var input = this.input = new Element(this.selector)
 			.addEvent('input', this.send)
 			.inject(this.element);
 
-		if (!!config.step) input.set('step', config.step);
+		if (!!schema.step) input.set('step', schema.step);
 
-		if (!!config.range) input.set({
-			'min': config.range[0],
-			'max': config.range[1]
+		if (!!schema.range) input.set({
+			'min': schema.range[0],
+			'max': schema.range[1]
 		});
 
 		this.parent(key, data, widget);

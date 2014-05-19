@@ -1,104 +1,115 @@
 {
-	"engine": {
-		"pd": {
-			"options": {
-				"pd": "/Applications/Pd-0.45-5-64bit.app/Contents/Resources/bin/pd"
-				, "encoding": "ascii"
-				, "read": 8005
-				, "write": 8006
-				, "flags": {
-					"r": 44100
-					, "audiobuf": 6
-					, "nogui": false
-					, "nodac": false
-					, "noadc": false
-					, "nomidi": true
-					, "noautopatch": false
-					, "noloadbang": false
-					, "noprefs": true
-					, "stderr": true
-					, "listdev": false
-					, "verbose": false
-					, "batch": false
-					, "send": "netsend send ready;"
-					, "path": ["pd", "pd/blib"]
-					, "open": "./manager.pd"
-				}
-			}
-			, "process": false
-			, "dsp": false
+	"pd": {
+		"options": {
+			"pd": "/Applications/Pd-0.45-5-64bit.app/Contents/Resources/bin/pd"
+			, "encoding": "ascii"
+			, "read": 8005
+			, "write": 8006
 		}
+		, "flags": {
+			"r": 44100
+			, "audiobuf": 6
+			, "nogui": false
+			, "nodac": false
+			, "noadc": false
+			, "nomidi": true
+			, "noautopatch": false
+			, "noloadbang": false
+			, "noprefs": true
+			, "stderr": true
+			, "listdev": false
+			, "verbose": false
+			, "batch": false
+			, "send": "netsend send ready;"
+			, "path": ["pd", "pd/blib"]
+			, "open": "./manager.pd"
+		}
+		, "process": false
+		, "dsp": false
 	}
 	, "type": {
-		"engine": {
-			"pd": {
+		"pd": {
+			"type": "object"
+			, "properties": {
 				"options": {
-					"object": {
-						"columns": true
-						, "fieldset": true
-						, "disable": ["engine", "pd", "process"]
+					"type": "object"
+					, "columns": true
+					, "fieldset": true
+					, "disable": ["engine", "pd", "process"]
+					, "properties": {
+						"pd": {
+							"title": "Pd"
+							, "type": "string"
+						}
+						, "encoding": {
+							"type": "enum"
+							, "values": ["ascii", "utf-8", "base64", "hex"]
+						}
 					}
-					, "pd": {
-						"label": "Pd"
-					}
-					, "encoding": {
-						"type": "enum"
-						, "values": ["ascii", "utf-8", "base64", "hex"]
-					}
-					, "flags": {
+				}
+				, "flags": {
+					"type": "object"
+					, "columns": true
+					, "fieldset": true
+					, "disable": ["engine", "pd", "process"]
+					, "properties": {
 						"r": {
-							"label": "sample rate"
+							"title": "sample rate"
 							, "type": "enum"
 							, "values": [44100, 22050]
 						}
 						, "audiobuf": {
-							"label": "audio buffer"
-							, "title": "size of audio I/O buffer in msec"
+							"title": "audio buffer"
+							, "description": "size of audio I/O buffer in msec"
 						}
 						, "nogui": {
-							"title": "suppress starting the GUI"
+							"description": "suppress starting the GUI"
 						}
 						, "nodac": {
-							"title": "suppress audio output"
+							"description": "suppress audio output"
 						}
 						, "noadc": {
-							"title": "suppress audio input"
+							"description": "suppress audio input"
 						}
 						, "nomidi": {
-							"title": "suppress MIDI input and output"
+							"description": "suppress MIDI input and output"
 						}
 						, "noautopatch": {
-							"title": "suppress auto-connecting to new objects"
+							"description": "suppress auto-connecting to new objects"
 						}
 						, "noloadbang": {
-							"title": "suppress all loadbangs"
+							"description": "suppress all loadbangs"
 						}
 						, "listdev": {
-							"title": "list audio and MIDI devices"
+							"description": "list audio and MIDI devices"
 						}
 						, "verbose": {
-							"title": "extra printout on startup when searching for files"
+							"description": "extra printout on startup when searching for files"
 						}
 						, "nogui": {
-							"title": "suppress starting the GUI"
+							"description": "suppress starting the GUI"
 						}
 						, "batch": {
-							"title": "You should probably also specify -nosound. With these flag Pd runs as quickly as it can without waiting for real time"
+							"description": "You should probably also specify -nosound. With these flag Pd runs as quickly as it can without waiting for real time"
 						}
 						, "send": {
-							"title": "send a message at startup (after patches are loaded)"
+							"description": "send a message at startup (after patches are loaded)"
+						}
+						, "path": {
+							"type": "array"
+							, "title": "Path"
 						}
 						, "open": {
-							"title": "open file(s) on startup"
+							"description": "open file(s) on startup"
 						}
 					}
 				}
 				, "process": {
-					"label": "Spawn"
+					"title": "Spawn"
 					, "important": true
 				}
 				, "dsp": {
-					"label": "Compute Audio"
+					"title": "Compute Audio"
 					, "disabled": true
 					, "enable": ["engine", "pd", "process"]
 				}

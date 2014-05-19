@@ -12,9 +12,9 @@ new Unit({
 
 	elements: {
 		display: new Element('pre')
-		, dataButton: new Element('span[tabindex=0][text=data].button')
-		, configButton: new Element('span[tabindex=0][text=config].button')
-		, perfButton: new Element('span[tabindex=0][text=performance].button')
+		, dataButton: new Element('span[tabindex=0][text=State].button')
+		, configButton: new Element('span[tabindex=0][text=Schema].button')
+		, perfButton: new Element('span[tabindex=0][text=Resources].button')
 	},
 
 	data: null,
