@@ -27,12 +27,13 @@
 		, "process": false
 		, "dsp": false
 	}
-	, "type": {
+	, "schema": {
 		"pd": {
 			"type": "object"
 			, "properties": {
 				"options": {
-					"type": "object"
+					"title": "Options"
+					, "type": "object"
 					, "columns": true
 					, "fieldset": true
 					, "disable": ["engine", "pd", "process"]
@@ -48,7 +49,8 @@
 					}
 				}
 				, "flags": {
-					"type": "object"
+					"title": "Flags"
+					, "type": "object"
 					, "columns": true
 					, "fieldset": true
 					, "disable": ["engine", "pd", "process"]

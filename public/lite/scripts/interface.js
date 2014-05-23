@@ -6,7 +6,7 @@ new Unit({
 		this.subscribe({
 			'socket connect': this.connect,
 			'socket disconnect': this.disconnect,
-			'types ready': this.setSchema
+			'schema ready': this.setSchema
 		});
 		this.bound = {
 			'onGet': this.onGet.bind(this),
@@ -26,6 +26,7 @@ new Unit({
 
 	setSchema: function(schema){
 		this.schema = schema;
+		//Object.freeze(schema);
 		this.then();
 	},
 
@@ -46,8 +47,7 @@ new Unit({
 			.removeListener('merge', this.bound.onMerge)
 			.removeListener('remove', this.bound.onRemove);
 
-		this.io = null;
-		this.schema = null;
+		this.io = this.schema = null;
 	},
 
 	then: function(){
@@ -107,9 +107,6 @@ new Unit({
 	},
 
 	addWidget: function(context, name){
-
-		// console.log(name, this.schema[name]);
-
 		var widget = new Widget(name, this.schema[name] || {}),
 			build = widget.build.bind(widget, {
 				'schema': this.schema[name] || {}
@@ -129,7 +126,7 @@ new Unit({
 				if (typeof values[key] == 'object'){
 					merge(values[key], keys);
 				} else {
-					console.log(keys.join(' '), values[key]);
+					// console.log(keys.join(' '), values[key]);
 					widget.fireEvent(keys.join(' '), values[key]);
 				}
 			}

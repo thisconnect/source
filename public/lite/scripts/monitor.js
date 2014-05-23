@@ -3,9 +3,17 @@ new Unit({
 	initSetup: function(){
 		this.subscribe({
 			'socket connect': this.addDataSocket,
-			'types connect': this.addConfigSocket,
-			'socket disconnect': this.destroy
+			'socket disconnect': this.destroy,
+			'schema connect': this.addSchemaSocket,
+			'schema ready': this.addSchema
 		});
+	},
+
+	readySetup: function(){
+		this.elements.resButton.inject(this.element).addEvent('click', this.getRes.bind(this));
+		this.element.appendText(' ');
+		this.elements.display.set('text', '').inject(this.element);
+		this.element.inject(document.body);
 	},
 
 	element: new Element('section.widget'),
@@ -13,8 +21,9 @@ new Unit({
 	elements: {
 		display: new Element('pre')
 		, dataButton: new Element('span[tabindex=0][text=State].button')
-		, configButton: new Element('span[tabindex=0][text=Schema].button')
-		, perfButton: new Element('span[tabindex=0][text=Resources].button')
+		, schemaButton: new Element('span[tabindex=0][text=Schema].button')
+		, localSchemaButton: new Element('span[tabindex=0][text="Local Schema"].button')
+		, resButton: new Element('span[tabindex=0][text=Resources].button')
 	},
 
 	data: null,
@@ -29,35 +38,38 @@ new Unit({
 			.inject(this.element);
 
 		this.element.appendText(' ');
-		this.then();
+		this.elements.display.set('text', '').inject(this.element);
 	},
 
-	config: null,
+	schemaSocket: null,
 
-	addConfigSocket: function(config){
-		var get = this.get.bind(this, config);
-		this.config = config;
+	addSchemaSocket: function(socket){
+		var get = this.get.bind(this, socket);
+		this.schemaSocket = socket;
 
-		this.elements.configButton
+		this.elements.schemaButton
 			.addEvent('click', get)
 			.addEvent('keydown:keys(enter)', get)
 			.inject(this.element);
 
 		this.element.appendText(' ');
-		this.then();
+		this.elements.display.set('text', '').inject(this.element);
 	},
 
-	then: function(){
-		if (!!this.data && !!this.config){
-			this.elements.perfButton.inject(this.element).addEvent('click', this.getPerf.bind(this));
-			this.elements.display.set('text', '').inject(this.element);
-			this.element.inject(document.body);
-		}
+	addSchema: function(schema){
+		var setText = this.onGet.bind(this, schema);
+		this.elements.localSchemaButton
+			.addEvent('click', setText)
+			.addEvent('keydown:keys(enter)', setText)
+			.inject(this.element);
+
+		this.elements.display.set('text', '').inject(this.element);
 	},
 
 	destroy: function(){
 		this.elements.dataButton.removeEvents();
-		this.elements.configButton.removeEvents();
+		this.elements.schemaButton.removeEvents();
+		this.elements.localSchemaButton.removeEvents();
 		this.element.dispose();
 	},
 
@@ -69,7 +81,7 @@ new Unit({
 		this.elements.display.set('text', JSON.stringify(data, null, '\r    '));
 	},
 
-	getPerf: function(){
+	getRes: function(){
 		this.onGet(window.performance.getEntries());
 	}
 

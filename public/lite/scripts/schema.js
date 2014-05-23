@@ -32,26 +32,40 @@ new Unit({
 		this.io = null;
 	},
 
-	types: {},
+	schema: {},
 
 	onConnect: function(){
 		this.io.emit('get', this.bound.onGet);
-		this.publish('types connect', this.io);
+		this.publish('schema connect', this.io);
 	},
 
 	onGet: function(data){
-		this.types = data;
-		this.publish('types ready', this.types);
+		this.schema = data;
+		this.publish('schema ready', this.schema);
 	},
 
-	onSet: function(id, value){
-		this.types[id] = value;
+	onSet: function(key, value){
+		console.log('schema onSet');
+		this.schema[key] = value;
 	},
 
 	onMerge: function(data){
-		for (var key in data){
-			this.types[key] = data[key];
+		console.log('schema onMerge', data);
+		this.merge(this.schema, data);
+	},
+
+	merge: function merge(o1, o2){
+		for (var p in o2) {
+			o1[p] = (
+				o1[p] != null
+				&& o2[p] != null
+				&& !Array.isArray(o1[p])
+				&& !Array.isArray(o2[p])
+				&& typeof o1[p] == 'object'
+				&& typeof o2[p] == 'object'
+			) ? merge(o1[p], o2[p]) : o2[p];
 		}
+		return o1;
 	}
 
 });
