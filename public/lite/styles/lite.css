@@ -16,7 +16,7 @@ html, button, input, textarea, select {
 	font: 100%/1.625 Menlo, monospace;
 }
 
-h1, h2, h3, h4, h5, label {
+h1, h2, h3, h4, h5, label, .array {
 	font-size: 1rem;
 	line-height: inherit;
 	margin: .84rem 0;
@@ -131,7 +131,8 @@ label.radio input[type=radio] {
 }
 
 @media screen and (min-width: 481px) {
-	.columns label {
+	.columns label,
+	.columns .array {
 		display: inline-block;
 		margin-top: 0;
 		vertical-align: top;

@@ -19,7 +19,7 @@ Controller.array = new Class({
 
 	setup: function(key, data, widget){
 		var schema = data.schema || {};
-		this.element = new Element('div');
+		this.element = new Element('div.array');
 
 		new Element('span', {
 			'text': schema.title || key

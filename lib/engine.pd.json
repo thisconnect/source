@@ -5,6 +5,7 @@
 			, "encoding": "ascii"
 			, "read": 8005
 			, "write": 8006
+			, "basepath": ""
 		}
 		, "flags": {
 			"r": 44100
