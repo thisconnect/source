@@ -68,7 +68,7 @@ var Controller = new Class({
 	},
 
 	setImportant: function(){
-		this.element.addClass('button').addClass('at-right');
+		this.element.addClass('at-right');
 	},
 
 	setColumns: function(){
@@ -105,6 +105,12 @@ var Controller = new Class({
 		this.element.addClass('disabled')
 			.getElements('button, input, select, textarea')
 			.setProperty('disabled', true);
+	},
+
+	focus: function(){
+		if (this.input && this.input.focus) this.input.focus();
+		else if (this.element && this.element.focus) this.element.focus();
+		return this;
 	}
 
 });

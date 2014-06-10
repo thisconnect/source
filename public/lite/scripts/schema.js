@@ -18,7 +18,7 @@ new Unit({
 	io: null,
 
 	connect: function(socket){
-		(this.io = socket.of('/type'))
+		(this.io = socket.of('/schema'))
 			.once('connect', this.bound.onConnect)
 			.on('set', this.bound.onSet)
 			.on('merge', this.bound.onMerge);

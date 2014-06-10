@@ -16,7 +16,7 @@ new Unit({
 		};
 	},
 
-	element: new Element('div.state'),
+	element: new Element('main'),
 
 	readySetup: function(){
 		this.element.inject(document.body);
@@ -60,6 +60,10 @@ new Unit({
 		this.io.emit('set', path, value);
 	},
 
+	get: function(path, callback){
+		this.io.emit('get', path, callback);
+	},
+
 	remove: function(key){
 		this.io.emit('remove', key);
 	},
@@ -84,7 +88,7 @@ new Unit({
 			this.publish('state ' + key + ' build', value);
 			this.publish('state ' + key + ' merge', value);
 		} else {
-			// console.log('onSet', 'state ' + key[0] + ' set', [key.slice(1).join('.'), value].join(' '));
+			// console.log('onSet', key[0] + ' set', [key.slice(1).join('.'), value].join(' '));
 			this.publish('state ' + key[0] + ' set', [key.slice(1), value]);
 		}
 	},
@@ -115,6 +119,13 @@ new Unit({
 			id = context + ' ' + name;
 
 		function set(path, value){
+			var parent = path.slice(0),
+				key = parent.pop();
+
+			// console.log('_____set', parent.join(' '), {'key': key, 'value': value});
+			widget.fireEvent(parent.join(' '), {'key': key, 'value': value});
+
+			// console.log('_____set', path.join(' '), value);
 			widget.fireEvent(path.join(' '), value);
 		}
 
@@ -141,6 +152,8 @@ new Unit({
 		}
 
 		widget.addEvent('change', this.set.bind(this));
+		widget.addEvent('set', this.set.bind(this));
+		widget.addEvent('get', this.get.bind(this));
 		widget.addEvent('remove', this.remove.bind(this, name));
 
 		this.subscribe(id + ' build', build);

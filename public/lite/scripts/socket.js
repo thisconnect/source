@@ -16,7 +16,9 @@ new Unit({
 	warning: new Element('span.warning'),
 
 	readySetup: function(){
-		this.button.addEvent('click', this.bound.toggle);
+		this.button
+			.addEvent('click', this.bound.toggle)
+			.addEvent('keydown:keys(enter)', this.bound.toggle);
 		this.element.adopt([this.info, this.warning, this.button]);
 		this.element.inject(document.body);
 		this.connect();

@@ -101,6 +101,10 @@
 						, "path": {
 							"type": "array"
 							, "title": "Path"
+							, "items": {
+								"type": "string"
+								, "default": ""
+							}
 						}
 						, "open": {
 							"description": "open file(s) on startup"

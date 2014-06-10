@@ -1,6 +1,6 @@
 html {
 	overflow-y: scroll;
-	padding: 8px 24px 8px 36px;
+	padding: 0 2px 0 0;
 }
 
 body {
@@ -10,16 +10,50 @@ body {
 header {
 	color: #a0a0a0;
 	font-size: .8rem;
+	padding: 1rem;
 }
 
 html, button, input, textarea, select {
 	font: 100%/1.625 Menlo, monospace;
 }
 
+.widget {
+	clear: both;
+	display: block;
+	margin: 1rem;
+	position: relative;
+}
+
+main .widget {
+	margin: .5rem 0;
+}
+
+fieldset {
+	background: #eee;
+	border-color: #fff #fff #ccc #fff;
+	border-style: solid;
+	border-width: 1px 0;
+	box-sizing: border-box;
+	padding: 3rem 1rem 1px 1rem; /* 1px weird safari vs chrome diff*/
+	margin: 0;
+	position: relative;
+}
+
+legend {
+	display: block;
+	font-weight: 700;
+	position: absolute;
+	top: 1rem;
+}
+
 h1, h2, h3, h4, h5, label, .array {
 	font-size: 1rem;
 	line-height: inherit;
 	margin: .84rem 0;
+}
+
+h2 {
+	padding-left: 1rem;
 }
 
 ul, li {
@@ -49,17 +83,36 @@ select:focus,
 
 a,
 .button {
-	color: rgb(0, 0, 238);
+	cursor: pointer;
+	display: inline-block;
+	padding: 0 .2rem;
 	text-decoration: none;
 }
 
-a:hover {
-	text-decoration: underline;
+a:hover,
+.button:hover {
+	background-color: rgb(0, 0, 238);
+	color: #fff;
 }
 
 a:active,
 .button:active {
-	color: rgb(255, 0, 0);
+	background-color: rgb(255, 0, 0);
+}
+
+span.button {
+	margin: 0 0 .5rem 0;
+}
+
+.button.close {
+	box-sizing: border-box;
+	font-size: 2rem;
+	height: 2rem;
+	line-height: 1.9rem;
+	position: absolute;
+	right: 1rem;
+	text-align: center;
+	width: 2rem;
 }
 
 input {
@@ -69,10 +122,18 @@ input {
 	text-indent: .25rem;
 }
 
+input[type=number],
+input[type=range],
+input[type=text] {
+	border: none;
+	padding-top: .125rem;
+}
+
 @media screen and (max-width: 481px) {
 	input[type=number],
 	input[type=range],
 	input[type=text] {
+		display: block;
 		width: 100%;
 	}
 }
@@ -117,6 +178,13 @@ pre {
 label {
 	box-sizing: border-box;
 	display: block;
+	margin-left: 1rem;
+	margin-right: 1rem;
+}
+
+fieldset label {
+	margin-left: 0;
+	margin-right: 0;
 }
 
 label.checkbox,
@@ -127,7 +195,7 @@ label.radio {
 label.checkbox input[type=checkbox],
 label.radio input[type=radio] {
 	float: left;
-	margin: 5px 0 0 -1.375rem;
+	margin: 6px 0 0 -1.3125rem;
 }
 
 @media screen and (min-width: 481px) {
@@ -158,44 +226,12 @@ h1::-moz-selection, h2::-moz-selection,
 span::-moz-selection,
 label::-moz-selection { background: transparent; }
 
-.button {
-	cursor: pointer;
-	display: inline-block;
-}
-
-span.button {
-	margin: 0 0 .5rem 0;
-}
-
-.button.close {
-	border-color: #ddd;
-	border-width: 1px;
-	border-style: solid;
-	box-sizing: border-box;
-	font-size: 2rem;
-	height: 2rem;
-	line-height: 1.9rem;
-	margin: -1px -1px 0 0;
-	position: absolute;
-	right: 0;
-	text-align: center;
-	width: 2rem;
-}
 
 .warning {
 	background: rgb(255, 100, 0);
 	color: white;
 	display: inline-block;
 	padding: 0 .2rem;
-}
-
-.widget {
-	border: 1px solid #ddd;
-	clear: both;
-	display: block;
-	margin: .5rem 0;
-	padding: 0 1rem;
-	position: relative;
 }
 
 /* table */
@@ -225,8 +261,11 @@ tr:last-child td {
 /* scrollbar */
 
 html::-webkit-scrollbar {
+	background-color: #fff;
 	width: 10px;
 	height: 10px;
+	margin: 0;
+	padding: 0;
 }
 
 html::-webkit-scrollbar-button:start:decrement,
@@ -236,10 +275,12 @@ html::-webkit-scrollbar-button:end:increment {
 
 html::-webkit-scrollbar-track-piece {
 	background-color: #fff;
+	margin: 2px 0;
+	padding: 0;
 }
 
 html::-webkit-scrollbar-thumb:vertical {
-	background: #ddd;
+	background: #bbb;
 	-webkit-border-radius: 6px;
 }
 

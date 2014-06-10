@@ -10,7 +10,10 @@ new Unit({
 	},
 
 	readySetup: function(){
-		this.elements.resButton.inject(this.element).addEvent('click', this.getRes.bind(this));
+		this.elements.resButton
+			.addEvent('click', this.getRes.bind(this))
+			.addEvent('keydown:keys(enter)', this.getRes.bind(this))
+			.inject(this.element);
 		this.element.appendText(' ');
 		this.elements.display.set('text', '').inject(this.element);
 		this.element.inject(document.body);

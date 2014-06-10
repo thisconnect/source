@@ -15,8 +15,11 @@ var Widget = new Class({
 	create: function(schema){
 		this.element = new Element('section.widget');
 
+		var remove = this.fireEvent.bind(this, 'remove');
+
 		new Element('span.close.button.at-right[text=⨯][tabindex=0]')
-			.addEvent('click', this.fireEvent.bind(this, 'remove'))
+			.addEvent('keydown:keys(enter)', remove)
+			.addEvent('click', remove)
 			.inject(this.element);
 
 		new Element('h2', {
@@ -54,7 +57,7 @@ var Widget = new Class({
 
 		if (!Controller[type]) return console.log('ERROR', type, 'is no controller');
 
-		new Controller[type](key, data, this);
+		return new Controller[type](key, data, this);
 	},
 
 	attach: function(element, position){
