@@ -50,9 +50,9 @@ describe('Socket.IO', function(){
 
 		});
 
-		it('should connect to 8004/type', function(done){
+		it('should connect to 8004/schema', function(done){
 
-			io.connect('//:8004/type', {
+			io.connect('//:8004/schema', {
 				'resource': 'io'
 				, 'force new connection': true
 			})
@@ -67,13 +67,13 @@ describe('Socket.IO', function(){
 
 		});
 
-		it('should connect to port 8004 on namespace /type', function(done){
+		it('should connect to port 8004 on namespace /schema', function(done){
 
 			io.connect('//:8004', {
 				'resource': 'io'
 				, 'force new connection': true
 			})
-			.of('/type')
+			.of('/schema')
 			.on('connect', function(){
 
 				this.emit('get', function(data){

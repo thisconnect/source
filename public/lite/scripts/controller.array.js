@@ -4,6 +4,7 @@ Controller.array = new Class({
 
 	initialize: function(key, data, widget){
 		var path = data.path.concat(key);
+		console.log('array', path.join('.'));
 
 		this.setup(key, data, widget);
 
@@ -14,7 +15,7 @@ Controller.array = new Class({
 			, 'array': true
 		}, data.value);
 
-		if (true) this.add(widget, path, data);
+		if (data.schema.items) this.add(widget, path, data);
 
 		this.attach(data.element);
 	},
@@ -22,21 +23,26 @@ Controller.array = new Class({
 	list: null,
 
 	setup: function(key, data, widget){
-		var schema = data.schema || {};
+		var schema = data.schema || {},
+			items = schema.items || {};
 
 		this.element = new Element('div.array');
 
-		new Element('span', {
-			'text': schema.title || key
+		if (!!schema.title) new Element('h2.title', {
+			'text': schema.title
 		}).inject(this.element);
 
 		this.list = new Element('ul').inject(this.element);
+
+		if (items.vertical) this.list.addClass('vertical');
+		if (items.type) this.list.addClass(items.type);
 
 		this.create(key, data, widget);
 	},
 
 	add: function(widget, path, data){
 		var list = this.list,
+			items = data.schema.items || {},
 			focus;
 
 		widget.addEvent(path.slice(1).join(' '), function(change){
@@ -46,12 +52,15 @@ Controller.array = new Class({
 				data.value[change.key] = change.value;
 
 				control = widget.addControl(change.key, {
-					'schema': data.schema.items || {}
+					'schema': items
 					, 'element': list
-					, 'path': path.concat(change.key)
+					, 'path': path
 					, 'array': true
-					, 'value': change.value
-				});
+					// , 'value': change.value
+				})
+				//.set(change.value)
+				;
+
 				if (focus){
 					control.focus();
 					focus = false;
@@ -60,18 +69,16 @@ Controller.array = new Class({
 		});
 
 		function add(){
-			var at = path.slice(0);
+			var at = path.slice(0),
+				value = (items.default != null ? items.default
+					: (items.type == 'string' ? ''
+					: (items.type == 'boolean' ? false
+					: 0 )));
+
 			at.push(data.value.length);
 			focus = true;
-			widget.fireEvent('set', [at, data.schema.items.default]);
+			widget.fireEvent('set', [at, value]);
 		}
-/*		function add(){
-			widget.fireEvent('get', [path, function(array){
-				var at = path.slice(0);
-				at.push(array.length);
-				widget.fireEvent('set', [at, data.schema.items.default]);
-			}]);
-		}*/
 
 		new Element('span.button[tabindex=0][text="+"]')
 			.addEvent('click', add)

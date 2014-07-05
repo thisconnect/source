@@ -8,7 +8,7 @@ Controller.collection = new Class({
 
 		this.setup(key, data, widget);
 
-		var outer = new Element('div.table').inject(this.element),
+		var outer = new Element('div.collection').inject(this.element),
 			table = new Element('table').inject(outer),
 			thead = new Element('thead').inject(table);
 
@@ -24,15 +24,15 @@ Controller.collection = new Class({
 			, 'collection': true
 		}, data.value);
 
-		this.attach(data.element);
+		//this.attach(data.element);
 	},
 
 	setup: function(key, data, widget){
 		var schema = data.schema || {};
-		this.element = new Element('div');
+		this.element = data.element;
 
-		new Element('span', {
-			'text': schema.title || key
+		if (!!schema.title) new Element('h2.title', {
+			'text': schema.title
 		}).inject(this.element);
 
 		this.create(key, data, widget);

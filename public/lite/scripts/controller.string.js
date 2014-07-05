@@ -4,6 +4,8 @@ Controller.string = new Class({
 
 	selector: 'input[type=text]',
 
+	pattern: '',
+
 	input: null,
 
 	create: function(key, data, widget){
@@ -14,6 +16,15 @@ Controller.string = new Class({
 			.inject(this.element);
 
 		if (schema.placeholder != null) input.set('placeholder', schema.placeholder);
+
+		if (!!schema.maxLength) input.set('maxlength', schema.maxLength);
+
+		if (!!schema.minLength || !!schema.maxLength){
+			this.input.set('required', 'required');
+			this.pattern = '.{' + (schema.minLength || '') + ',' + (schema.maxLength || '') + '}';
+		}
+
+		if (!!this.pattern) input.set('pattern', this.pattern);
 
 		this.parent(key, data, widget);
 	},
@@ -29,7 +40,7 @@ Controller.string = new Class({
 	},
 
 	get: function(){
-		return this.input.value;
+		return (this.pattern == '' || this.input.checkValidity()) ? this.input.value : null;
 	}
 
 });

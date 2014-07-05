@@ -4,7 +4,7 @@ Controller.object = new Class({
 
 	initialize: function(key, data, widget){
 		var path = data.path.concat(key);
-
+		// console.log('object', path.join('.'));
 		this.setup(key, data, widget);
 
 		widget.build({
@@ -22,10 +22,13 @@ Controller.object = new Class({
 
 		this.element = data.array ? new Element('li')
 			: data.collection ? new Element('tr')
-			: new Element(schema.fieldset ? 'fieldset' : 'section')
-				.grab(new Element(schema.fieldset ? 'legend' : 'h2', {
-					'text': schema.title || key
-				}));
+			: new Element(schema.fieldset ? 'fieldset' : 'div.object');
+
+// if (schema.title) console.log(schema.title);
+
+		if (!!schema.title && !data.array && !data.collection) new Element(schema.fieldset ? 'legend' : 'h2.title', {
+			'text': schema.title
+		}).inject(this.element);
 
 		this.create(key, data, widget);
 	}

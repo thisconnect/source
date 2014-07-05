@@ -6,7 +6,7 @@ Controller.float = new Class({
 
 	create: function(key, data, widget){
 		this.parent(key, data, widget);
-		if (data.schema.vertical) this.input.addClass('vertical');
+		if (data.schema.vertical) this.element.addClass('vertical');
 	},
 
 	get: function(){

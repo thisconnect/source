@@ -1,4 +1,5 @@
 html {
+	overflow-x: hidden;
 	overflow-y: scroll;
 	padding: 0 2px 0 0;
 }
@@ -25,7 +26,7 @@ html, button, input, textarea, select {
 }
 
 main .widget {
-	margin: .5rem 0;
+	margin: .75rem 0;
 }
 
 fieldset {
@@ -46,19 +47,36 @@ legend {
 	top: 1rem;
 }
 
-h1, h2, h3, h4, h5, label, .array {
+h1, h2, h3, h4, h5 {
 	font-size: 1rem;
 	line-height: inherit;
-	margin: .84rem 0;
 }
 
-h2 {
-	padding-left: 1rem;
+label,
+.array,
+.collection,
+.title {
+	margin: .75rem 0;
+	padding: 0 1rem;
+}
+
+.array .title {
+	padding: 0;
 }
 
 ul, li {
-	display: inline;
+	display: inline-block;
+	margin: 0;
 	padding: 0;
+}
+
+ul.string,
+.string li {
+	display: block;
+}
+
+.string input {
+	width: 100%;
 }
 
 .at-left {
@@ -67,6 +85,11 @@ ul, li {
 
 .at-right {
 	float: right;
+	margin-top: 0;
+}
+
+fieldset + .at-right {
+	margin-top: .75rem;
 }
 
 a:focus,
@@ -110,7 +133,7 @@ span.button {
 	height: 2rem;
 	line-height: 1.9rem;
 	position: absolute;
-	right: 1rem;
+	right: .3rem;
 	text-align: center;
 	width: 2rem;
 }
@@ -133,7 +156,6 @@ input[type=text] {
 	input[type=number],
 	input[type=range],
 	input[type=text] {
-		display: block;
 		width: 100%;
 	}
 }
@@ -150,7 +172,8 @@ input[type=range] {
     height: 20px;
 } */
 
-input[type=range].vertical {
+
+.vertical input[type=range] {
 	-webkit-appearance: slider-vertical;
 	height: 4rem;
 	width: 1rem;
@@ -178,18 +201,29 @@ pre {
 label {
 	box-sizing: border-box;
 	display: block;
+}
+
+label.checkbox,
+label.radio {
 	margin-left: 1rem;
-	margin-right: 1rem;
+	padding-left: 1.375rem;
 }
 
 fieldset label {
 	margin-left: 0;
 	margin-right: 0;
+	padding: 0;
 }
 
-label.checkbox,
-label.radio {
-	padding-left: 1.375rem;
+fieldset label.checkbox,
+fieldset label.radio {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+input[type=checkbox],
+input[type=radio] {
+	margin-left: .25rem;
 }
 
 label.checkbox input[type=checkbox],
@@ -234,16 +268,16 @@ label::-moz-selection { background: transparent; }
 	padding: 0 .2rem;
 }
 
-/* table */
+/* Collection */
 
-.table {
+.collection {
 	margin-bottom: .2rem;
 	max-width: 100%;
 	overflow: scroll;
 }
 
 table {
-	margin-bottom: .8rem;
+	margin-bottom: .75rem;
 }
 
 th {

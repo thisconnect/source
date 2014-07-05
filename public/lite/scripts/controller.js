@@ -1,11 +1,13 @@
 var Controller = new Class({
 
 	send: function(path, get){
-		this.fireEvent('change', [path, get()]);
+		var value = get();
+		if (value != null) this.fireEvent('change', [path, value]);
 	},
 
 	initialize: function(key, data, widget){
 		var path = data.path.concat(key);
+		// console.log(path.join('.'));
 		this.send = this.send.bind(widget, path, this.get.bind(this));
 
 		widget.addEvent(path.slice(1).join(' '), this.set.bind(this));
@@ -40,8 +42,6 @@ var Controller = new Class({
 		if (schema.disabled) this.disable();
 		if (schema.enable) this.setupEnable(widget, schema.enable);
 		if (schema.disable) this.setupDisable(widget, schema.disable);
-
-		this.element.appendText(' ');
 	},
 
 	destroy: function(){

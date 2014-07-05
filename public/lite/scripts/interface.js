@@ -38,6 +38,7 @@ new Unit({
 			.on('merge', this.bound.onMerge)
 			.on('remove', this.bound.onRemove);
 
+		this.bound.set = socket.emit.bind(socket, 'set');
 		this.then();
 	},
 
@@ -73,17 +74,19 @@ new Unit({
 	},
 
 	onGet: function(data){
+		// console.log('onGet', data);
 		for (var widget in data){
+			if (Array.isArray(data[widget])) console.log('onGet', widget, data[widget]);
 			this.publish('state ' + widget + ' delete');
 			this.addWidget('state', widget);
-			this.publish('state ' + widget + ' build', data[widget]);
-			this.publish('state ' + widget + ' merge', data[widget]);
+			this.publish('state ' + widget + ' build', [data[widget]]);
+			this.publish('state ' + widget + ' merge', [data[widget]]);
 		}
 	},
 
 	onSet: function(key, value){
 		if (typeof key == 'string'){
-			console.log('onSet', key, value);
+			// console.log('onSet', key, value);
 			this.addWidget('state', key);
 			this.publish('state ' + key + ' build', value);
 			this.publish('state ' + key + ' merge', value);
@@ -111,7 +114,7 @@ new Unit({
 	},
 
 	addWidget: function(context, name){
-		var widget = new Widget(name, this.schema[name] || {}),
+		var widget = new Widget(name),
 			build = widget.build.bind(widget, {
 				'schema': this.schema[name] || {}
 			}),
@@ -130,9 +133,11 @@ new Unit({
 		}
 
 		function merge(values, path){
+			// console.log(path, values);
 			for (var key in values){
 				if (!values.hasOwnProperty(key)) continue;
 
+				// console.log(typeOf(path), values[key]);
 				var keys = (path || []).concat(key);
 				if (typeof values[key] == 'object'){
 					merge(values[key], keys);
@@ -151,9 +156,11 @@ new Unit({
 			widget.fireEvent('destroy');
 		}
 
-		widget.addEvent('change', this.set.bind(this));
-		widget.addEvent('set', this.set.bind(this));
-		widget.addEvent('get', this.get.bind(this));
+		widget.addEvent('change', this.bound.set);
+		widget.addEvent('set', this.bound.set);
+		// widget.addEvent('change', this.set.bind(this));
+		// widget.addEvent('set', this.set.bind(this));
+		// widget.addEvent('get', this.get.bind(this));
 		widget.addEvent('remove', this.remove.bind(this, name));
 
 		this.subscribe(id + ' build', build);
