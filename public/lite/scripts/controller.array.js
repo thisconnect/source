@@ -1,3 +1,5 @@
+/* global Controller */
+
 Controller.array = new Class({
 
 	Extends: Controller,
@@ -42,7 +44,7 @@ Controller.array = new Class({
 
 	add: function(widget, path, data){
 		var list = this.list,
-			items = data.schema.items || {},
+			items = data.schema.items || {},
 			focus;
 
 		widget.addEvent(path.slice(1).join(' '), function(change){

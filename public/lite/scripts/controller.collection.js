@@ -1,3 +1,5 @@
+/* global Controller */
+
 Controller.collection = new Class({
 
 	Extends: Controller,
@@ -18,10 +20,10 @@ Controller.collection = new Class({
 			});
 
 		widget.build({
-			'schema': schema
-			, 'element': new Element('tbody').inject(table)
-			, 'path': path
-			, 'collection': true
+			'schema': schema,
+			'element': new Element('tbody').inject(table),
+			'path': path,
+			'collection': true
 		}, data.value);
 
 		//this.attach(data.element);

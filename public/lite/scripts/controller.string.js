@@ -1,3 +1,5 @@
+/* global Controller */
+
 Controller.string = new Class({
 
 	Extends: Controller,
@@ -40,7 +42,7 @@ Controller.string = new Class({
 	},
 
 	get: function(){
-		return (this.pattern == '' || this.input.checkValidity()) ? this.input.value : null;
+		return (this.pattern === '' || this.input.checkValidity()) ? this.input.value : null;
 	}
 
 });

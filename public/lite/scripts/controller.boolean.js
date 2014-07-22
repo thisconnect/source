@@ -1,3 +1,5 @@
+/* global Controller */
+
 Controller.boolean = new Class({
 
 	Extends: Controller,
@@ -9,7 +11,6 @@ Controller.boolean = new Class({
 	input: null,
 
 	create: function(key, data, widget){
-
 		this.input = new Element(this.selector)
 			.addEvent('change', this.send)
 			.inject(this.element, 'top');

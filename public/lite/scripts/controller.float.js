@@ -1,3 +1,5 @@
+/* global Controller */
+
 Controller.float = new Class({
 
 	Extends: Controller.number,

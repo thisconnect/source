@@ -1,0 +1,23 @@
+{
+    "curly": false,
+    "eqeqeq": false,
+    "immed": true,
+    "indent": 4,
+    "latedef": true,
+    "noarg": true,
+    "nonbsp": true,
+    "quotmark": "single",
+    "undef": true,
+    "unused": true,
+    "maxparams": 3,
+
+    "eqnull": true,
+    "laxbreak": true,
+    "laxcomma": true,
+
+    "browser": true,
+    "mootools": true,
+    "node": false,
+
+    "predef": [ "io", "Unit" ]
+}

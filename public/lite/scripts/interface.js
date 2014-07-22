@@ -1,18 +1,20 @@
+/* global Widget */
+
 new Unit({
 
 	bound: {},
 
 	initSetup: function(){
 		this.subscribe({
-			'socket connect': this.connect,
-			'socket disconnect': this.disconnect,
-			'schema ready': this.setSchema
+			'socket connect': this.connect
+			, 'socket disconnect': this.disconnect
+			, 'schema ready': this.setSchema
 		});
 		this.bound = {
-			'onGet': this.onGet.bind(this),
-			'onSet': this.onSet.bind(this),
-			'onMerge': this.onMerge.bind(this),
-			'onRemove': this.onRemove.bind(this)
+			'onGet': this.onGet.bind(this)
+			, 'onSet': this.onSet.bind(this)
+			, 'onMerge': this.onMerge.bind(this)
+			, 'onRemove': this.onRemove.bind(this)
 		};
 	},
 
@@ -53,7 +55,7 @@ new Unit({
 
 	then: function(){
 		if (!!this.io && !!this.schema){
-			this.io.emit('get', this.bound.onGet)
+			this.io.emit('get', this.bound.onGet);
 		}
 	},
 
@@ -114,9 +116,10 @@ new Unit({
 	},
 
 	addWidget: function(context, name){
-		var widget = new Widget(name),
+		var widget = new Widget(name, this.schema),
 			build = widget.build.bind(widget, {
-				'schema': this.schema[name] || {}
+				'schema': this.schema[name] || {}//,
+				//'definitions': this.schema.definitions
 			}),
 			unsubscribe = this.unsubscribe.bind(this),
 			id = context + ' ' + name;
@@ -169,7 +172,7 @@ new Unit({
 		this.subscribe(id + ' delete', destroy);
 
 		widget.attach(this.element);
-		
+
 	}
 
 });

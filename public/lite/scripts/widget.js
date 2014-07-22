@@ -1,11 +1,17 @@
+/* exported Widget */
+/* global Controller */
+
 var Widget = new Class({
 
 	Implements: [Events],
 
 	id: null,
 
-	initialize: function(key){
+	schema: null,
+
+	initialize: function(key, schema){
 		this.id = key;
+		this.schema = schema;
 		this.addEvent('destroy', this.destroy);
 		this.create();
     },
@@ -21,16 +27,18 @@ var Widget = new Class({
 			.addEvent('keydown:keys(enter)', remove)
 			.addEvent('click', remove)
 			.inject(this.element);
-
 	},
 
 	destroy: function(){
 		this.removeEvents();
 		this.element.destroy();
+		this.schema = null;
 	},
 
 	build: function(data, values){
 		var properties = data.schema.properties || {};
+
+		// if (!!data.definitions) this.definitions = data.definitions;
 
 		if (!data.path && data.schema.type == 'array') console.log(this.id, data.schema, values);
 
@@ -44,7 +52,7 @@ var Widget = new Class({
 			if (!values.hasOwnProperty(key)) continue;
 
 			this.addControl(key, {
-				'schema': data.schema.items || properties[key] || {}
+				'schema': data.schema.items || properties[key] || {}
 				, 'element': data.element || this.element
 				, 'path': data.path
 				, 'array': data.array
@@ -55,13 +63,33 @@ var Widget = new Class({
 	},
 
 	addControl: function(key, data){
+		if (!!data.schema.$ref){
+			// console.log(key, data.schema);
+			data.schema = this.getDefinition(data.schema.$ref);
+			return this.addControl(key, data);
+		}
 		var type = data.schema.type
-				|| (Array.isArray(data.value) && 'array')
-				|| typeof data.value;
+			|| (Array.isArray(data.value) && 'array')
+			|| typeof data.value;
 
 		if (!Controller[type]) return console.log('ERROR', type, 'is not a controller');
 
 		return new Controller[type](key, data, this);
+	},
+
+	getDefinition: function(pointer){
+		var path = pointer.split('#/')[1].split('/');
+
+		function get(o, path){
+			for (var i = 0, l = path.length; i < l; i++){
+				if (hasOwnProperty.call(o, path[i])) o = o[path[i]];
+				else return o[path[i]];
+			}
+			return o;
+		}
+
+		// console.log(this.schema, path);
+		return get(this.schema, path);
 	},
 
 	attach: function(element, position){

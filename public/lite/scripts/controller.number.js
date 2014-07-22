@@ -1,3 +1,5 @@
+/* global Controller */
+
 Controller.number = new Class({
 
 	Extends: Controller,
@@ -7,7 +9,7 @@ Controller.number = new Class({
 	input: null,
 
 	create: function(key, data, widget){
-		var schema = data.schema || {};
+		var schema = data.schema || {};
 
 		var input = this.input = new Element(this.selector)
 			.addEvent('input', this.send)

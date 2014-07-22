@@ -1,3 +1,5 @@
+/* global Controller */
+
 Controller.object = new Class({
 
 	Extends: Controller,

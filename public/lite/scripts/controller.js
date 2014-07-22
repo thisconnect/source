@@ -1,3 +1,5 @@
+/* exported Controller */
+
 var Controller = new Class({
 
 	send: function(path, get){
@@ -74,7 +76,7 @@ var Controller = new Class({
 	setColumns: function(){
 		this.element.addClass('columns');
 	},
-	
+
 	setupEnable: function(widget, path){
 		path = path.slice(1).join(' ');
 		widget.addEvent(path, this.onEnable.bind(this));
@@ -84,7 +86,7 @@ var Controller = new Class({
 		if (!!value) this.enable();
 		else this.disable();
 	},
-	
+
 	setupDisable: function(widget, path){
 		path = path.slice(1).join(' ');
 		widget.addEvent(path, this.onDisable.bind(this));
