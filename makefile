@@ -7,7 +7,7 @@ all: test
 test: test-modules test-node
 
 test-node:
-	@node main --socket.log-level=1 --engine.pd.options.flags.nogui & echo $$! > app.pid
+	@node app --socket.log-level=1 --engine.pd.options.flags.nogui & echo $$! > app.pid
 	@mocha --reporter $(REPORTER) ./test/node/* || true
 	@echo 'done'
 	@kill `cat app.pid`
