@@ -78,7 +78,7 @@ new Unit({
 	onGet: function(data){
 		// console.log('onGet', data);
 		for (var widget in data){
-			if (Array.isArray(data[widget])) console.log('onGet', widget, data[widget]);
+			// if (Array.isArray(data[widget])) console.log('onGet', widget, data[widget]);
 			this.publish('state ' + widget + ' delete');
 			this.addWidget('state', widget);
 			this.publish('state ' + widget + ' build', [data[widget]]);
@@ -123,6 +123,8 @@ new Unit({
 			}),
 			unsubscribe = this.unsubscribe.bind(this),
 			id = context + ' ' + name;
+
+console.log('_______ addWidget', this.schema[name]);
 
 		function set(path, value){
 			var parent = path.slice(0),

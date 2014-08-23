@@ -12,9 +12,8 @@ var Widget = new Class({
 	initialize: function(key, schema){
 		this.id = key;
 		this.schema = schema;
-		this.addEvent('destroy', this.destroy);
 		this.create();
-    },
+  },
 
 	element: null,
 
@@ -27,6 +26,8 @@ var Widget = new Class({
 			.addEvent('keydown:keys(enter)', remove)
 			.addEvent('click', remove)
 			.inject(this.element);
+
+		this.addEvent('destroy', this.destroy);
 	},
 
 	destroy: function(){
@@ -36,35 +37,48 @@ var Widget = new Class({
 	},
 
 	build: function(data, values){
-		var properties = data.schema.properties || {};
+		var schema = data.schema;
 
-		// if (!!data.definitions) this.definitions = data.definitions;
+		if (!data.path && schema.type == 'array') console.log(this.id, data, schema);
 
-		if (!data.path && data.schema.type == 'array') console.log(this.id, data.schema, values);
+		// if (!!values.$type) console.log(data.path.join('.'), values.$type);
 
 		if (!data.path) this.addControl(this.id, {
-				'schema': data.schema
+				'schema': schema
 				, 'element': this.element
 				, 'path': []
 				, 'value': values
 			});
-		else for (var key in values){
-			if (!values.hasOwnProperty(key)) continue;
+		else {
 
-			this.addControl(key, {
-				'schema': data.schema.items || properties[key] || {}
-				, 'element': data.element || this.element
-				, 'path': data.path
-				, 'array': data.array
-				, 'collection': data.collection
-				, 'value': values[key]
-			});
+			if (!!values.$type) schema = this.getDefinition('#/definitions/' + values.$type);
+			//console.log('====', data.path.join('.'), values.$type, data);
+
+			// if (!!values.$type) console.log('???', values.$type, schema);
+
+			for (var key in values){
+				if (!values.hasOwnProperty(key)) continue;
+
+				// console.log('>>>', key, schema.items || properties[key]);
+
+				this.addControl(key, {
+					'schema': schema.items || (schema.properties && schema.properties[key]) || {}
+					, 'element': data.element || this.element
+					, 'path': data.path
+					, 'array': data.array
+					, 'collection': data.collection
+					, 'value': values[key]
+				});
+			}
 		}
 	},
 
 	addControl: function(key, data){
+		// if (key == '$type') console.log('-----', data.path.join('.'), data);
+
+		// if (!!data.schema.oneOf) console.log('oneOf', key, data);
 		if (!!data.schema.$ref){
-			// console.log(key, data.schema);
+			// console.log('$ref', key, data.schema);
 			data.schema = this.getDefinition(data.schema.$ref);
 			return this.addControl(key, data);
 		}
@@ -80,15 +94,15 @@ var Widget = new Class({
 	getDefinition: function(pointer){
 		var path = pointer.split('#/')[1].split('/');
 
-		function get(o, path){
+		function get(schema, path){
 			for (var i = 0, l = path.length; i < l; i++){
-				if (hasOwnProperty.call(o, path[i])) o = o[path[i]];
-				else return o[path[i]];
+				if (hasOwnProperty.call(schema, path[i])) schema = schema[path[i]];
+				else return schema[path[i]];
 			}
-			return o;
+			return schema;
 		}
 
-		// console.log(this.schema, path);
+		// console.log(path.join('.'), this.schema);
 		return get(this.schema, path);
 	},
 

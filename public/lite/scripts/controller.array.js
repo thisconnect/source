@@ -6,7 +6,6 @@ Controller.array = new Class({
 
 	initialize: function(key, data, widget){
 		var path = data.path.concat(key);
-		console.log('array', path.join('.'));
 
 		this.setup(key, data, widget);
 
@@ -42,49 +41,55 @@ Controller.array = new Class({
 		this.create(key, data, widget);
 	},
 
-	add: function(widget, path, data){
-		var list = this.list,
-			items = data.schema.items || {},
-			focus;
+	focus: false,
+	schema: {},
 
-		widget.addEvent(path.slice(1).join(' '), function(change){
-			var control;
-			if (data.value[change.key] == null){
+	onChange: function(widget, path, data, change){
+		var control;
+		if (data.value[change.key] == null){
 
-				data.value[change.key] = change.value;
+			data.value[change.key] = change.value;
 
-				control = widget.addControl(change.key, {
-					'schema': items
-					, 'element': list
-					, 'path': path
-					, 'array': true
-					// , 'value': change.value
-				})
-				//.set(change.value)
-				;
+			control = widget.addControl(change.key, {
+				'schema': this.schema.items
+				, 'element': this.list
+				, 'path': path
+				, 'array': true
+				// , 'value': change.value
+			});
+			//.set(change.value)
 
-				if (focus){
-					control.focus();
-					focus = false;
-				}
+			if (this.focus){
+				control.focus();
+				this.focus = false;
 			}
-		});
+		}
+	},
 
-		function add(){
-			var at = path.slice(0),
-				value = (items.default != null ? items.default
-					: (items.type == 'string' ? ''
-					: (items.type == 'boolean' ? false
-					: 0 )));
+	onAdd: function add(widget, path, data){
+		var at = path.slice(0),
+			value = (this.schema.items.default != null ? this.schema.items.default
+				: (this.schema.items.type == 'string' ? ''
+				: (this.schema.items.type == 'boolean' ? false
+				: 0 )));
 
-			at.push(data.value.length);
-			focus = true;
-			widget.fireEvent('set', [at, value]);
+		at.push(data.value.length);
+		this.focus = true;
+		widget.fireEvent('set', [at, value]);
+	},
+
+	add: function(widget, path, data){
+		this.schema = data.schema || {};
+
+		if (!!data.schema.items.anyOf){
+			console.log('*******', path.join('.'), JSON.stringify(data.schema.items.anyOf));
 		}
 
+		widget.addEvent(path.slice(1).join(' '), this.onChange.bind(this, widget, path, data));
+
 		new Element('span.button[tabindex=0][text="+"]')
-			.addEvent('click', add)
-			.addEvent('keydown:keys(enter)', add)
+			.addEvent('click', this.onAdd.bind(this, widget, path, data))
+			.addEvent('keydown:keys(enter)', this.onAdd.bind(this, widget, path, data))
 			.inject(this.element);
 	}
 
