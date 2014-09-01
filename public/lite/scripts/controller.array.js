@@ -55,7 +55,7 @@ Controller.array = new Class({
 				, 'element': this.list
 				, 'path': path
 				, 'array': true
-				// , 'value': change.value
+				, 'value': change.value
 			});
 			//.set(change.value)
 
@@ -73,21 +73,31 @@ Controller.array = new Class({
 				: (this.schema.items.type == 'boolean' ? false
 				: 0 )));
 
+		if (!!data.schema.items.anyOf){
+			value = widget.getDefault(this.picker.get('value'));
+		} else {
+			this.focus = true;
+		}
+		// console.log('values', JSON.stringify(value)); // data.value
 		at.push(data.value.length);
-		this.focus = true;
 		widget.fireEvent('set', [at, value]);
 	},
 
-	add: function(widget, path, data){
-		this.schema = data.schema || {};
+	picker: null,
 
-		if (!!data.schema.items.anyOf){
-			console.log('*******', path.join('.'), JSON.stringify(data.schema.items.anyOf));
+	add: function(widget, path, data){
+		var schema = this.schema = data.schema || {};
+
+		if (!!schema.items.anyOf){
+			this.picker = new Element('select').adopt(schema.items.anyOf.map(function(item){
+				var name = item.$ref.match(/([^/]+$)/)[1];
+				return new Element('option', {text: name, value: item.$ref});
+			})).inject(this.element);
 		}
 
 		widget.addEvent(path.slice(1).join(' '), this.onChange.bind(this, widget, path, data));
 
-		new Element('span.button[tabindex=0][text="+"]')
+		new Element('span.button[tabindex=0][text="＋"]')
 			.addEvent('click', this.onAdd.bind(this, widget, path, data))
 			.addEvent('keydown:keys(enter)', this.onAdd.bind(this, widget, path, data))
 			.inject(this.element);

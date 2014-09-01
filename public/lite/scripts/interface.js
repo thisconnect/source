@@ -94,6 +94,8 @@ new Unit({
 			this.publish('state ' + key + ' merge', value);
 		} else {
 			// console.log('onSet', key[0] + ' set', [key.slice(1).join('.'), value].join(' '));
+			console.log('onSet', key[0] + ' set', key.slice(1));
+			console.log('onSet', key[0] + ' set', value);
 			this.publish('state ' + key[0] + ' set', [key.slice(1), value]);
 		}
 	},
@@ -124,13 +126,11 @@ new Unit({
 			unsubscribe = this.unsubscribe.bind(this),
 			id = context + ' ' + name;
 
-console.log('_______ addWidget', this.schema[name]);
-
 		function set(path, value){
 			var parent = path.slice(0),
 				key = parent.pop();
 
-			// console.log('_____set', parent.join(' '), {'key': key, 'value': value});
+			console.log('_____set', parent.join(' '), {'key': key, 'value': value});
 			widget.fireEvent(parent.join(' '), {'key': key, 'value': value});
 
 			// console.log('_____set', path.join(' '), value);

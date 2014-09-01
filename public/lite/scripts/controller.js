@@ -29,7 +29,7 @@ var Controller = new Class({
 		this.element = data.array ? new Element('li')
 			: data.collection ? new Element('td')
 			: new Element(this.label, {
-				text: (schema.title || key) + ' '
+				text: (schema.title || '') + ' '
 			});
 
 		this.create(key, data, widget);

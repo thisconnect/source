@@ -6,7 +6,7 @@ Controller.object = new Class({
 
 	initialize: function(key, data, widget){
 		var path = data.path.concat(key);
-		// console.log('object', path.join('.'));
+
 		this.setup(key, data, widget);
 
 		widget.build({

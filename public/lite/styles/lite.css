@@ -54,13 +54,21 @@ h1, h2, h3, h4, h5 {
 
 label,
 .array,
-.collection,
-.title {
+.collection {
 	margin: .75rem 0;
 	padding: 0 1rem;
 }
 
+.title {
+	margin: .75rem 0;
+	padding: 0 2rem 0 1rem;
+}
+
 .array .title {
+	padding: 0;
+}
+
+.array label {
 	padding: 0;
 }
 
@@ -229,7 +237,7 @@ input[type=radio] {
 label.checkbox input[type=checkbox],
 label.radio input[type=radio] {
 	float: left;
-	margin: 6px 0 0 -1.3125rem;
+	margin: 6px 7px 0 -1.3125rem; /* 7px if empty label*/
 }
 
 @media screen and (min-width: 481px) {
@@ -317,4 +325,3 @@ html::-webkit-scrollbar-thumb:vertical {
 	background: #bbb;
 	-webkit-border-radius: 6px;
 }
-
