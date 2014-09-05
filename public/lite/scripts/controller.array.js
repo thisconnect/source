@@ -59,6 +59,24 @@ Controller.array = new Class({
 			});
 			//.set(change.value)
 
+			function merge(values, path){
+				console.log('M.E.R.G.E', path, values);
+				for (var key in values){
+					if (!values.hasOwnProperty(key)) continue;
+
+					// console.log(typeOf(path), values[key]);
+					var keys = (path || []).concat(key);
+					if (typeof values[key] == 'object'){
+						merge(values[key], keys);
+					} else {
+						console.log(keys.join(' '), values[key]);
+						widget.fireEvent(keys.join(' '), values[key]);
+					}
+				}
+			}
+
+			if (!!change.value.$type) merge(change.value, [change.key]);
+
 			if (this.focus){
 				control.focus();
 				this.focus = false;
@@ -68,19 +86,21 @@ Controller.array = new Class({
 
 	onAdd: function add(widget, path, data){
 		var at = path.slice(0),
-			value = (this.schema.items.default != null ? this.schema.items.default
-				: (this.schema.items.type == 'string' ? ''
-				: (this.schema.items.type == 'boolean' ? false
-				: 0 )));
+			value;
+
+		at.push(data.value.length);
 
 		if (!!data.schema.items.anyOf){
 			value = widget.getDefault(this.picker.get('value'));
 		} else {
 			this.focus = true;
+			value = (this.schema.items.default != null ? this.schema.items.default
+				: (this.schema.items.type == 'string' ? ''
+				: (this.schema.items.type == 'boolean' ? false
+				: 0 )));
 		}
-		// console.log('values', JSON.stringify(value)); // data.value
-		at.push(data.value.length);
 		widget.fireEvent('set', [at, value]);
+		// console.log('values', JSON.stringify(value)); // data.value
 	},
 
 	picker: null,
