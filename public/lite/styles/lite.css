@@ -240,6 +240,10 @@ label.radio input[type=radio] {
 	margin: 6px 7px 0 -1.3125rem; /* 7px if empty label*/
 }
 
+.columns .array {
+	padding: 0;
+}
+
 @media screen and (min-width: 481px) {
 	.columns label,
 	.columns .array {
@@ -323,5 +327,5 @@ html::-webkit-scrollbar-track-piece {
 
 html::-webkit-scrollbar-thumb:vertical {
 	background: #bbb;
-	-webkit-border-radius: 6px;
+	border-radius: 6px;
 }

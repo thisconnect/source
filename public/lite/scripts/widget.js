@@ -38,10 +38,6 @@ var Widget = new Class({
 
 	build: function(data, values){
 		var schema = data.schema;
-if (!!data.path) console.log('widget.build ???????', data.path.join('.'), JSON.stringify(values));
-		// if (!data.path && schema.type == 'array') console.log(this.id, data, schema);
-
-		// if (!!values.$type) console.log(data.path.join('.'), values.$type);
 
 		if (!data.path){
 			this.addControl(this.id, {
@@ -51,16 +47,10 @@ if (!!data.path) console.log('widget.build ???????', data.path.join('.'), JSON.s
 				, 'value': values
 			});
 		} else {
-
 			if (!!values.$type) schema = this.getDefinition('#/definitions/' + values.$type).schema;
-			//console.log('====', data.path.join('.'), values.$type, data);
-
-			// if (!!values.$type) console.log('???', values.$type, schema);
 
 			for (var key in values){
 				if (!values.hasOwnProperty(key)) continue;
-
-				// console.log('>>>', key, schema.items || schema.properties[key]);
 
 				this.addControl(key, {
 					'schema': schema.items || (schema.properties && schema.properties[key]) || {}
@@ -75,10 +65,8 @@ if (!!data.path) console.log('widget.build ???????', data.path.join('.'), JSON.s
 	},
 
 	addControl: function(key, data){
-		console.log('?=?=?=?', key, data.value);
 
 		if (!!data.schema.$ref){
-			// console.log('$ref', key, data.schema);
 			data.schema = this.getDefinition(data.schema.$ref).schema;
 			// return this.addControl(key, data);
 		}

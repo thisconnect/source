@@ -77,7 +77,6 @@ new Unit({
 	},
 
 	onGet: function(data){
-		// console.log('onGet', data);
 		for (var widget in data){
 			// if (Array.isArray(data[widget])) console.log('onGet', widget, data[widget]);
 			this.publish('state ' + widget + ' delete');
@@ -89,21 +88,16 @@ new Unit({
 
 	onSet: function(key, value){
 		if (typeof key == 'string'){
-			//console.log('onSet', key, value);
 			this.addWidget('state', key);
 			this.publish('state ' + key + ' build', value);
 			this.publish('state ' + key + ' merge', value);
 		} else {
-			// console.log('onSet', key[0] + ' set', [key.slice(1).join('.'), value].join(' '));
-			// console.log('onSet', key[0] + ' set', key.slice(1));
-			// console.log('onSet', key[0] + ' set', value);
 			this.publish('state ' + key[0] + ' set', [key.slice(1), value]);
 		}
 	},
 
 	onRemove: function(widget){
 		if (typeof widget == 'string'){
-			console.log('onRemove', widget);
 			this.publish('state ' + widget + ' delete');
 		} else {
 			console.log('OMG OMG OMG OMG OMG onRemove', widget);
@@ -111,9 +105,8 @@ new Unit({
 	},
 
 	onMerge: function(data){
-		console.log('onMerge', data);
 		for (var widget in data){
-			// this.publish('state ' + widget + ' build', data[widget]);
+			this.publish('state ' + widget + ' build', data[widget]);
 			this.publish('state ' + widget + ' merge', data[widget]);
 		}
 	},
@@ -131,24 +124,19 @@ new Unit({
 			var parent = path.slice(0),
 				key = parent.pop();
 
-			console.log('_____set', parent.join(' '), {'key': key, 'value': value});
 			widget.fireEvent(parent.join(' '), {'key': key, 'value': value});
 
-			console.log('_____set', path.join(' '), value);
 			widget.fireEvent(path.join(' '), value);
 		}
 
 		function merge(values, path){
-			console.log('M.E.R.G.E', path, values);
 			for (var key in values){
 				if (!values.hasOwnProperty(key)) continue;
 
-				// console.log(typeOf(path), values[key]);
 				var keys = (path || []).concat(key);
 				if (typeof values[key] == 'object'){
 					merge(values[key], keys);
 				} else {
-					// console.log(keys.join(' '), values[key]);
 					widget.fireEvent(keys.join(' '), values[key]);
 				}
 			}
