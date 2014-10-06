@@ -9,16 +9,6 @@ new Unit({
 		});
 	},
 
-	readySetup: function(){
-		this.elements.resButton
-			.addEvent('click', this.getRes.bind(this))
-			.addEvent('keydown:keys(enter)', this.getRes.bind(this))
-			.inject(this.element);
-		this.element.appendText(' ');
-		this.elements.display.set('text', '').inject(this.element);
-		this.element.inject(document.body);
-	},
-
 	element: new Element('section.widget'),
 
 	elements: {
@@ -27,6 +17,16 @@ new Unit({
 		, schemaButton: new Element('span[tabindex=0][text=Schema].button')
 		, localSchemaButton: new Element('span[tabindex=0][text="Local Schema"].button')
 		, resButton: new Element('span[tabindex=0][text=Resources].button')
+	},
+
+	readySetup: function(){
+		this.elements.resButton
+			.addEvent('click', this.getRes.bind(this))
+			.addEvent('keydown:keys(enter)', this.getRes.bind(this))
+			.inject(this.element);
+
+		this.element.appendText(' ');
+		this.elements.display.set('text', '').inject(this.element);
 	},
 
 	data: null,
@@ -42,6 +42,7 @@ new Unit({
 
 		this.element.appendText(' ');
 		this.elements.display.set('text', '').inject(this.element);
+		this.then();
 	},
 
 	schemaSocket: null,
@@ -57,6 +58,7 @@ new Unit({
 
 		this.element.appendText(' ');
 		this.elements.display.set('text', '').inject(this.element);
+		this.then();
 	},
 
 	addSchema: function(schema){
@@ -69,10 +71,16 @@ new Unit({
 		this.elements.display.set('text', '').inject(this.element);
 	},
 
+	then: function(){
+		if (!!this.data, !!this.schemaSocket) this.element.inject(document.body);
+	},
+
 	destroy: function(){
 		this.elements.dataButton.removeEvents();
 		this.elements.schemaButton.removeEvents();
 		this.elements.localSchemaButton.removeEvents();
+		this.data = null;
+		this.schemaSocket = null;
 		this.element.dispose();
 	},
 

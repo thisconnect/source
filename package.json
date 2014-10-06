@@ -1,29 +1,37 @@
 {
-	"name": "thisconnect"
-	, "version": "0.9.0-dev"
-	, "author": "Enrique Erne (http://mild.ch/)"
-	, "contributors": [
-		{"name": "Enrique Erne"}
-	]
-	, "scripts": {
-		"start": "node app"
-		, "test": "make test"
-	}
-	, "dependencies": {
-		"connect": "2.17.1"
-		, "socket.io": "0.9.16"
-		, "socket.io-client": "0.9.16"
-		, "minimist": "0.0.8"
-		, "planet": ">= 0.14.10"
-		, "port": ">= 0.8.0"
-		, "fudi": "> = 0.0.2"
-		, "tool": "1.0.1"
-	}
-	, "devDependencies": {
-		"mocha": "1.19.0"
-		, "expect.js": "0.3.1"
-		, "wrapup": "1.0.6"
-		, "benchmark": "1.0.0"
-	}
-	, "repository": "git://github.com/thisconnect/source.git"
+  "name": "thisconnect",
+  "version": "0.9.0-dev",
+  "author": "Enrique Erne (http://mild.ch/)",
+  "contributors": [
+    {
+      "name": "Enrique Erne"
+    }
+  ],
+  "scripts": {
+    "start": "node app",
+    "test": "make test"
+  },
+  "dependencies": {
+    "connect": "3.2.0",
+    "serve-static": "1.6.3",
+    "serve-favicon": "2.1.5",
+    "socket.io": "0.9.16",
+    "socket.io-client": "0.9.16",
+    "minimist": "0.0.8",
+    "planet": ">= 0.14.10",
+    "port": ">= 0.8.0",
+    "fudi": "> = 0.0.2",
+    "tool": "1.0.1"
+  },
+  "devDependencies": {
+    "benchmark": "1.0.0",
+    "expect.js": "0.3.1",
+    "gulp": "^3.8.8",
+    "gulp-jshint": "^1.8.4",
+    "gulp-nodemon": "^1.0.4",
+    "gulp-notify": "^1.8.0",
+    "mocha": "1.19.0",
+    "wrapup": "1.0.6"
+  },
+  "repository": "git://github.com/thisconnect/source.git"
 }
