@@ -11,10 +11,10 @@ gulp.task('server', function(){
         }
     })
     .on('start', function(){
-        console.log('nodemon started!!');
+        console.log('nodemon started!');
     })
 //    .on('change', ['hint'])
     .on('restart', function(){
-        console.log('restarted YEAH!__!!_');
+        console.log('nodemon restarted!');
     });
 });
