@@ -6,14 +6,14 @@ var map = require('vinyl-map');
 
 var base = __dirname + '/../';
 
-gulp.task('sync:browser', ['script'], function() {
+gulp.task('sync:browser', ['script'], function(){
 
     browserSync({
         files: [base + 'index.html', base + 'build/*.css'],
         proxy: {
             host: 'http://localhost:8004'
         },
-        port: 8005,
+        port: 8003,
         ghostMode: {
             clicks: false,
             location: true,
@@ -36,7 +36,7 @@ gulp.task('sync:reload', ['script'], function(){
 gulp.task('sync:inject', ['style'], function(){
     var inject = map(function (buff, filename){
         console.log(filename);
-        // browserSync.reload('build/styles.min.css');
+        // browserSync.reload('../build/styles.min.css');
     });
 
     return gulp.src(['build/styles.min.css'], {

@@ -6,6 +6,8 @@ var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var notify = require('gulp-notify');
 
+var base = __dirname + '/../';
+
 gulp.task('script:build', function(){
 
      return gulp.src([
@@ -16,11 +18,11 @@ gulp.task('script:build', function(){
             'controller.enum.js', 'socket.js', 'schema.js',
             'interface.js', 'monitor.js'
         ], {
-            'cwd': __dirname + '/../scripts/'
+            'cwd': base + 'scripts/'
         })
         .pipe(concat('main.js'))
         .pipe(gulp.dest('build', {
-            'cwd': __dirname + '/../'
+            'cwd': base
         }))
         .pipe(notify({
             'message': 'build complete'
@@ -31,18 +33,36 @@ gulp.task('script:build', function(){
 gulp.task('script:compress', ['script:build'], function(){
 
     return gulp.src('main.js', {
-            'cwd': __dirname + '/../build/'
+            'cwd': base + 'build/'
         })
         .pipe(uglify({
-            compress:{
+            'compress':{
                 'drop_console': true
             }
         }))
-        .pipe(rename({ 'extname': '.min.js' }))
+        .pipe(rename({
+            'extname': '.min.js'
+        }))
         .pipe(gulp.dest('build', {
-            'cwd': __dirname + '/../'
+            'cwd': base
         }));
 
 });
 
-gulp.task('script', ['script:build', 'script:compress']);
+gulp.task('script:support', ['script:build'], function(){
+    return gulp.src('company/Source/Company.js', {
+           'cwd': base + 'support/'
+       })
+       .pipe(uglify({
+           'compress':{
+               'drop_console': true
+           }
+       }))
+       .pipe(rename('company.min.js'))
+       .pipe(gulp.dest('build', {
+           'cwd': base
+       }))
+
+});
+
+gulp.task('script', ['script:build', 'script:compress', 'script:support']);

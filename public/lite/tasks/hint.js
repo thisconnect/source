@@ -2,12 +2,14 @@ var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var notify = require('gulp-notify');
 
+var base = __dirname + '/../';
+
 gulp.task('hint', function(){
 
     return gulp.src('scripts/*.js', {
-            'cwd': __dirname + '/../'
+            'cwd': base
         })
-        .pipe(jshint(__dirname + '/../.jshintrc'))
+        .pipe(jshint(base + '.jshintrc'))
         .pipe(notify(function(file){
             if (file.jshint.success) return false;
 
