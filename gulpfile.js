@@ -1,6 +1,5 @@
 var gulp = require('gulp');
 
-// require('./tasks/hint');
 require('./tasks/server');
 
 require('./public/lite/gulpfile');
