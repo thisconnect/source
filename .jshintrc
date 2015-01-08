@@ -9,10 +9,12 @@
     "quotmark": "single",
     "undef": true,
     "unused": true,
+    "strict": true,
     "maxparams": 3,
+    "maxdepth": 2,
 
     "eqnull": true,
-    "laxbreak": true,
+    "laxbreak": false,
     "laxcomma": true,
 
     "-W008": 0,

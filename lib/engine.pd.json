@@ -1,32 +1,34 @@
 {
-	"pd": {
-		"options": {
-			"pd": "/Applications/Pd-0.45-5-64bit.app/Contents/Resources/bin/pd"
-			, "encoding": "ascii"
-			, "read": 8005
-			, "write": 8006
-			, "basepath": ""
+	"state": {
+		"pd": {
+			"options": {
+				"pd": "/Applications/Pd-0.45-5-64bit.app/Contents/Resources/bin/pd"
+				, "encoding": "ascii"
+				, "read": 8005
+				, "write": 8006
+				, "basepath": ""
+			}
+			, "flags": {
+				"r": 44100
+				, "audiobuf": 6
+				, "nogui": false
+				, "nodac": false
+				, "noadc": false
+				, "nomidi": true
+				, "noautopatch": false
+				, "noloadbang": false
+				, "noprefs": true
+				, "stderr": true
+				, "listdev": false
+				, "verbose": false
+				, "batch": false
+				, "send": "netsend send ready;"
+				, "path": ["pd", "pd/blib"]
+				, "open": "./manager.pd"
+			}
+			, "process": false
+			, "dsp": false
 		}
-		, "flags": {
-			"r": 44100
-			, "audiobuf": 6
-			, "nogui": false
-			, "nodac": false
-			, "noadc": false
-			, "nomidi": true
-			, "noautopatch": false
-			, "noloadbang": false
-			, "noprefs": true
-			, "stderr": true
-			, "listdev": false
-			, "verbose": false
-			, "batch": false
-			, "send": "netsend send ready;"
-			, "path": ["pd", "pd/blib"]
-			, "open": "./manager.pd"
-		}
-		, "process": false
-		, "dsp": false
 	}
 	, "schema": {
 		"pd": {
@@ -37,7 +39,7 @@
 					, "type": "object"
 					, "columns": true
 					, "fieldset": true
-					, "disable": ["engine", "pd", "process"]
+					, "disable": ["pd", "process"]
 					, "properties": {
 						"pd": {
 							"title": "Pd"
@@ -54,7 +56,7 @@
 					, "type": "object"
 					, "columns": true
 					, "fieldset": true
-					, "disable": ["engine", "pd", "process"]
+					, "disable": ["pd", "process"]
 					, "properties": {
 						"r": {
 							"title": "sample rate"
@@ -118,7 +120,7 @@
 				, "dsp": {
 					"title": "Compute Audio"
 					, "disabled": true
-					, "enable": ["engine", "pd", "process"]
+					, "enable": ["pd", "process"]
 				}
 			}
 		}

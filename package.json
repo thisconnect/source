@@ -9,12 +9,14 @@
   ],
   "scripts": {
     "start": "node app",
-    "test": "make test"
+    "test": "make test",
+    "dev": "gulp"
   },
   "dependencies": {
     "compression": "^1.1.0",
     "connect": "^3.2.0",
     "fudi": "> = 0.0.2",
+    "log": "^1.4.0",
     "minimist": "^1.1.0",
     "planet": ">= 0.14.10",
     "port": ">= 0.8.0",

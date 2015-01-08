@@ -9,9 +9,9 @@ var Controller = new Class({
 
 	initialize: function(key, data, widget){
 		var path = data.path.concat(key);
-		// console.log(path.join('.'));
+		//console.log(path.join('.'));
 		this.send = this.send.bind(widget, path, this.get.bind(this));
-
+if (key == 'engine') console.log('?', key, path);
 		widget.addEvent(path.slice(1).join(' '), this.set.bind(this));
 		// widget.addEvent('destroy', this.destroy);
 

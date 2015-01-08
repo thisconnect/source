@@ -77,7 +77,9 @@ new Unit({
 	},
 
 	onGet: function(data){
+
 		for (var widget in data){
+			console.log('====', widget, [data[widget]]);
 			// if (Array.isArray(data[widget])) console.log('onGet', widget, data[widget]);
 			this.publish('state ' + widget + ' delete');
 			this.addWidget('state', widget);
@@ -130,7 +132,8 @@ new Unit({
 		}
 
 		function merge(values, path){
-			for (var key in values){
+			if (typeof values != 'object') console.log(id, values);
+			else for (var key in values){
 				if (!values.hasOwnProperty(key)) continue;
 
 				var keys = (path || []).concat(key);
